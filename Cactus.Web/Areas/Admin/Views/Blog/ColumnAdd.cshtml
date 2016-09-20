@@ -1,0 +1,60 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+    </div>
+</div>
+<form class="pure-form  pure-form-aligned" id="columnAdd">
+    <fieldset>
+        <legend>添加栏目</legend>
+        <div class="pure-control-group">
+            <label>栏目名</label>
+            <input name="ColumnName" type="text" value="" placeholder="栏目名" />
+            <div class="pure-error pure-c-error" name="ColumnName"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>排序编号</label>
+            <input name="Sort" type="text" value="1" placeholder="排序编号，越小越前面" />
+            <div class="pure-error pure-c-error" name="Sort"></div>
+        </div>
+        
+        <div class="pure-controls">
+            <button type="button" class="pure-button pure-button-primary" name="columnadd">添加</button>
+        </div>
+    </fieldset>
+</form>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#columnAdd button[name=columnadd]").bind('click', function () {
+            var ColumnName = $("#columnAdd input[name=ColumnName]").val();
+            if (ColumnName == '' || ColumnName == undefined) {
+                $('#columnAdd div[name=ColumnName]').html('请填写类目名'); return;
+            } else {
+                $('#columnAdd div[name=ColumnName]').html('');
+            }
+            var Sort = $("#columnAdd input[name=Sort]").val();
+            if (Sort == '' || Sort == undefined) {
+                $('#columnAdd div[name=Sort]').html('请填写排序编号'); return;
+            } else {
+                $('#columnAdd div[name=Sort]').html('');
+            }
+            $.ajax({
+                url: "/Admin/Blog/ColumnAdd",
+                type: "post",
+                data: { ColumnName: ColumnName, Sort: Sort, Pid: 0 },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.loadBackPage('main-content');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        })
+    });
+</script>

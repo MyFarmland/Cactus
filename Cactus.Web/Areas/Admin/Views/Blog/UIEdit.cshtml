@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+    var filePath=ViewData["filePath"] as string;
+    var fileName=ViewData["fileName"] as string;
+    var dir = ViewData["dir"] as string;
+}
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+    </div>
+</div>
+<form class="pure-form  pure-form-aligned" id="EditUI">
+    <fieldset>
+        <legend>视图编辑</legend>
+        <div class="pure-control-group">
+            <label>视图名</label>
+            <input name="ViewName" type="text" value="@fileName" disabled style="color:black;" />
+        </div>
+        <div class="pure-control-group">
+            <label>视图内容</label>
+            <textarea name="ViewContent" placeholder="模板内容" style="width: 600px;height: 450px;overflow: auto;" rows="2" cols="20">@(System.IO.File.ReadAllText(filePath))</textarea>
+            <div class="pure-error pure-c-error" name="ViewContent"></div>
+        </div>
+
+        <div class="pure-controls">
+            <button type="button" class="pure-button pure-button-primary" name="ViewUpdate">更新</button>
+        </div>
+    </fieldset>
+</form>
+<script type="text/javascript">
+    $(function () {
+        var dir='@(dir)';
+        $("#EditUI button[name=ViewUpdate]").bind('click', function () {
+            var ViewName = $("#EditUI input[name=ViewName]").val();
+            var ViewContent = $("#EditUI textarea[name=ViewContent]").val();
+            if (ViewContent == '' || ViewContent == undefined) {
+                $('#EditUI div[name=ViewContent]').html('请填写模板内容'); return;
+            } else {
+                $('#EditUI div[name=ViewContent]').html('');
+            }
+            $.ajax({
+                url: "/Admin/Blog/UISave",
+                type: "post",
+                data: { dir:dir,filename: ViewName, Content: ViewContent },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.loadBackPage('main-content');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        })
+    });
+</script>

@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>layout example2</title>
+    <link rel="stylesheet" href="/PureUI/src/pureplus.css">
+    <link rel="stylesheet" href="/PureUI/Font-Awesome-4.5.0/css/font-awesome.css">
+    <link href="/PureUI/pureUI/public.css" rel="stylesheet" />
+    <style>
+        body.signin {
+            background: url(/PureUI/Img/bg2.jpg) no-repeat center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+        .signinpanel {
+            min-width:200px;
+            max-width:450px;
+            margin: 10% auto 0;
+        }
+
+        .content {
+            text-align: center;
+            border: 1px solid #999;
+            margin: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body class="pure-family signin">
+    <div class="pure-g signinpanel">
+        <div class="pure-u-2-5" style="color: rgba(255,255,255,.95);">
+            <h1>pure css UI</h1>
+        </div>
+        <div class="pure-u-3-5">
+            <form class="pure-form">
+                <div class="pure-group">
+                    <input type="text" class="pure-input-1" placeholder="Username">
+                    <input type="text" class="pure-input-1" placeholder="Password">
+                </div>
+                <button type="submit" class="pure-button pure-input-1 pure-button-primary">登录</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

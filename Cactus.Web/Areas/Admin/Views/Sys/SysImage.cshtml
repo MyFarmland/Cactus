@@ -1,0 +1,96 @@
+﻿@{
+    Layout = null;
+    var config = ViewData["SiteConfig"] as Cactus.Model.Sys.SiteConfig;
+}
+
+<form class="pure-form  pure-form-aligned">
+        <fieldset>
+            <legend>基本图片</legend>
+            <div class="pure-control-group">
+                <label style="width:5em;">网站logo</label>
+                <img src="@(config.SiteLogo+"?_t=1111")" alt="网站logo" name="siteLogo"/>
+                <input name="SysSiteLogo" type="file"/>
+                <a href="javascript:;" name="SysSiteLogo_submit" class="pure-link pure-link-default">提交</a>
+                <a href="javascript:;" name="SysSiteLogo_clean" class="pure-link pure-link-default">清空</a>
+                <div class="pure-error pure-c-error" name="siteLogo"></div>
+            </div>
+            <div class="pure-control-group">
+                <label style="width:5em;">管理员默认头像</label>
+                <img src="@(config.DefaultAvatar+"?_t=1111")" alt="默认头像" name="defaultAvatar" width="32px" height="32px"/>
+                <input name="SysDefaultAvatar" type="file" />
+                <a href="javascript:;" name="SysDefaultAvatar_submit" class="pure-link pure-link-default">提交</a>
+                <a href="javascript:;" name="SysDefaultAvatar_clean" class="pure-link pure-link-default">清空</a>
+                <div class="pure-error pure-c-error" name="defaultAvatar"></div>
+            </div>
+        </fieldset>
+    </form>
+<script type="text/javascript">
+    $(function () {
+
+        $('a[name=SysSiteLogo_clean]').bind('click', function () {
+            $("input[name=SysSiteLogo]").upload("clean");
+        });
+        $('a[name=SysSiteLogo_submit]').bind('click', function () {
+            var file = $("input[name=SysSiteLogo]").upload("getFileVal");
+            if (file == '' || file == undefined) {
+                $("div[name=siteLogo]").html("请选择文件");
+                return;
+            }
+            Admin.loadDialog_show();
+            var $target=$(this);
+            $target.attr("disabled", "disabled");
+            $("input[name=SysSiteLogo]").upload({
+                url: '/Admin/Sys/SysSiteLogo',
+                // 上传完成后, 返回json, text
+                dataType: 'json',
+                onSend: function (obj, str) { $("div[name=siteLogo]").html("上传中"); return true; },
+                // 上传之后回调
+                onComplate: function (data) {
+                    Admin.loadDialog_hide();
+                    $target.removeAttr("disabled");
+                    if (data.pass) {
+                        $("div[name=siteLogo]").html('上传成功');
+                        $("img[name=siteLogo]").attr('src', data.append.url + "?_t=" + (new Date()).valueOf());
+                    } else {
+                        $("div[name=siteLogo]").html(data.msg);
+                    }
+                }
+            });
+            $("input[name=SysSiteLogo]").upload("ajaxSubmit");
+        });
+        $('a[name=SysDefaultAvatar_clean]').bind('click', function () {
+            $("input[name=SysDefaultAvatar]").upload("clean");
+        });
+        $('a[name=SysDefaultAvatar_submit]').bind('click', function () {
+            var file = $("input[name=SysDefaultAvatar]").upload("getFileVal");
+            if (file == '' || file == undefined) {
+                $("div[name=defaultAvatar]").html("请选择文件");
+                return;
+            }
+            Admin.loadDialog_show();
+            var $target = $(this);
+            $target.attr("disabled", "disabled");
+            $("input[name=SysDefaultAvatar]").upload({
+                url: '/Admin/Sys/SysDefaultAvatar',
+                // 上传完成后, 返回json, text
+                dataType: 'json',
+                onSend: function (obj, str) { $("div[name=defaultAvatar]").html("上传中"); return true; },
+                // 上传之后回调
+                onComplate: function (data) {
+                    Admin.loadDialog_hide();
+                    $target.removeAttr("disabled");
+
+                    if (data.pass) {
+                        $("div[name=defaultAvatar]").html('上传成功');
+                        $("img[name=defaultAvatar]").attr('src', data.append.url+"?_t="+(new Date()).valueOf());
+                    } else {
+                        $("div[name=defaultAvatar]").html(data.msg);
+                    }
+                    
+                }
+            });
+            $("input[name=SysDefaultAvatar]").upload("ajaxSubmit");
+        });
+
+    })
+</script>

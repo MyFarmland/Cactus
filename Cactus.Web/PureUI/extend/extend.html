@@ -1,0 +1,135 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <!--缩放比例以及允许缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!--格式的检测，电话，邮箱-->
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <!--是否显示苹果工具栏和菜单栏-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!--状态栏样式-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>扩展</title>
+    <link rel="stylesheet" href="/PureUI/src/pureplus.css">
+    <link rel="stylesheet" href="/PureUI/Font-Awesome-4.5.0/css/font-awesome.css">
+    <link href="/PureUI/pureUI/public.css" rel="stylesheet" />
+    <style>
+
+    </style>
+</head>
+<body class="pure-family">
+    <p>分页</p>
+    <ul class="pure-paginator">
+        <li><a class="pure-button pure-button-primary" href="#">«</a></li>
+        <li><a class="pure-button" href="#">1</a></li>
+        <li><a class="pure-button pure-button-primary pure-button-active" href="#">2</a></li>
+        <li><a class="pure-button " href="#">3</a></li>
+        <li><a class="pure-button" href="#">4</a></li>
+        <li><a class="pure-button pure-button-active" href="#">5</a></li>
+        <li><a class="pure-button " href="#">»</a></li>
+    </ul>
+    <hr />
+    <ul class="pure-paginator">
+        <li class="pure-paginator-next"><a class="pure-button pure-button-primary" href="#">next</a></li>
+        <li><a class="pure-button" href="#">...</a></li>
+        <li class="pure-paginator-prev"><a class="pure-button " href="#">prev</a></li>
+    </ul>
+    <hr />
+    <p>表单扩展</p>
+    <hr />
+    <form class="pure-form">
+        <div class="pure-input-group">
+            <div class="pure-input-group-addon">$</div>
+            <input type="text" class="pure-input-1" placeholder="Amount" />
+            <div class="pure-input-group-addon">.00</div>
+        </div>
+        <hr />
+        <div class="pure-input-group">
+            <input type="text" class="pure-input-1" placeholder="Amount" />
+            <div class="pure-input-group-addon">.00</div>
+        </div>
+        <hr />
+        <div class="pure-input-group">
+            <div class="pure-input-group-addon">$</div>
+            <input type="text" class="pure-input-1" placeholder="Amount" />
+        </div>
+
+        <div class="pure-input-group  pure-input-group-primary">
+            <div class="pure-input-group-addon"><input type="checkbox" /></div>
+            <input type="text" class="pure-input-1" placeholder="Amount" />
+        </div>
+        <div class="pure-input-group pure-input-group-green">
+            <div class="pure-input-group-addon "><input type="radio" /></div>
+            <input type="text" class="pure-input-1" placeholder="Amount" />
+        </div>
+        <div class="pure-input-group pure-input-group-red">
+            <div class="pure-input-group-addon "><i class="fa fa-film"></i></div>
+            <input type="text" class="pure-input-1" placeholder="Amount" />
+        </div>
+        <div class="pure-input-group pure-input-group-yellow">
+            <div class="pure-input-group-addon ">1111111111</div>
+            <input type="text" class="pure-input-1" placeholder="Amount" />
+        </div>
+    </form>
+    <hr />
+    <p>tab</p>
+    <div class="pure-tab">
+        <ul class="pure-tab-head">
+            <li><a class="pure-tab-button " href="#">111</a></li>
+            <li><a class="pure-tab-button " href="#">222</a></li>
+            <li><a class="pure-tab-button pure-tab-active " href="#">333</a></li>
+            <li><a class="pure-tab-button " href="#">444</a></li>
+            <li><a class="pure-tab-button " href="#">555</a></li>
+        </ul>
+        <div class="pure-tab-content">
+            content<br />
+            content<br />
+            content<br />
+            content<br />
+        </div>
+    </div>
+    <hr />
+    <p>pure-button-group</p>
+    <div class="pure-button-group">
+        <button class="pure-button">A Button</button>
+        <button class="pure-button">B Button</button>
+        <button class="pure-button">C Button</button>
+    </div>
+    <br />
+    <div class="pure-button-group">
+        <button class="pure-button pure-round pure-button-primary">A Button</button>
+        <button class="pure-button pure-button-primary">B Button</button>
+        <button class="pure-button pure-round pure-button-primary">C Button</button>
+    </div>
+    <br />
+    <div class="pure-button-group">
+        <button class="pure-button pure-round pure-button-primary">A Button</button>
+        <button class="pure-button pure-round pure-button-primary">B Button</button>
+    </div>
+    <hr />
+    <p>pure-progress</p>
+    <div class="pure-progress">
+        <div class="pure-progress-bar" style="width: 30%"></div>
+    </div>
+    <div class="pure-progress pure-progress-striped">
+        <div class="pure-progress-bar" style="width: 15%"></div>
+    </div>
+    <div class="pure-progress pure-progress-striped pure-progress-active">
+        <div class="pure-progress-bar" style="width: 15%"></div>
+    </div>
+    <div class="pure-progress">
+        <div class="pure-progress-bar" style="width: 65%">Male</div>
+        <div class="pure-progress-bar " style="width: 15%; background-color:red;">Female</div>
+        <div class="pure-progress-bar " style="width: 20%;background-color:gray;">Other</div>
+    </div>
+    <p>标签</p>
+
+    <span class="pure-tag">Allmobilize <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a></span>
+    <span class="pure-tag">Free</span>
+    <span class="pure-tag">Secondary</span>
+    <span class="pure-tag">Success</span>
+    <span class="pure-tag">Warning</span>
+    <span class="pure-tag">Danger</span>
+</body>
+</html>

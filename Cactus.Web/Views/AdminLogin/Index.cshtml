@@ -1,0 +1,109 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登陆-欢迎使用Cactus</title>
+    <link rel="shortcut icon" type="image/png" href="favicon.png?_v=1" />
+    <link href="/Content/PureUI/pureplus-min.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background-color: rgb(231,255,231);
+            overflow-y: hidden;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        form {
+            margin: 150px auto;
+            width: 300px;
+        }
+        .code {
+            border-radius: 4px;
+            display: block;
+            height: 40px;
+            width: 140px;
+            border: 1px solid #ccc;
+        }
+        .t-height {
+            height: 40px;
+        }
+        .pure-g a {
+            letter-spacing:0em;
+        }
+    </style>
+</head>
+<body class="pure-family">
+    <form class="pure-form pure-g" action="" id="signupForm">
+        @Html.AntiForgeryToken()
+        <div class="pure-u-1-1">
+            <div  style="margin: 0 auto 10px;outline: 0;display: block; text-align:center; font-size:20px; font-family:'Microsoft YaHei';">欢迎使用Cactus！</div>
+        </div>
+        <div class="pure-u-1-1">
+            <img src="/Content/Admin/img/logo.png" style="width: 99px;height: 99px;margin: 0 auto 15px;outline: 0;display: block;" />
+        </div>
+        <fieldset class="pure-group pure-u-1">
+            <input name="username" id="username" type="text" class="pure-input-1" placeholder="用户名" tabindex="1" value="702295399@qq.com" />
+            <input name="password" id="password" type="password" class="pure-input-1" placeholder="密码" tabindex="2" value="123456"/>
+        </fieldset>
+        <div class="pure-u-1-2">
+            <img class="code t-height" src="/AdminLogin/VCode?_t=1" onClick="OnCode(this)" alt="验证码">
+        </div>
+        <div class="pure-u-1-2">
+            <input class="pure-input-1 t-height" type="text" name="vcode" id="vcode" placeholder="验证码" tabindex="3">
+        </div>
+        <div class="pure-group pure-input-1">
+            <button type="button" id="btn" class="pure-button pure-input-1 pure-button-primary" tabindex="4">登 录</button>
+        </div>
+        <div class="pure-group pure-input-1">
+            <a href="/" class="pure-link">回到首页</a>
+        </div>
+        <div class="pure-u-1-1">QQ交流群:110826636</div>
+    </form>
+    <script src="~/Content/Js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#btn').bind("click", Login);
+            $('body').bind("keypress", function (e) {
+
+                if (e.keyCode == 13) {
+                    $('#btn').click();
+                }
+
+            })
+        })
+        function OnCode(obj) {
+            var _src = $(obj).attr('src');
+            $(obj).attr('src', _src + (parseInt(Math.random() * 10)));
+            //this.src+=Math.random()
+        }
+        function Login() {
+            if ($('#username').val() == '') { alert('请填写用户名'); return; }
+            if ($('#password').val() == '') { alert('请填写密码');  return; }
+            if ($('#vcode').val() == '') { alert('请填写验证码'); return; }
+            $('#btn').attr("disabled", "disabled");
+            $('#btn').html("登录中");
+            var param = $("#signupForm").serialize();
+            $.ajax({
+                url: "/AdminLogin/Index",
+                type: "post",
+                dataType: "json",
+                data: param,
+                success: function (obj) {
+                    if (obj.pass) {                        
+                        window.location = "/Admin";
+                    } else {
+                        alert(obj.msg)
+                        $('#btn').removeAttr("disabled");
+                        $('#btn').html("登 录");
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

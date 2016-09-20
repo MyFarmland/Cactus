@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TagManage');" class="pure-button pure-button-primary">返回</a>*@
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+    </div>
+</div>
+<form class="pure-form  pure-form-aligned" id="p_tagAdd">
+    <fieldset>
+        <legend>添加标签</legend>
+        <div class="pure-control-group">
+            <label>标签名</label>
+            <input name="TagName" type="text" value="" placeholder="标签名" />
+            <div class="pure-error pure-c-error" name="TagName"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>标签描述</label>
+            <textarea rows="5" cols="20" name="TagDes" placeholder="标签描述" style="resize: none;"></textarea>
+            <div class="pure-error pure-c-error" name="TagDes"></div>
+        </div>
+        <div class="pure-controls">
+            <button type="button" class="pure-button pure-button-primary" name="tagadd">添加</button>
+        </div>
+    </fieldset>
+</form>
+<script>
+    $(function () {
+        $('#p_tagAdd button[name=tagadd]').bind('click', function () {
+            var TagName = $("#p_tagAdd input[name=TagName]").val();
+            if (TagName == '' || TagName == undefined) {
+                $('#p_tagAdd div[name=TagName]').html('请填写标签名'); return;
+            } else {
+                $('#p_tagAdd div[name=TagName]').html('');
+            }
+            var TagDes = $("#p_tagAdd textarea[name=TagDes]").val();
+            $.ajax({
+                url: "/Admin/Blog/TagAdd",
+                type: "post",
+                data: { TagName: TagName, TagDes: TagDes },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.loadBackPage('main-content');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        })
+    });
+</script>

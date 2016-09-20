@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CCFD427B-78C8-4C3F-A235-E376373CAF33}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cactus.IService</RootNamespace>
+    <AssemblyName>Cactus.IService</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Linux|AnyCPU' ">
+    <OutputPath>bin\Linux\</OutputPath>
+    <DefineConstants>Linux</DefineConstants>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CMS\ICommentService.cs" />
+    <Compile Include="CMS\IStaticPageService.cs" />
+    <Compile Include="CMS\ITagService.cs" />
+    <Compile Include="CMS\ITempPageService.cs" />
+    <Compile Include="IBaseService.cs" />
+    <Compile Include="IPowerConfigService.cs" />
+    <Compile Include="IRoleServer.cs" />
+    <Compile Include="ISiteConfigService.cs" />
+    <Compile Include="CMS\IThemeConfigService.cs" />
+    <Compile Include="IUserServer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CMS\IArticleService.cs" />
+    <Compile Include="CMS\IColumnService.cs" />
+    <Compile Include="Store\ICategoryService.cs" />
+    <Compile Include="Store\ICommodityService.cs" />
+    <Compile Include="Store\ICustomerService.cs" />
+    <Compile Include="Store\IOrderDetailService.cs" />
+    <Compile Include="Store\IOrderService.cs" />
+    <Compile Include="Store\IStaffService.cs" />
+    <Compile Include="Store\IStoreInfoService.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cactus.Model\Cactus.Model.csproj">
+      <Project>{a0b12f00-f361-4002-abbd-5186749e218f}</Project>
+      <Name>Cactus.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+</Project>

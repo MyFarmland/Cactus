@@ -1,0 +1,65 @@
+﻿@{
+    Layout = null;
+    var user=ViewData["LoginUser"] as Cactus.Model.Sys.User;
+}
+
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/CenterUser');" class="pure-button pure-button-primary">返回</a>*@
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+    </div>
+</div>
+<form class="pure-form  pure-form-aligned">
+    <fieldset>
+        <legend>修改头像</legend>
+        <div class="pure-control-group">
+            <label style="width: 5em;">用户头像</label>
+            <img src="@(user.Avatar+"?_t=1111")" alt="头像" width="32px" height="32px" name="Face"/>
+            <input name="AvatarFile" type="file" />
+            <a href="javascript:;" name="face_submit" class="pure-link pure-link-default">提交</a>
+            <a href="javascript:;" name="face_clean" class="pure-link pure-link-default">清空</a>
+            <div class="pure-error pure-c-error" name="AvatarFile"></div>
+        </div>
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+
+        $('a[name=face_clean]').bind('click', function () {
+            $("input[name=AvatarFile]").upload("clean");
+        });
+        $('a[name=face_submit]').bind('click', function () {
+            var file = $("input[name=AvatarFile]").upload("getFileVal");
+            if (file == '' || file == undefined) {
+                $("input[name=AvatarFile]").parent().find('.pure-c-error').html("请选择文件");
+                return;
+            }
+            Admin.loadDialog_show();
+            var $target = $(this);
+            $target.attr("disabled", "disabled");
+            $("input[name=AvatarFile]").upload({
+                url: '/Admin/Root/CenterAlterFace',
+                // 上传完成后, 返回json, text
+                dataType: 'json',
+                onSend: function (obj, str) { $("div[name=AvatarFile]").html("上传中"); return true; },
+                // 上传之后回调
+                onComplate: function (data) {
+                    Admin.loadDialog_hide();
+                    $target.removeAttr("disabled");
+                    if (data.pass) {
+                        $("div[name=AvatarFile]").html('上传成功');
+                        $("img[name=Face]").attr('src', data.append.url + "?_t=" + (new Date()).valueOf());
+                    } else {
+                        $("div[name=AvatarFile]").html(data.msg);
+                    }
+                },
+                onProgress: function (e) { }
+            });
+            $("input[name=AvatarFile]").upload("ajaxSubmit");
+        });
+
+    })
+</script>
+

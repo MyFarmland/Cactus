@@ -1,0 +1,5 @@
+﻿这是Pure的源码工程目录，官网是：http://purecss.io  （官网很久不更新了），Pure是一个css的基础库，国内的妹子UI也对它做过参考。
+现在我做了源码上的很多改进和扩展（兼容原先是pure）
+字体图标用了Font-Awesome-4.5.0
+pureUI目录下的pure.css，可以在线压缩工具：http://www.daqianduan.com/tools 压缩代码到pure-min.css
+pure很小巧，原先GZIP压缩后只有4k，现在扩展改进后是6k，依旧小巧。

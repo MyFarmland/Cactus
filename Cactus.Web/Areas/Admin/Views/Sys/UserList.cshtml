@@ -1,0 +1,132 @@
+﻿@{
+    Layout = null;
+    var list = ViewData["UserList"] as List<Cactus.Model.Sys.User>;
+    var pageturn = ViewData["Pageturn"] as Cactus.Model.Other.PageTurnModel;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Sys/UserAdd');" class="pure-button pure-button-primary">添加管理员</a>
+    </div>
+</div>
+<table class="pure-table pure-table-bordered table-p" id="user">
+</table>
+<ul class="pure-paginator" id="table_paginator">
+</ul>
+<script type="text/javascript">
+    function onTable(index) {
+        Admin.tipTable($('#user'),'数据加载中...');
+        $.ajax({
+            url: "/Admin/Sys/UserList",
+            type: "post",
+            data: { page: index },
+            success: function (obj) {
+                if (obj.pass) {
+                    Admin.renderTable($('#user'),obj.rows,[
+                        { field: "User_Id",title:"#" },
+                        { field: "Name" ,title:"登录账户"},
+                        { field: "NickName",title:"昵称" },
+                        { field: "RoleName" ,title:"角色名"},
+                        { field: "AddTime" ,title:"注册时间"},
+                        { field: "LastLoginTime",title:"最后登录时间" },
+                        { field: "User_Id",title:"操作",formatter:function(val, rec, row){
+                            var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="info" data-value="' + val + '">查看</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="pwd" data-value="' + val + '">重置密码</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="face" data-value="' + val + '">修改头像</a>';
+                            return str;
+                        }
+                        }]);
+                    //
+                    onPaginator(obj.pagination);
+                } else {
+                    layer.alert(obj.msg)
+                }
+            }
+        });
+    }
+
+    function onPaginator(p) {
+        bindFunc();
+        $('#table_paginator').pure_paginator({
+            spacerNum: 2,
+            prevStr: '上一页',
+            nextStr: '下一页',
+            countStr: '共{count}页',
+            count: p.PageCount,
+            inPage: p.PageIndex,
+            onPage: function (index) { 
+                onTable(index);
+            }
+        });
+    }
+    //操作绑定
+    function bindFunc(){
+        $('#user a[name=upd]').bind('click',function(){
+            var $target=$(this);
+            var id= $target.attr('data-value');
+            Admin.loadContent_Jq('main-content', '/Admin/Sys/UserUpdate?id='+id);
+        });
+        $('#user a[name=del]').bind('click',function(){
+            var $target=$(this);
+            var id = $target.attr('data-value');
+            layer.confirm('确定真的删除吗？', {
+                btn: ['确定', '取消']
+            }, function () {
+                Admin.loadDialog_show();
+                $.ajax({
+                    url: "/Admin/Sys/UserDelete",
+                    type: "post",
+                    data: { ids: id },
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        if (obj.pass) {
+                            layer.alert(obj.msg);
+                            $target.parent().parent().remove();
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                    }
+                });
+            }, function () { });
+        });
+        $('#user a[name=info]').bind('click',function(){
+            var $target=$(this);
+            var id= $target.attr('data-value');
+            Admin.loadContent_Jq('main-content', '/Admin/Sys/UserInfo?id='+id);
+        });
+        $('#user a[name=pwd]').bind('click',function(){
+            var $target=$(this);
+            var id = $target.attr('data-value');
+            layer.confirm('确定真的重置密码？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                Admin.loadDialog_show();
+                $.ajax({
+                    url: "/Admin/Sys/UserResetPwd?id=" + id,
+                    type: "get",
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        layer.close(index);
+                        if (obj.pass) {
+                            layer.alert(obj.msg);
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                    }
+                });
+            }, function () { });
+        });
+        $('#user a[name=face]').bind('click',function(){
+            var $target=$(this);
+            var id= $target.attr('data-value');
+            Admin.loadContent_Jq('main-content', '/Admin/Sys/UserAlterFace?id='+id);
+        });
+    }
+
+    $(function () {
+        onTable(@pageturn.PageIndex);
+    })
+</script>
+

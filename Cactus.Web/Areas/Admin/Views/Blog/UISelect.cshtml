@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+    var themes=ViewData["ThemeConfig"] as Cactus.Model.CMS.ThemeConfig;
+}
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>        
+    </div>
+</div>
+<div class="pure-g" style="min-width:900px; " id="UISelect">
+@foreach (var theme in themes.ThemeList)
+{
+    <div class="pure-u-1-3">
+        <div class="theme-border">
+            <div>
+                <a href="javascript:;" class="pure-link pure-link-purple" name="select" data-value="@theme.ThemeName">选择</a>
+            </div>
+            <div>
+                主题名: @theme.ThemeName
+            </div>
+            <div>
+                主题别名: @theme.ThemeAnotherName
+            </div>
+            <div>
+                主题介绍: @theme.ThemeDes
+            </div>
+            <div>
+                <a href="javascript:;" data-rel="lightcase:" onclick="openPhoto('@(theme.ThemeImgUrl)')" style="display:inline-block;">
+                    <img src="@theme.ThemeImgUrl" class="pure-img" />
+                </a>
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+<script type="text/javascript">
+    function openPhoto(imgUrl) {
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            area: '900px',
+            skin: 'layui-layer-nobg',
+            shadeClose: true,
+            content: '<img src="' + imgUrl + '" class="pure-img" />'
+        });
+    }
+    function bindAction() {
+        //点击目录
+        $('#UISelect a[name=select]').bind('click', function () {
+            var themeName = $(this).attr('data-value');
+            Admin.loadDialog_show();
+            $.ajax({
+                url: "/Admin/Blog/UISelect",
+                type: "post",
+                data: { themeName: themeName },
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    if (obj.pass) {
+                        Admin.loadBackPage('main-content');
+                    } else {
+                        layer.alert(obj.msg);
+                    }
+                }
+            });
+        });
+    }
+    $(function () {
+        bindAction();
+    });
+</script>

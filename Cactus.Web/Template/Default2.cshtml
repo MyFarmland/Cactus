@@ -1,0 +1,23 @@
+﻿@{
+     Layout = "~/Themes/Default/Views/Shared/_BlogLayout.cshtml";
+    var obj = ViewData["Data"] as Newtonsoft.Json.Linq.JObject;
+}
+<form class="pure-form pure-search pure-g" action="@Url.Action("Search", "Blog")" method="get">
+    <input type="text" placeholder="输入你的关键字">
+    <button type="submit" class="pure-button pure-button-primary">搜索</button>
+</form>
+<div class="posts">
+
+    <section class="post">
+        <header class="post-header">
+            <h2 class="post-title">@(obj["title"].ToString())</h2>
+            <p class="post-meta">
+                发表于 @(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+            </p>
+        </header>
+
+        <div class="post-description-detail">
+            @Html.Raw(obj["content"].ToString())
+        </div>
+    </section>
+</div>

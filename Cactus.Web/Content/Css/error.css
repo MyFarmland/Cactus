@@ -1,0 +1,72 @@
+﻿* {
+    box-sizing: border-box;
+    font-family: Microsoft YaHei, 'Hiragino Sans GB', 'Microsoft Yahei', 微软雅黑, 宋体, Tahoma, Helvetica, STHeiti;
+}
+
+body {
+    background-color: rgb(1,167,172);
+    margin: 0px;
+    padding: 0px;
+}
+
+.context {
+    display: block;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 3px 5px #0CC;
+}
+
+.txt {
+    font-size: 8em;
+    text-align: center;
+    font-weight: 400;
+    margin: 3px auto;
+    text-shadow: 0px 3px 0px #7F8C8D;
+    display: block;
+}
+
+.error-img {
+    background-image: url(../Images/cat.jpg);
+    background-repeat: no-repeat;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+    .context {
+        width: 20em;
+        margin: 50px auto;
+        height: 15em;
+    }
+
+    .txt {
+        font-size: 6em;
+        text-align: center;
+        font-weight: 400;
+    }
+
+    .error-img {
+        width: 145px;
+        height: 100px;
+        background-size: cover;
+    }
+}
+
+@media (min-width: 768px) {
+    .context {
+        width: 48em;
+        margin: 100px auto;
+        height: 30em;
+    }
+
+    .txt {
+        font-size: 8em;
+        text-align: center;
+        font-weight: 400;
+    }
+
+    .error-img {
+        width: 290px;
+        height: 200px;
+        background-size: cover;
+    }
+}

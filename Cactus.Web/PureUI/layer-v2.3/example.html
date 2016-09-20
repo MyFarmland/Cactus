@@ -1,0 +1,239 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>layer-pure-example</title>
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script src="layer/layer.js"></script>
+    <link rel="stylesheet" href="/PureUI/src/pureplus.css">
+    <link rel="stylesheet" href="/PureUI/Font-Awesome-4.5.0/css/font-awesome.css">
+    <link href="/PureUI/pureUI/public.css" rel="stylesheet" />
+</head>
+<body class="pure-family">
+<h2>layer 案例</h2>
+    <p>
+        <button class="pure-button pure-button-primary" id="test1">test1</button>
+        <a class="pure-button pure-button-primary" href="#" id="test2">test2</a>
+        <button class="pure-button pure-button-primary" id="parentIframe">parentIframe</button>
+        <a class="pure-button pure-button-primary" href="#" id="test4">test4</a>
+        <button class="pure-button pure-button-primary" id="test5">test5</button>
+        <a class="pure-button pure-button-primary" href="#" id="test6">test6</a>
+    </p>
+    <p>
+        <button class="pure-button pure-button-primary" id="test7">test7</button>
+        <button class="pure-button pure-button-primary" id="test8">test8</button>
+        <button class="pure-button pure-button-primary" id="test9">test9</button>
+        <button class="pure-button pure-button-primary" id="test10">test10</button>
+        <button class="pure-button pure-button-primary" id="test11">test11</button>
+        <button class="pure-button pure-button-primary" id="test12">test12</button>
+    </p>
+    <p>
+        <button class="pure-button pure-button-primary" id="test13">test13</button>
+        <button class="pure-button pure-button-primary" id="test14">test14</button>
+        <button class="pure-button pure-button-primary" id="test15">test15</button>
+        <button class="pure-button pure-button-primary" id="test16">test16</button>
+        <button class="pure-button pure-button-primary" id="test17">test17</button>
+        <button class="pure-button pure-button-primary" id="test18">test18</button>
+    </p>
+    <p>
+        <button class="pure-button pure-button-primary" id="test19">test19</button>
+
+    </p>
+<script>
+;!function(){
+    $('#test1').on('click', function () {
+        layer.msg('Hello layer');
+    });
+    $('#test2').on('click', function () {
+        layer.open({
+            type: 1,
+            area: ['600px', '360px'],
+            shadeClose: true, //点击遮罩关闭
+            content: '\<\div style="padding:20px;">自定义内容\<\/div>'
+        });
+    });
+    //弹出一个iframe层
+    $('#parentIframe').on('click', function () {
+        layer.open({
+            type: 2,
+            title: 'iframe父子操作',
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['800px', '520px'],
+            content: 'test/iframe.html'
+        });
+    });
+    //弹出一个loading层
+    $('#test4').on('click', function () {
+        var ii = layer.load();
+        //此处用setTimeout演示ajax的回调
+        setTimeout(function () {
+            layer.close(ii);
+        }, 1000);
+    });
+    $('#test5').on('click', function () {
+        layer.tips('Hello tips!', '#test5');
+    });
+    $('#test6').on('click', function (obj) {
+        //多窗口模式，层叠置顶
+        layer.open({
+            type: 1 //此处以1html 2iframe举例
+            , title: '当你选择该窗体时，即会在最顶端'
+            , area: ['390px', '330px']
+            , shade: 0
+            , offset: [ //为了演示，随机坐标
+                Math.random() * ($(window).height() - 300)
+                , Math.random() * ($(window).width() - 390)
+            ]
+            , content: $('.layer_notice') //'test/iframe.html'
+            , btn: ['继续弹出', '全部关闭'] //只是为了演示
+            , btn1: function () {
+                console.log(obj);
+                console.log(this);
+                $('#test6').click();
+            }
+            , btn2: function () {
+                layer.closeAll();
+            }
+
+            , zIndex: layer.zIndex //重点1
+            , success: function (layero) {
+                layer.setTop(layero); //重点2
+            }
+        });
+    });
+    $('#test7').on('click', function () {
+        //配置一个透明的询问框
+        layer.msg('大部分参数都是可以公用的<br>合理搭配，展示不一样的风格', {
+            time: 20000, //20s后自动关闭
+            btn: ['明白了', '知道了', '哦']
+        });
+    });
+    $('#test8').on('click', function () {
+        //初体验
+        layer.alert('内容')
+    });
+    $('#test9').on('click', function () {
+        //layer.config({
+        //    skin: 'layer-ext-seaning',
+        //    extend: 'skin/seaning/style.css'
+        //});
+        //第三方扩展皮肤
+        layer.alert('内容', {
+            icon: 1,
+            skin: 'layer-ext-seaning' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+        })
+    });
+    $('#test10').on('click', function () {
+        layer.confirm('您是如何看待前端开发？', {
+            btn: ['重要', '奇葩'] //按钮
+        }, function () {
+            layer.msg('的确很重要', { icon: 1 });
+        }, function () {
+            layer.msg('也可以这样', {
+                time: 20000, //20s后自动关闭
+                btn: ['明白了', '知道了']
+            });
+        });
+    });
+    $('#test11').on('click', function () {
+        //提示层
+        layer.msg('玩命提示中');
+    });
+    $('#test12').on('click', function () {
+        //墨绿深蓝风
+        layer.alert('墨绿风格，点击确认看深蓝', {
+            skin: 'layui-layer-molv' //样式类名
+          , closeBtn: 0
+        }, function () {
+            layer.alert('偶吧深蓝style', {
+                skin: 'layui-layer-lan'
+              , closeBtn: 0
+              , shift: 4 //动画类型
+            });
+        });
+    });
+    $('#test13').on('click', function () {
+        //捕获页
+        layer.open({
+            type: 1,
+            shade: false,
+            title: false, //不显示标题
+            content: $('.layer_notice'), //捕获的元素
+            cancel: function (index) {
+                layer.close(index);
+                this.content.show();
+                layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+            }
+        });
+    });
+    $('#test14').on('click', function () {
+        //页面层
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['420px', '240px'], //宽高
+            content: 'html内容'
+        });
+    });
+    $('#test15').on('click', function () {
+        //自定页
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 0, //不显示关闭按钮
+            shift: 2,
+            shadeClose: true, //开启遮罩关闭
+            content: '内容'
+        });
+    });
+    $('#test16').on('click', function () {
+        //加载层
+        var index = layer.load(0, { shade: false }); //0代表加载的风格，支持0-2
+
+
+    });
+    $('#test17').on('click', function () {
+        //loading层
+        var index = layer.load(1, {
+            shade: [0.1, '#fff'] //0.1透明度的白色背景
+        });
+    });
+    $('#test18').on('click', function () {
+        //prompt层
+        layer.prompt({
+            title: '输入任何口令，并确认',
+            formType: 1 //prompt风格，支持0-2
+        }, function (pass) {
+            layer.prompt({ title: '随便写点啥，并确认', formType: 2 }, function (text) {
+                layer.msg('演示完毕！您的口令：' + pass + ' 您最后写下了：' + text);
+            });
+        });
+    });
+    $('#test19').on('click', function () {
+
+        //tab层
+        layer.tab({
+            area: ['600px', '300px'],
+            tab: [{
+                title: 'TAB1',
+                content: '内容1'
+            }, {
+                title: 'TAB2',
+                content: '内容2'
+            }, {
+                title: 'TAB3',
+                content: '内容3'
+            }]
+        });
+
+    });
+    //文档
+    //http://layer.layui.com/api.html
+}();
+</script>
+
+
+    <div class="layer_notice">layer_notice</div>
+</body>
+</html>

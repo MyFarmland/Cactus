@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>layout example1</title>
+    <link rel="stylesheet" href="/PureUI/src/pureplus.css">
+    <link rel="stylesheet" href="/PureUI/Font-Awesome-4.5.0/css/font-awesome.css">
+    <link href="/PureUI/pureUI/public.css" rel="stylesheet" />
+    <style>
+        .content {
+            border: 1px solid #999;
+            margin: 10px;
+            padding: 5px;
+        }
+        .about {
+            background: #1E5B94;
+            color: #fff;
+            min-height:320px;
+            max-height:500px;
+        }
+        .center {
+            margin:0 auto;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 50%;
+        } 
+        .detail {
+            background: #fff;
+        }
+        .footer {
+            text-align: center;
+            padding: 1em;
+        }
+        .l-box h3 {
+            color: #1f8dd6;
+        }
+    </style>
+</head>
+<body class="pure-family" >
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1">
+            <div class="pure-g">
+                <!--head-->
+                <div class="pure-u-1 pure-u-md-1">
+                    <!--导航菜单-->
+                    <div class="pure-menu pure-menu-horizontal pure-menu-right">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link">Home</a></li>
+                            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                                <a href="#" id="menuLink1" class="pure-menu-link">Contact</a>
+                                <ul class="pure-menu-children">
+                                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Email</a></li>
+                                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Twitter</a></li>
+                                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Tumblr Blog</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--body-->
+                <div class="pure-u-1 pure-u-md-1 about">
+                    <div class="center">
+                        <p style="text-align: center;margin-top:100px;">
+                            <button class="pure-button pure-button-primary" style="width:240px;height:100px;font-size:32px;">Start</button>
+                        </p>
+                    </div>
+                </div>
+                <div class="pure-u-1 pure-u-md-1 detail">
+
+                            <h2>Excepteur sint occaecat cupidatat.</h2>
+
+                            <div class="pure-g content">
+                                <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                                    <h3>
+                                        <i class="fa fa-rocket"></i>
+                                        Get Started Quickly
+                                    </h3>
+                                    <p>
+                                        Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
+                                    </p>
+                                </div>
+                                <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                                    <h3>
+                                        <i class="fa fa-mobile"></i>
+                                        Responsive Layouts
+                                    </h3>
+                                    <p>
+                                        Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
+                                    </p>
+                                </div>
+                                <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                                    <h3>
+                                        <i class="fa fa-th-large"></i>
+                                        Modular
+                                    </h3>
+                                    <p>
+                                        Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
+                                    </p>
+                                </div>
+                                <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                                    <h3>
+                                        <i class="fa fa-check-square-o"></i>
+                                        Plays Nice
+                                    </h3>
+                                    <p>
+                                        Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.
+                                    </p>
+                                </div>
+                            </div>
+
+
+                        <div class="pure-g content">
+                            <div class=" pure-u-1 pure-u-md-1-2 pure-u-lg-2-5">
+                                <img class="pure-img" alt="File Icons" width="300" src="../Img/350x200.png">
+                            </div>
+                            <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-3-5">
+
+                                <h2 >Laboris nisi ut aliquip.</h2>
+
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <h2>Dolore magna aliqua. Uis aute irure.</h2>
+
+                            <div class="pure-g">
+                                <div class="pure-u-1 pure-u-md-2-5">
+                                    <form class="pure-form pure-form-stacked">
+                                        <fieldset>
+                                            <label for="name">Your Name</label>
+                                            <input id="name" type="text" placeholder="Your Name">
+
+
+                                            <label for="email">Your Email</label>
+                                            <input id="email" type="email" placeholder="Your Email">
+
+                                            <label for="password">Your Password</label>
+                                            <input id="password" type="password" placeholder="Your Password">
+
+                                            <button type="submit" class="pure-button">Sign Up</button>
+                                        </fieldset>
+                                    </form>
+                                </div>
+
+                                <div class="pure-u-1 pure-u-md-3-5">
+                                    <h4>Contact Us</h4>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat.
+                                    </p>
+
+                                    <h4>More Information</h4>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="footer">
+                            View the source of this layout to learn more. Made with love by the YUI Team.
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

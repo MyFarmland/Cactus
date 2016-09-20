@@ -1,0 +1,138 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/StaticHtmlAdd');" class="pure-button pure-button-primary pure-split">添加页面</a>
+        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TemplateManage');" class="pure-button pure-button-primary pure-split">单页模板管理</a>
+    </div>
+</div>
+<p>*主要管理添加一些单个的特殊页面</p>
+<table class="pure-table pure-table-bordered table-p" id="staticPage">   
+</table>
+<ul class="pure-paginator" id="table_paginator">
+</ul>
+<script type="text/javascript">
+    function onTable(index) {
+        Admin.tipTable($('#staticPage'), '数据加载中...');
+        $.ajax({
+            url: "/Admin/Blog/StaticHtmlManage",
+            type: "post",
+            data: { page: index },
+            success: function (obj) {
+                if (obj.pass) {
+                    Admin.renderTable($('#staticPage'), obj.rows, [
+                        { field: "Page_Id", title: "#" },
+                        {
+                            field: "PageName", title: "页面名", formatter: function (val, rec, row) {
+                            if(val.length>25){
+                                return val.substring(0,25)+"...";
+                            }
+                            return val;
+                        } },
+                        { field: "TempName", title: "模板名" },
+                        {
+                            field: "PagePath", title: "静态文件地址", formatter: function (val, rec, row) {
+                                if (val != '' && val != null) {
+                                    var str = '<a href="' + val + '" class="pure-link pure-link-default" target="_blank">' + val + '</a>';
+                                    return str
+                                } else {
+                                    return val;
+                                }
+                            }
+                        },
+                        { field: "CreateTime", title: "创建时间" },
+                        { field: "LastTime", title: "最后编辑时间" },
+                        {
+                            field: "Page_Id", title: "操作", formatter: function (val, rec, row) {
+                                var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>' +
+                            '<a href="javascript:;" class="pure-link pure-link-purple" name="render" data-value="' + val + '">生成页面</a>';
+                            
+                            return str;
+                        } }]);
+                    onPaginator(obj.pagination);
+                } else {
+                    layer.alert(obj.msg)
+                }
+            }
+        });
+    }
+
+    function onPaginator(p) {
+        bindFunc();
+        $('#table_paginator').pure_paginator({
+            spacerNum: 2,
+            prevStr: '上一页',
+            nextStr: '下一页',
+            countStr: '共{count}页',
+            count: p.PageCount,
+            inPage: p.PageIndex,
+            onPage: function (index) { 
+                onTable(index);
+            }
+        });
+    }
+    //操作绑定
+    function bindFunc(){
+        $('#staticPage a[name=upd]').bind('click', function () {
+            var $target=$(this);
+            var id= $target.attr('data-value');
+            Admin.loadContent_Jq('main-content', '/Admin/Blog/StaticHtmlUpdate?id=' + id);
+        });
+
+        $('#staticPage a[name=del]').bind('click', function () {
+            var $target=$(this);
+            var id = $target.attr('data-value');
+            layer.confirm('确定真的删除吗？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                Admin.loadDialog_show();
+                $.ajax({
+                    url: "/Admin/Blog/StaticHtmlDelete",
+                    type: "post",
+                    data: { ids: id },
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        layer.close(index);
+                        if (obj.pass) {
+                            $target.parent().parent().remove();
+                        } else {
+                            layer.alert('删除失败');
+                        }
+                    }
+                });
+            }, function () { });
+        });
+
+        $('#staticPage a[name=render]').bind('click', function () {
+            var $target = $(this);
+            var id = $target.attr('data-value');
+            layer.confirm('确定真的生成吗？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                Admin.loadDialog_show();
+                $.ajax({
+                    url: "/Admin/Blog/StaticHtmlRender",
+                    type: "post",
+                    data: { id: id },
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        layer.close(index);
+                        if (obj.pass) {
+                            layer.alert(obj.msg + ",地址:" + obj.append.url);
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                    }
+                });
+            }, function () { });
+        });
+    }
+
+    $(function () {
+        onTable(1);
+    })
+</script>
+

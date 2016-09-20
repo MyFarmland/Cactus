@@ -1,0 +1,151 @@
+﻿@{
+    Layout = null;
+    var keys = ViewData["CacheKey"] as Dictionary<string, string>;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" name="CacheAll" class="pure-button pure-button-primary pure-split">重置全部缓存</a>
+        <a href="javascript:;" name="CacheAllFile" class="pure-button pure-button-primary pure-split">重置全部文件缓存</a>
+        <a href="javascript:;" name="CacheAllMemory" class="pure-button pure-button-primary pure-split">重置全部内容缓存</a>
+        <a href="javascript:;" name="CacheAllRunTime" class="pure-button pure-button-primary pure-split">重置全部运行时缓存</a>
+        <a href="javascript:;" name="CacheAllYesterday" class="pure-button pure-button-primary pure-split">重置过去一天前的缓存</a>
+    </div>
+</div>
+<table class="pure-table pure-table-bordered table-p" id="table_cache">
+    <thead>
+        <tr>
+            <th>缓存Key</th>
+            <th>详细说明</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var i in keys)
+        {
+        
+            <tr>
+                <td>@i.Key</td>
+                <td>@i.Value</td>
+                <td>
+                    <a href="javascript:;" data-key="@i.Key" class="pure-link pure-link-purple">重置缓存</a>
+                    <div class="pure-error pure-c-error"></div>
+                </td>
+            </tr>
+            
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
+        $('a[name=CacheAll]').bind('click', function () {
+            var $target = $(this);
+            Admin.loadDialog_show();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Sys/CacheClear",
+                dataType: "json",
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                },
+                error: function (e, s, t) {
+                    layer.alert('网络错误');
+                    Admin.loadDialog_hide();
+                }
+            });
+        });
+        $('a[name=CacheAllFile]').bind('click', function () {
+            var $target = $(this);
+            Admin.loadDialog_show();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Sys/CacheClearType",
+                data: { type: 2 },
+                dataType: "json",
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                },
+                error: function (e, s, t) {
+                    layer.alert('网络错误');
+                    Admin.loadDialog_hide();
+                }
+            });
+        });
+        $('a[name=CacheAllMemory]').bind('click', function () {
+            var $target = $(this);
+            Admin.loadDialog_show();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Sys/CacheClearType",
+                dataType: "json",
+                data: { type: 1 },
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                },
+                error: function (e, s, t) {
+                    layer.alert('网络错误');
+                    Admin.loadDialog_hide();
+                }
+            });
+        });
+        $('a[name=CacheAllRunTime]').bind('click', function () {
+            var $target = $(this);
+            Admin.loadDialog_show();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Sys/CacheClearType",
+                dataType: "json",
+                data: { type: 3 },
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                },
+                error: function (e, s, t) {
+                    layer.alert('网络错误');
+                    Admin.loadDialog_hide();
+                }
+            });
+        });
+        $('a[name=CacheAllYesterday]').bind('click', function () {
+            var $target = $(this);
+            Admin.loadDialog_show();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Sys/CacheClearYesterday",
+                dataType: "json",
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                },
+                error: function (e, s, t) {
+                    layer.alert('网络错误');
+                    Admin.loadDialog_hide();
+                }
+            });
+        });
+        $('#table_cache a.pure-link').bind('click', function () {
+            var $target = $(this);
+            var key = $target.attr('data-key');
+            if (key == '' || key == undefined) { return; }
+            Admin.loadDialog_show();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Sys/CacheClearKey",
+                data: { key: key },
+                dataType: "json",
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    $target.next('.pure-c-error').html(obj.msg);
+                },
+                error: function (e, s, t) {
+                    layer.alert('网络错误');
+                }
+            });
+        });
+    })
+
+    
+</script>

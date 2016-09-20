@@ -1,0 +1,1 @@
+web.config的必须的文件，其余的.cshtml将会自动生成

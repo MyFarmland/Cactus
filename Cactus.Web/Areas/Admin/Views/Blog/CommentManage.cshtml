@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+
+<table class="pure-table pure-table-bordered table-p" id="comment"></table>
+<ul class="pure-paginator" id="table_paginator"></ul>
+<script type="text/javascript">
+    function onTable(index) {
+        Admin.tipTable($('#comment'), '数据加载中...');
+        $.ajax({
+            url: "/Admin/Blog/CommentList",
+            type: "post",
+            data: { page: index },
+            success: function (obj) {
+                if (obj.pass) {
+                    Admin.renderTable($('#comment'), obj.rows, [
+                        { field: "Comment_Id", title: "#" },
+                        { field: "Email", title: "邮箱" },
+                        { field: "Nickname", title: "昵称" },
+                        { field: "Content", title: "内容" },
+                        { field: "CreateTime", title: "创建时间" },
+                        { field: "Title", title: "文章标题" },
+                        {
+                            field: "Comment_Id", title: "操作", formatter: function (val, rec, row) {
+                                var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>';
+
+                            return str;
+                        } }]);
+                    onPaginator(obj.pagination);
+                } else {
+                    layer.alert(obj.msg)
+                }
+            }
+        });
+    }
+
+    function onPaginator(p) {
+        bindFunc();
+        $('#table_paginator').pure_paginator({
+            spacerNum: 2,
+            prevStr: '上一页',
+            nextStr: '下一页',
+            countStr: '共{count}页',
+            count: p.PageCount,
+            inPage: p.PageIndex,
+            onPage: function (index) {
+                onTable(index);
+            }
+        });
+    }
+    //操作绑定
+    function bindFunc(){
+        $('#comment a[name=del]').bind('click', function () {
+            var $target=$(this);
+            var id = $target.attr('data-value');
+            layer.confirm('确定真的删除吗？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                Admin.loadDialog_show();
+                $.ajax({
+                    url: "/Admin/Blog/CommentDelete",
+                    type: "post",
+                    data: { ids: id },
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        layer.close(index);
+                        if (obj.pass) {
+                            $target.parent().parent().remove();
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                    }
+                });
+            }, function () { });
+        });
+    }
+
+    $(function () {
+        onTable(1);
+    })
+</script>

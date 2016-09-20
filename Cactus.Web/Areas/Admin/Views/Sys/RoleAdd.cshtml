@@ -1,0 +1,114 @@
+﻿@{
+    Layout = null;
+    var power = ViewData["Power"] as Cactus.Model.Sys.PowerConfig;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Sys/RoleList');" class="pure-button pure-button-primary">返回</a>*@
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+    </div>
+</div>
+<form class="pure-form  pure-form-aligned" id="roleAdd">
+    <input type="hidden" id="" name="" value=""/>
+        <fieldset>
+            <legend>添加角色</legend>
+            <div class="pure-control-group">
+                <label>角色名</label>
+                <input name="RoleName" type="text" value="" placeholder="角色名" />
+                <div class="pure-error pure-c-error" name="RoleName"></div>
+            </div>
+            
+            <div class="pure-control-group">
+                <label>功能列表</label>
+                <div class="pure-controls">
+                    <div class="pure-tab">
+                        <ul class="pure-tab-head">
+                            @foreach (var group in power.PowerGroupList)
+                            {
+                                <text>
+                                    <li><a class="pure-tab-button " href="javascript:;">@group.GroupName</a></li>
+                                </text>
+                            }
+                        </ul>
+                        @foreach (var group in power.PowerGroupList)
+                        {
+                            <div class="pure-tab-content">
+                                @{
+                            var plist = group.PowerList.Where(t => t.NoGroupId == group.NoGroupId).ToList();
+                                }
+                                @if (plist.Count > 0)
+                                {
+                                    <table class="pure-table pure-table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>功能名</th>
+                                                <th>功能介绍</th>
+                                                <th>状态（用于树级菜单）</th>
+                                                <th><input name="checkAll" type="checkbox" title="全选" /></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in plist)
+                                            {
+                                                <tr>
+                                                    <td>@(item.PowerName)</td>
+                                                    <td>@item.PowerDes</td>
+                                                    <td>@(item.IsShow ? "(显示)" : "(隐藏)")</td>
+                                                    <td><input name="ActionId" type="checkbox"  value="@item.NoPowerId" /></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="pure-controls">
+                <button type="button" class="pure-button pure-button-primary" name="roleadd">提交</button>
+            </div>
+        </fieldset>
+    </form>
+
+<script type="text/javascript">
+    $(function () {
+        Admin.tabInit(0);
+        $('button[name=roleadd]').bind('click', function () {
+            var val = $("#roleAdd input[name=RoleName]").val();
+            if (val == '' || val == undefined) { $('div[name=RoleName]').html('请填写角色名'); return; } else {
+                $('div[name=RoleName]').html('');
+            }
+            var ids = "";
+            $('input[name=ActionId]:checked').each(function () {
+                if (ids.length > 0) {
+                    ids += ',' + $(this).val();
+                } else {
+                    ids += $(this).val();
+                }
+            });
+            $.ajax({
+                url: "/Admin/Sys/RoleAdd",
+                type: "post",
+                data: { RoleName: val, ActionIds: ids },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.loadContent_Jq('main-content', '/Admin/Sys/RoleList');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        });
+        $('input[name=checkAll]').bind('click', function () {
+            if ($(this).prop("checked") == true) {
+                $(this).parent().parent().parent().parent().find("input[type='checkbox']").prop("checked", true);
+            } else {
+                $(this).parent().parent().parent().parent().find("input[type='checkbox']").prop("checked", false);
+            }
+        });
+    })
+
+</script>

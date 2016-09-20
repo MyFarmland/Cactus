@@ -1,0 +1,57 @@
+﻿@{
+    var list = ViewData["BlogList"] as List<Cactus.Model.CMS.Article>;
+    int index = Convert.ToInt32(ViewData["BlogPage"].ToString());
+    int count = Convert.ToInt32(ViewData["BlogPageCount"].ToString());
+    ViewBag.Title = "列表";
+}
+
+<form class="pure-form pure-search pure-g" action="@Url.Action("Search", "Blog")" method="get">
+    <input type="text" name="k" placeholder="输入你的关键字">
+    <button type="submit" class="pure-button pure-button-primary">搜索</button>
+</form>
+
+<div class="posts" >
+
+    <div id="section_list">
+        @for (int i = 0; i < list.Count; i++)
+        {
+            <section class="post">
+                <header class="post-header">
+                    @*<img class="post-avatar" alt="@list[i].Author" height="48" width="48" src="/Content/Images/1111-avatar.jpg">*@
+                    <a href="@Url.Action("Detail", "Blog", new  {id=list[i].Article_Id })"><h2 class="post-title">@list[i].Title</h2></a>
+                    <p class="post-meta">
+                        由 <a class="post-author" href="javascript:;">@list[i].Author
+                        </a> 发表于 @list[i].LastTime.ToString("yyyy-MM-dd HH:mm:ss"), 阅读(@list[i].Browse) 
+
+                    @if (string.IsNullOrEmpty(list[i].Tags)==false)
+                    {
+                        string[] tag = list[i].Tags.Split(',');
+                        for (int j = 0; j < tag.Length; j++)
+                        {
+                        <a class="post-category" href="javascript:;">@tag[j]</a>
+                        }
+                    }
+                    </p>
+                </header>
+
+                <div class="post-description">
+                    @{
+                    string temp = System.Web.HttpUtility.HtmlDecode(list[i].ArticleContent);
+                    temp = Cactus.Common.StringHelper.FilterHTML(temp);
+                    }
+                    @Html.Raw(temp.Length > 200 ? temp.Substring(0, 200)+"......" : temp)<a href="@Url.Action("Detail", "Blog", new  {id=list[i].Article_Id })"> 更多 </a>
+                </div>
+            </section>
+        }
+    </div>
+
+    <div class="pure-g pageArea">
+        <div class="new-pagenav">
+            <div class="new-pagenav-left"><a href="@Url.Action("List", "Blog", new  {p=index<=1?1:index-1 })" class="pure-link" style="display: block;"><i class="fa fa-chevron-left fa-m-right"></i>上一页</a></div>
+            <div class="new-pagenav-center">
+                @index/@(count)页
+            </div>
+            <div class="new-pagenav-right"><a href="@Url.Action("List", "Blog", new  {p=index>=count?count:index+1 })" class="pure-link" style="display: block;">下一页<i class="fa fa-chevron-right fa-m-left"></i></a></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿阅读不少开源组件，手痒，自己写一个计划任务
+参考：quartz.net，nopcommerce.com ，Linux crond
+
+
+
+//出事配置节点
+Cactus.Crond.TimerTask.NopConfig.Init();
+Cactus.Crond.TaskManager.
+.Initialize(StudyCommerceTimerTask.TimerTask.NopConfig.ScheduleTasks);
+Cactus.Crond.TaskManager.Instance.Start();
+
+
+	<NopConfig>
+		<SqlServer ConnectionStringName="ConnectionString"/>
+		<Cache Enabled="True"/>
+		<ScheduleTasks>
+			<!--1分钟执行一次-->
+			<Thread seconds="60">
+				<task name="AddDatabase" type="StudyCommerceTimerTask.TimerTask.ThreadTask.AddBase,StudyCommerceTimerTask" enabled="true" stopOnError="false"/>
+			</Thread>
+		</ScheduleTasks>
+	</NopConfig>

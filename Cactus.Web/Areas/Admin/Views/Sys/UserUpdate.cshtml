@@ -1,0 +1,88 @@
+﻿@{
+    Layout = null;
+    var role = ViewData["RoleList"] as List<Cactus.Model.Sys.Role>;
+    var user = ViewData["User"] as Cactus.Model.Sys.User;
+}
+
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Sys/UserIndex');" class="pure-button pure-button-primary">返回</a>*@
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+    </div>
+</div>
+
+<form class="pure-form  pure-form-aligned" id="userUpd">
+    <input type="hidden" value="@user.User_Id" name="User_Id" />
+        <fieldset>
+            <legend>修改用户</legend>
+            <div class="pure-control-group">
+                <label>用户账户</label>
+                <input type="text" value="@user.Name" placeholder="角色名" disabled="disabled" />
+            </div>
+            <div class="pure-control-group">
+                <label>用户昵称</label>
+                <input name="NickName" type="text" value="@user.NickName" placeholder="用户昵称" />
+                <div class="pure-error pure-c-error" name="NickName"></div>
+            </div>
+            <div class="pure-control-group">
+                <label>邮箱</label>
+                <input name="Email" type="text" value="@user.Email" placeholder="邮箱" />
+                <div class="pure-error pure-c-error" name="Email"></div>
+            </div>
+            <div class="pure-control-group">
+                <label>电话</label>
+                <input name="Phone" type="text" value="@user.Phone" placeholder="电话" />
+                <div class="pure-error pure-c-error" name="Phone"></div>
+            </div>
+            <div class="pure-control-group">
+                <label>QQ</label>
+                <input name="Qq" type="text" value="@user.Qq" placeholder="QQ" />
+                <div class="pure-error pure-c-error" name="Qq"></div>
+            </div>
+            <div class="pure-control-group">
+                <label>角色</label>
+                <select name="RoleId">
+                    @foreach (var r in role)
+                    {
+                        <option value="@r.Role_Id" @(r.Role_Id == user.RoleId ? "selected" : "")>@r.RoleName</option>
+                    }
+                </select>
+                <div class="pure-error pure-c-error" name="RoleId"></div>
+            </div>
+            <div class="pure-controls">
+                <button type="button" class="pure-button pure-button-primary" name="userupd">保存</button>
+            </div>
+        </fieldset>
+    </form>
+
+<script type="text/javascript">
+    $(function () {
+        $('#userUpd button[name=userupd]').bind('click', function () {
+            var User_Id = $('#userUpd input[name=User_Id]').val();
+            var NickName = $('#userUpd input[name=NickName]').val();
+            if (NickName == '' || NickName == undefined) {
+                $('#userUpd div[name=NickName]').html('请填写用户昵称');
+                return;
+            } else { $('#userUpd div[name=NickName]').html(''); }
+            var Email = $('#userUpd input[name=Email]').val();
+            var Phone = $('#userUpd input[name=Phone]').val();
+            var Qq = $('#userUpd input[name=Qq]').val();
+            var RoleId = $('#userUpd select[name=RoleId]').val();
+            if (RoleId == '' || RoleId == undefined) {
+                $('#userUpd div[name=RoleId]').html('请选择用户角色');
+                return;
+            } else { $('#userUpd div[name=RoleId]').html(''); }
+            Admin.loadDialog_show();
+            $.ajax({
+                url: "/Admin/Sys/UserUpdate",
+                type: "post",
+                data: { NickName: NickName, Email: Email, Phone: Phone, Qq: Qq, RoleId: RoleId, User_Id: User_Id },
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                }
+            });
+        })
+    })
+</script>

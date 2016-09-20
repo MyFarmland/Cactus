@@ -1,0 +1,170 @@
+﻿@using Cactus.Model;
+@{
+    var loginUser = ViewData["LoginUser"] as Cactus.Model.Sys.User;
+    var Power =ViewData["Power"] as Cactus.Model.Sys.PowerConfig;
+    var site = ViewData["SiteConfig"] as Cactus.Model.Sys.SiteConfig;
+    var _dirhost = site.SiteStaticDir;
+    var version = 2;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@site.SiteDescr">
+    <title>@site.SiteName-@ViewBag.Title</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png?_v=@version" />
+    <link href="@(_dirhost)/Content/PureUI/pureplus.css?_v=@version" rel="stylesheet" />
+    <link href="@(_dirhost)/Content/Admin/css/admin.css?_v=@version" rel="stylesheet" />
+    <link href="@(_dirhost)/Content/wangEditor-2.0.1/css/wangEditor.min.css?_v=@version" rel="stylesheet" />
+    <link href="@(_dirhost)/Content/Font-Awesome-4.5.0/css/font-awesome.css?_v=@version" rel="stylesheet" />
+    <link href="@(_dirhost)/Content/lightcase/lightcase.css?_v=@version" rel="stylesheet" />
+</head>
+<body class="pure-family">
+ <div id="layout" class="pure-g">
+        <div class="left-layout">
+            <div id="menu-tree">
+                <!--begin-->
+                <div class="pure-menu">
+                    <span class="pure-menu-heading">
+                        <div class="logo-img"></div>
+                        <div class="logo-font">@site.SiteName-后台管理</div>
+                    </span>
+                    <ul class="pure-menu-list">
+                        @{ var m_power =Power.PowerGroupList; }
+                        @for (int i = 0; i < m_power.Count(); i++)
+                        { 
+                        
+                        <li class="pure-menu-item">
+                            @if (m_power[i].IsShow)
+                            {
+                                {
+                                    var powerlist = m_power[i].PowerList.Where(t => t.IsShow == true).ToList();
+                                    string[] ac_arr = loginUser.Role.ActionIds.Split(',');
+                                    List<Cactus.Model.Sys.Power> power_li = new List<Cactus.Model.Sys.Power>();
+                                    if (loginUser.IsSuperUser)
+                                    {
+                                        power_li = powerlist;
+                                    }
+                                    else
+                                    {
+                                        for (int j = 0; j < ac_arr.Length; j++)
+                                        {
+                                            var _p_l = powerlist.Where(_ => _.NoPowerId == ac_arr[j]).ToList();
+                                            if (_p_l.Count != 0)
+                                            {
+                                                power_li.Add(_p_l[0]);
+                                            }
+                                        }
+                                    }
+                                    bool _b = power_li.Where(_t => _t.IsShow == true).Count() > 0;//判断是否有显示的
+                                    if (_b)
+                                    {
+                                        <text>
+                                            <a href="javascript:;" class="pure-menu-link pure-menu-main">
+                                                <span class=""><i class="fa @m_power[i].Icon"></i>@m_power[i].GroupName</span><i class="fa fa-chevron-right" style=" float:right;"></i>
+                                            </a>
+                                        </text>
+                                        var count = power_li.Count();
+                                        if (count > 0)
+                                        {
+                                            <ul class="pure-menu-list pure-menu-child">
+                                                @for (int j = 0; j < count; j++)
+                                                {
+                                                <li class="pure-menu-item">
+                                                    <a href="javascript:;" class="pure-menu-link" url-target="@(power_li[j].ParamStr)">
+                                                        <span class=""><i class="fa @power_li[j].Icon"></i> @(power_li[j].PowerName)</span>
+                                                    </a>
+                                                </li>
+                                                }
+                                            </ul>
+                                        }
+                                    }
+                                }
+                            }
+                        </li>
+                        }
+                    </ul>
+                    <div class="pure-menu-heading">
+                        <div class="copyright-font">@site.SiteCopyRight</div></div>
+                </div>
+                <!--end-->
+            </div>
+        </div>
+        <div class="right-layout">
+            <div id="nav">
+                <!--begin-->
+                    <div id="nav-tree" class="pure-menu pure-menu-horizontal pure-menu-fixed">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-item">
+                                <img src="@loginUser.Avatar" width="48px" height="48px" style="border-radius:24px;border:1px solid #fff;">
+                            </li>
+                            <li class="pure-menu-item pure-menu-disabled">登录用户：@loginUser.NickName</li>
+                            <li class="pure-menu-item">
+                                <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/ZPanel');" class="pure-menu-link"><span><i class="fa fa-home"></i> 首页</span></a>
+                            </li>
+                            <li class="pure-menu-item">
+                                <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/CenterUser');" class="pure-menu-link"><span><i class="fa fa-user"></i>个人中心</span></a>
+                            </li>
+                            <li class="pure-menu-item">
+                                <a href="/" target="_blank" class="pure-menu-link"><span><i class="fa fa-home"></i>网站首页</span></a>
+                            </li>
+                            <li class="pure-menu-item"><a href="javascript:;" onclick="Logout();" class="pure-menu-link">退出</a></li>
+                        </ul>
+                    </div>
+                <!--end-->
+            </div>
+            <div id="main-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <script src="@(_dirhost)/Content/Js/jquery-1.9.1.min.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/Js/jquery.tmpl.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/Js/utils.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/Js/jquery.upload2.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/Js/json2.js"></script>
+    <script src="@(_dirhost)/Content/Pure_Js/paginator.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/Admin/js/admin_public.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/wangEditor-2.0.1/js/wangEditor.min.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/lightcase/lightcase.js?_v=@version"></script>
+    <script src="@(_dirhost)/Content/layer-v2.3/layer.js?_v=@version"></script>
+    <script type="text/javascript">
+    console.info('   _     _     _     _     \n'
++ ' /\' \\  /\' \\  /\' \\  /\' \\    \n'
++ '/\\_, \\/\\_, \\/\\_, \\/\\_, \\   \n'
++ '\\/_/\\ \\/_/\\ \\/_/\\ \\/_/\\ \\  \n'
++ '   \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \n'
++ '    \\ \\_\\ \\ \\_\\ \\ \\_\\ \\ \\_\\\n'
++ '     \\/_/  \\/_/  \\/_/  \\/_/\n');
+    console.info('1111 荣誉出品 联系方式QQ:702295399 QQ群:110826636 ');
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#menu-tree .pure-menu-link[url-target]').bind('click', function () {
+                var url = $(this).attr('url-target');
+                Admin.loadContent_Jq('main-content', url);
+            });
+            $('#menu-tree .pure-menu-main').bind('click', function () {
+                if ($(this).next().is(":hidden")) {
+                    $(this).next().show();
+                    $(this).find('.fa-chevron-right').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                } else {
+                    $(this).next().hide();
+                    $(this).find('.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                }
+            });
+        })
+        function Logout() {
+            layer.confirm('是否退出？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                layer.close(index);
+                window.location = "/Admin/Root/Logout";
+            }, function () { });
+
+        }
+    </script>
+</body>
+</html>

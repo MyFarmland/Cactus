@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+    var theme = ViewData["Theme"] as string;
+    FileInfo[] blogFiles = ViewData["blogFiles"] as FileInfo[];
+    FileInfo[] sharedFiles = ViewData["sharedFiles"] as FileInfo[];
+}
+<div class="tool-list">
+    <label>当前主题：</label>
+    <label style="font-weight:bold;">@(theme)</label>
+    <div class="pure-button-group">
+        <a href="javascript:;" class="pure-button pure-button-primary pure-split" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UISelect');">选择其他主题</a>
+        @*<a href="javascript:;" class="pure-button pure-button-primary pure-split" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/RenderManage');">生成静态管理</a>*@
+    </div>
+</div>
+
+<table class="pure-table pure-table-horizontal table-p">
+    <thead>
+        <tr>
+            <th>视图名称</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="2">主视图</td>
+        </tr>
+        @for (int i = 0; i < blogFiles.Length; i++)
+        {
+            <tr>
+                <td><i class="fa fa-file-o"></i><a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Blog&filename=@(blogFiles[i].Name)');"> @blogFiles[i].Name </a></td>
+                <td><a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Blog&filename=@(blogFiles[i].Name)');">编辑视图</a></td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2">辅视图</td>
+        </tr>
+        @for (int i = 0; i < sharedFiles.Length; i++)
+        {
+            <tr>
+                <td><i class="fa fa-file-o"></i><a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Shared&filename=@(sharedFiles[i].Name)');"> @sharedFiles[i].Name </a></td>
+                <td><a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Shared&filename=@(sharedFiles[i].Name)');">编辑视图</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

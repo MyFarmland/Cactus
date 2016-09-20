@@ -1,0 +1,510 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A5A5E1A0-8B6F-4AF5-A0FA-97D435482E7E}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cactus.Web</RootNamespace>
+    <AssemblyName>Cactus.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\packages\Autofac.Configuration.3.3.0\lib\net40\Autofac.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc">
+      <HintPath>..\packages\Autofac.Mvc4.3.1.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\IocConfig.cs" />
+    <Compile Include="App_Start\ThemeViewEngine.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="Content\Admin\css\admin.css" />
+    <Content Include="Content\Admin\img\logo.png" />
+    <Content Include="Content\Blog\Default\css\blog.css" />
+    <Content Include="Content\Blog\Default\img\cat_teacher00.jpeg" />
+    <Content Include="Content\Blog\Default\img\cat_teacher01.png" />
+    <Content Include="Content\Blog\Default\img\qsbk_shit32px.png" />
+    <Content Include="Content\Blog\Default\js\public.js" />
+    <Content Include="Content\Css\error.css" />
+    <Content Include="Content\Font-Awesome-4.5.0\css\font-awesome.css" />
+    <Content Include="Content\Font-Awesome-4.5.0\css\font-awesome.min.css" />
+    <Content Include="Content\Font-Awesome-4.5.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\Images\1111-avatar.jpg" />
+    <Content Include="Content\Images\cat.jpg" />
+    <Content Include="Content\Js\jquery.upload2.js" />
+    <Content Include="Content\Js\json2.js" />
+    <Content Include="Content\layer-v2.3\layer.js" />
+    <Content Include="Content\layer-v2.3\skin\default\icon-ext.png" />
+    <Content Include="Content\layer-v2.3\skin\default\icon.png" />
+    <Content Include="Content\layer-v2.3\skin\default\loading-0.gif" />
+    <Content Include="Content\layer-v2.3\skin\default\loading-1.gif" />
+    <Content Include="Content\layer-v2.3\skin\default\loading-2.gif" />
+    <Content Include="Content\layer-v2.3\skin\layer.css" />
+    <Content Include="Content\lightcase\lightcase.css" />
+    <Content Include="Content\lightcase\lightcase.js" />
+    <Content Include="Content\lightcase\loading_neg.gif" />
+    <Content Include="Content\lightcase\sprite.png" />
+    <Content Include="Content\Images\yzm.png" />
+    <Content Include="Content\Admin\js\admin_public.js" />
+    <Content Include="Content\Js\IE.js" />
+    <Content Include="Content\Js\jquery-1.9.1.min.js" />
+    <Content Include="Content\Js\jquery.tmpl.js" />
+    <Content Include="Content\Js\utils.js" />
+    <Content Include="Content\PureUI\pureplus-min.css" />
+    <Content Include="Content\PureUI\pureplus.css" />
+    <Content Include="Content\Pure_Js\paginator.js" />
+    <Content Include="Content\Store\css\base.css" />
+    <Content Include="Content\Store\img\bj.jpeg" />
+    <Content Include="Content\Store\img\item.jpeg" />
+    <Content Include="Content\Store\img\VCode.gif" />
+    <Content Include="Content\Theme\Default.png" />
+    <Content Include="Content\wangEditor-2.0.1\css\fonts\icomoon.svg" />
+    <Content Include="Content\wangEditor-2.0.1\css\wangEditor.css" />
+    <Content Include="Content\wangEditor-2.0.1\css\wangEditor.min.css" />
+    <Content Include="Content\wangEditor-2.0.1\js\wangEditor.js" />
+    <Content Include="Content\wangEditor-2.0.1\js\wangEditor.min.js" />
+    <Content Include="favicon.png" />
+    <Content Include="Global.asax" />
+    <Content Include="PureUI\buttons\example\button.html" />
+    <Content Include="PureUI\extend\extend.html" />
+    <Content Include="PureUI\extend\forms.html" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\css\font-awesome.css" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\css\font-awesome.min.css" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="PureUI\forms\example\forms.html" />
+    <Content Include="PureUI\grids\example\responsive.html" />
+    <Content Include="PureUI\Img\350x200.png" />
+    <Content Include="PureUI\Img\bg1.jpg" />
+    <Content Include="PureUI\Img\bg2.jpg" />
+    <Content Include="PureUI\Img\test.jpg" />
+    <Content Include="PureUI\index.html" />
+    <Content Include="PureUI\layer-v2.3\example.html" />
+    <Content Include="PureUI\layer-v2.3\layer\layer.js" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\default\icon-ext.png" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\default\icon.png" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\default\loading-0.gif" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\default\loading-1.gif" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\default\loading-2.gif" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\layer.css" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\seaning\close.png" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\seaning\default.png" />
+    <Content Include="PureUI\layer-v2.3\layer\skin\seaning\style.css" />
+    <Content Include="PureUI\layer-v2.3\test\iframe.html" />
+    <Content Include="PureUI\layer-v2.3\更新日志.txt" />
+    <Content Include="PureUI\layout example\index.html" />
+    <Content Include="PureUI\layout example\example1.html" />
+    <Content Include="PureUI\layout example\example2.html" />
+    <Content Include="PureUI\layout example\example3.html" />
+    <Content Include="PureUI\menus\example\menus.html" />
+    <Content Include="PureUI\layout example\img\file-icons.png" />
+    <Content Include="PureUI\src\grids-responsive.css" />
+    <Content Include="PureUI\src\public.css" />
+    <Content Include="PureUI\src\pureplus-min.css" />
+    <Content Include="PureUI\src\pureplus.css" />
+    <Content Include="PureUI\store\pay.html" />
+    <Content Include="PureUI\store\css\base.css" />
+    <Content Include="PureUI\store\img\item.jpeg" />
+    <Content Include="PureUI\store\img\bj.jpeg" />
+    <Content Include="PureUI\store\img\VCode.gif" />
+    <Content Include="PureUI\store\cat.html" />
+    <Content Include="PureUI\store\user_form.html" />
+    <Content Include="PureUI\store\user_reg.html" />
+    <Content Include="PureUI\store\user_login.html" />
+    <Content Include="PureUI\store\user_index.html" />
+    <Content Include="PureUI\store\new_list.html" />
+    <Content Include="PureUI\store\list.html" />
+    <Content Include="PureUI\store\item.html" />
+    <Content Include="PureUI\store\info.html" />
+    <Content Include="PureUI\store\master.html" />
+    <Content Include="PureUI\store\index.html" />
+    <Content Include="PureUI\tables\example\tables.html" />
+    <Content Include="PureUI\说明.txt" />
+    <Content Include="Template\使用说明.txt" />
+    <Content Include="Themes\使用说明.txt" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="使用说明.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="File\" />
+    <Folder Include="PureUI\layer-v2.3\doc\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configuration\AppSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Configuration\autofac.config" />
+    <Content Include="Configuration\PowerConfig.config" />
+    <Content Include="Configuration\SiteConfig.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cactus.BaseService\Cactus.BaseService.csproj">
+      <Project>{61eee871-388e-4c17-91f6-b55e25c9ef1e}</Project>
+      <Name>Cactus.BaseService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.Common\Cactus.Common.csproj">
+      <Project>{3DE44C87-8F84-4595-B588-AC6B0A5AF8FE}</Project>
+      <Name>Cactus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.Controllers\Cactus.Controllers.csproj">
+      <Project>{4DD2CA28-DB22-44EE-8780-3835ABCCE44C}</Project>
+      <Name>Cactus.Controllers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.Crond\Cactus.Crond.csproj">
+      <Project>{81df353d-429f-4b0b-926f-c8b623d0335a}</Project>
+      <Name>Cactus.Crond</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.IService\Cactus.IService.csproj">
+      <Project>{CCFD427B-78C8-4C3F-A235-E376373CAF33}</Project>
+      <Name>Cactus.IService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.Model\Cactus.Model.csproj">
+      <Project>{A0B12F00-F361-4002-ABBD-5186749E218F}</Project>
+      <Name>Cactus.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.MSSQLService\Cactus.MSSQLService.csproj">
+      <Project>{4C19174D-41B2-4BE6-946F-D87A2CB88A84}</Project>
+      <Name>Cactus.MSSQLService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.MySQLService\Cactus.MySQLService.csproj">
+      <Project>{AC759AC7-DCCE-4582-A908-F0EF54ADF4E5}</Project>
+      <Name>Cactus.MySQLService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cactus.SQLiteService\Cactus.SQLiteService.csproj">
+      <Project>{7E94E3D9-F98F-4087-AF34-BD40642EE2DC}</Project>
+      <Name>Cactus.SQLiteService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Font-Awesome-4.5.0\fonts\fontawesome-webfont.eot" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Font-Awesome-4.5.0\fonts\fontawesome-webfont.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Font-Awesome-4.5.0\fonts\fontawesome-webfont.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Font-Awesome-4.5.0\fonts\fontawesome-webfont.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Font-Awesome-4.5.0\fonts\FontAwesome.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Shared\_AdminLayout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Root\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\RoleList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\SysIndex.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\RoleAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\RoleUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\SysImage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\CacheManage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Root\CenterUser.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Root\CenterAlterPwd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Root\CenterAlterFace.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Root\CenterAlterInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\UserList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\UserUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\UserAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\UserAlterFace.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\wangEditor-2.0.1\css\fonts\icomoon.eot" />
+    <Content Include="Content\wangEditor-2.0.1\css\fonts\icomoon.ttf" />
+    <Content Include="Content\wangEditor-2.0.1\css\fonts\icomoon.woff" />
+    <Content Include="Content\wangEditor-2.0.1\css\wangEditor.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\UserInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\BlogIndex.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\BlogColumnManage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\ColumnAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\ColumnUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\BlogAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\BlogUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Shared\_ZPanel.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Sys\SetPower.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\FileManage.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\StaticHtmlManage.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\StaticHtmlAdd.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\TemplateAdd.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\TemplateUpdate.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\TemplateManage.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\StaticHtmlUpdate.cshtml" />
+    <Content Include="LICENSE" />
+    <Content Include="Areas\Admin\Views\Blog\StaticHtmlHelper.cshtml" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.eot" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.ttf" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.woff" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.woff2" />
+    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\FontAwesome.otf" />
+    <Content Include="Areas\Admin\Views\Sys\LogManager.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\TagManage.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\TagAdd.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\TagUpdate.cshtml" />
+    <Content Include="Themes\Default\Views\_ViewStart.cshtml" />
+    <Content Include="Themes\Default\Views\Blog\Detail.cshtml" />
+    <Content Include="Themes\Default\Views\Blog\Introduce.cshtml" />
+    <Content Include="Themes\Default\Views\Blog\List.cshtml" />
+    <Content Include="Themes\Default\Views\Blog\Search.cshtml" />
+    <Content Include="Themes\Default\Views\Shared\_BlogLayout.cshtml" />
+    <Content Include="Themes\Default\Views\Shared\404.cshtml" />
+    <Content Include="Themes\Default\Views\Shared\500.cshtml" />
+    <Content Include="Themes\Default\Views\Shared\Error.cshtml" />
+    <Content Include="Themes\Default\Views\Shared\SiteClose.cshtml" />
+    <Content Include="Themes\Default\Views\Web.config" />
+    <Content Include="Template\Default.cshtml" />
+    <Content Include="Template\Default2.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Template\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configuration\Plan.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\CommentManage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Store\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Store\StoreAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Store\StoreUpdate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\BlogByColumnId.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\BlogAddByColumnId.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\ColumnAddByColumnId.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\ManageUI.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AdminLogin\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\UIEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\UISelect.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configuration\Theme.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Blog\RenderManage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Linux.pubxml" />
+    <Content Include="Themes\Default\Views\Shared\_StoreLayout.cshtml" />
+    <Content Include="Themes\Default\Views\Store\Index.cshtml" />
+    <Content Include="Themes\Default\Views\Store\Info.cshtml" />
+    <Content Include="Themes\Default\Views\Store\Cat.cshtml" />
+    <Content Include="Themes\Default\Views\Store\Item.cshtml" />
+    <Content Include="Themes\Default\Views\Store\List.cshtml" />
+    <Content Include="Themes\Default\Views\Store\New_List.cshtml" />
+    <Content Include="Themes\Default\Views\Store\Pay.cshtml" />
+    <Content Include="Themes\Default\Views\Store\User_Form.cshtml" />
+    <Content Include="Themes\Default\Views\Store\User_Index.cshtml" />
+    <Content Include="Themes\Default\Views\Store\User_Login.cshtml" />
+    <Content Include="Themes\Default\Views\Store\User_Reg.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Linux|AnyCPU' ">
+    <OutputPath>bin\Linux\</OutputPath>
+    <DefineConstants>TRACE;Linux</DefineConstants>
+    <Optimize>true</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <Target Name="GatherAllFilesToPublish">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52589</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:54326/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+    <MonoDevelop>
+      <Properties>
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

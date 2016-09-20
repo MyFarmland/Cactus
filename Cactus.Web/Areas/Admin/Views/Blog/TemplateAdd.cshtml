@@ -1,0 +1,85 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TemplateManage');" class="pure-button pure-button-primary pure-split">返回</a>*@
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split">返回</a>
+        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/Transfer?view=StaticHtmlHelper');" class="pure-button pure-button-primary pure-split">模板使用帮助</a>
+    </div>
+</div>
+<form class="pure-form  pure-form-aligned" id="tempAdd">
+    <fieldset>
+        <legend>添加模板</legend>
+        <div class="pure-control-group">
+            <label>模板名</label>
+            <input name="TempName" type="text" value="" placeholder="模板名(字母或者数字,不能中文)" />
+            <div class="pure-error pure-c-error" name="TempName"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>模板别名</label>
+            <input name="TempByname" type="text" value="" placeholder="模板别名" />
+            <div class="pure-error pure-c-error" name="TempByname"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>模板参数</label>
+            <textarea rows="5" name="TempParameter" value="" placeholder="模板参数" style="width: 600px;" />
+            <div class="pure-error pure-c-error" name="TempParameter"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>模板内容</label>
+            <textarea rows="25" name="TempContent" value="" placeholder="模板内容" style="width: 600px;height: 450px;overflow: auto;" rows="2" cols="20" />
+            <div class="pure-error pure-c-error" name="TempContent"></div>
+        </div>
+
+        <div class="pure-controls">
+            <button type="button" class="pure-button pure-button-primary" name="tempadd">添加</button>
+        </div>
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $("#tempAdd button[name=tempadd]").bind('click', function () {
+            var TempName = $("#tempAdd input[name=TempName]").val(); 
+            if (TempName == '' || TempName == undefined) {
+                $("#tempAdd div[name=TempName]").html('请填写模板名'); return;
+            } else {
+                $("#tempAdd div[name=TempName]").html('');
+            }
+            var TempByname = $("#tempAdd input[name=TempByname]").val();
+            if (TempByname == '' || TempByname == undefined) {
+                $("#tempAdd div[name=TempByname]").html('请填写模板别名'); return;
+            } else {
+                $("#tempAdd div[name=TempByname]").html('');
+            }
+            var TempParameter = $("#tempAdd textarea[name=TempParameter]").val();
+            if (TempParameter == '' || TempParameter == undefined) {
+                $('#tempAdd div[name=TempParameter]').html('请填写模板参数'); return;
+            } else {
+                $('#tempAdd div[name=TempParameter]').html('');
+            }
+            var TempContent = $("#tempAdd textarea[name=TempContent]").val();
+            if (TempContent == '' || TempContent == undefined) {
+                $('#tempAdd div[name=TempContent]').html('请填写模板内容'); return;
+            } else {
+                $('#tempAdd div[name=TempContent]').html('');
+            }
+            $.ajax({
+                url: "/Admin/Blog/TemplateAdd",
+                type: "post",
+                data: { TempName: TempName, TempByname: TempByname, TempParameter: TempParameter, TempContent: TempContent },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.loadBackPage('main-content');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        })
+    });
+</script>
+
+

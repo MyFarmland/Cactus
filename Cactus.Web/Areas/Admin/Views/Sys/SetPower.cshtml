@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+    var power =ViewData["Power"] as Cactus.Model.Sys.PowerConfig;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" name="SetPower" class="pure-button pure-button-primary">初始化所有权限</a>
+    </div>
+</div>
+<div id="power_list">
+    @{
+        var html="";
+        foreach (var p in power.PowerGroupList)
+        {
+            html += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            html += "模块：" + p.GroupName+(p.IsShow ? "(显示)" : "(隐藏)");
+            html += "<br/>";
+            foreach (var pp in p.PowerList) {
+                html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
+                html += (pp.NoPowerId);
+                html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
+                html += (pp.PowerName);
+                html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
+                html += (pp.IsShow == true ? "显示" : "隐藏");
+                html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
+                html += (pp.ParamStr);
+                html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
+                html += (pp.PowerDes);
+                html += ("<br/>");
+            }
+        }
+    }    
+    @Html.Raw(html);
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('a[name=SetPower]').bind('click', function () {
+            $('#power_list').html("");
+            $('#power_list').append("开始初始化...");
+            $('#power_list').append("<br/>");
+            var param = {};
+            param.param = "Cactus.Controllers.dll";
+            $.ajax({
+                url: "/Admin/Sys/SetPower",
+                type: "post",
+                data: param,
+                success: function (obj) {
+                    if (obj.pass) {
+                        for (var i = 0; i < obj.append.PowerGroupList.length; i++) {
+                            $('#power_list').append(obj.append.PowerGroupList[i].NoGroupId);
+                            $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                            $('#power_list').append("模块：" + obj.append.PowerGroupList[i].GroupName + (obj.append.PowerGroupList[i].IsShow ? "(显示)" : "(隐藏)"));
+                            $('#power_list').append("<br/>");
+                            var p_list = obj.append.PowerGroupList[i].PowerList;
+                            for (var j = 0; j < p_list.length; j++) {
+                                $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                $('#power_list').append(p_list[j].NoPowerId);
+                                $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                $('#power_list').append(p_list[j].PowerName);
+                                $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                $('#power_list').append(p_list[j].IsShow==true?"显示":"隐藏");
+                                $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                $('#power_list').append(p_list[j].ParamStr);
+                                $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                $('#power_list').append(p_list[j].PowerDes);
+                                $('#power_list').append("<br/>");
+                            }
+                        }
+                        $('#power_list').append("初始化成功！！！");
+                        layer.alert(obj.msg);
+                    } else {
+                        layer.alert(obj.msg);
+                    }
+                }
+            });
+
+        });
+    });
+
+</script>

@@ -1,0 +1,1 @@
+Linux上使用Sqlite，需要用到Mono.Data.Sqlite.dll，外加一个系统的api驱动sqlite3.dll，前者项目引用即可，后者直接当bin目录下

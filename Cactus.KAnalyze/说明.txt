@@ -1,0 +1,30 @@
+﻿关键词分析组件源自（原作：泥水佬）：http://www.ikende.com/kwfilter
+2016-06-27 
+
+脏字词库 filthy.resx
+繁简体词库 zh_CNtoTW.resx
+
+作用：可以对词库进行分析，对脏字进行过滤或者对文章的词进行分析分词
+
+使用
+            Keyword kw = new Keyword();
+            string[] keys = Resource1.KEY.Split('\r', '\n');
+            kw.Add(keys);
+            string value = "java";
+            using (System.IO.StreamReader reader = new System.IO.StreamReader("TEST2.txt", Encoding.UTF8))
+            {
+                value = reader.ReadToEnd();
+            }
+            //IList<MatchItem> items = kw.Matchs(value);
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Reset();
+            sw.Start();
+            IList<MatchItem> items = kw.Matchs(value);
+            sw.Stop();
+            foreach (MatchItem item in items)
+            {
+                Console.WriteLine("keyword:[{0}] {1}[start:{2} end:{3}]", item.GetKeyWord(), item, item.StartIndex(), item.EndIndex());
+            }
+            Console.WriteLine("Matchs:{0}", items.Count);
+            Console.WriteLine("Text Length:{0} use Time:{1}ms", value.Length, sw.Elapsed.TotalMilliseconds);
+            Console.Read();

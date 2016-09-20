@@ -1,0 +1,194 @@
+﻿@{
+    Layout = null;
+}
+<label>文章查找</label>
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split">返回</a>
+    </div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1-1">
+        <div class="pure-form">
+            <input type="text" id="searchTxt" placeholder="关键字">
+            <input style="display:none" type="hidden">
+            <a href="javascript:;" id="searchBlog" class="pure-link pure-link-default ">搜索</a>
+        </div>
+    </div>
+</div>
+<table class="pure-table pure-table-bordered table-p" id="blog">   
+</table>
+<ul class="pure-paginator" id="table_paginator">
+</ul>
+<script type="text/javascript">
+    $(function () {
+        function onTable(index, title) {
+            Admin.tipTable($('#blog'), '数据加载中...');
+            $.ajax({
+                url: "/Admin/Blog/BlogList",
+                type: "post",
+                data: { page: index, title: title },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.renderTable($('#blog'), obj.rows, [
+                            { field: "Article_Id", title: "#" },
+                            {
+                                field: "Title", title: "标题", formatter: function (val, rec, row) {
+                                    if (val.length > 25) {
+                                        return val.substring(0, 25) + "...";
+                                    }
+                                    return val;
+                                }
+                            },
+                            { field: "ColumnName", title: "栏目" },
+                            { field: "CreateTime", title: "创建时间" },
+                            { field: "LastTime", title: "最后编辑时间" },
+                            {
+                                field: "Article_Id", title: "操作", formatter: function (val, rec, row) {
+                                    var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
+                                            '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>';
+                                    if (row.IsTop) {
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="top" data-value="' + val + '">取消置顶</a>';
+                                    } else {
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="top" data-value="' + val + '">置顶</a>';
+                                    }
+                                    if (row.IsShow) {
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="show" data-value="' + val + '">隐藏</a>';
+                                    } else {
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="show" data-value="' + val + '">显示</a>';
+                                    }
+                                    return str;
+                                }
+                            }]);
+                        onPaginator(obj.pagination, title);
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        }
+
+        function onPaginator(p, title) {
+            bindFunc();
+            $('#table_paginator').pure_paginator({
+                spacerNum: 2,
+                prevStr: '上一页',
+                nextStr: '下一页',
+                countStr: '共{count}页',
+                count: p.PageCount,
+                inPage: p.PageIndex,
+                onPage: function (index) {
+                    onTable(index, title);
+                }
+            });
+        }
+        //操作绑定
+        function bindFunc() {
+            $('#blog a[name=upd]').bind('click', function () {
+                var $target = $(this);
+                var id = $target.attr('data-value');
+                Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogUpdate?id=' + id);
+            });
+
+            $('#blog a[name=del]').bind('click', function () {
+                var $target = $(this);
+                var id = $target.attr('data-value');
+                layer.confirm('确定真的删除吗？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    Admin.loadDialog_show();
+                    $.ajax({
+                        url: "/Admin/Blog/BlogDelete",
+                        type: "post",
+                        data: { ids: id },
+                        success: function (obj) {
+                            Admin.loadDialog_hide();
+                            layer.close(index);
+                            if (obj.pass) {
+                                $target.parent().parent().remove();
+                            } else {
+                                layer.alert(obj.msg);
+                            }
+                        }
+                    });
+                }, function () { });
+            });
+
+            $('#blog a[name=top]').bind('click', function () {
+                var $target = $(this);
+                var id = $target.attr('data-value');
+                var b = true;
+                if ($target.html() == '置顶') {
+                    b = true;
+                } else {
+                    b = false;
+                }
+                layer.confirm('确定改变置顶', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    Admin.loadDialog_show();
+                    $.ajax({
+                        url: "/Admin/Blog/FileList",
+                        type: "post",
+                        data: { id: id, on_off: b },
+                        success: function (obj) {
+                            Admin.loadDialog_hide();
+                            layer.close(index);
+                            if (obj.pass) {
+                                $target.html(b ? '取消置顶' : '置顶');
+                            } else {
+                                layer.alert(obj.msg);
+                            }
+                        }
+                    });
+                }, function () { });
+
+
+            });
+
+            $('#blog a[name=show]').bind('click', function () {
+                var $target = $(this);
+                var id = $target.attr('data-value');
+                var b = true;
+                if ($target.html() == '显示') {
+                    b = true;
+                } else {
+                    b = false;
+                }
+                layer.confirm('确定改变显示？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    Admin.loadDialog_show();
+                    $.ajax({
+                        url: "/Admin/Blog/BlogIsShow",
+                        type: "post",
+                        data: { id: id, on_off: b },
+                        success: function (obj) {
+                            Admin.loadDialog_hide();
+                            layer.close(index);
+                            if (obj.pass) {
+                                $target.html(b ? '隐藏' : '显示');
+                            } else {
+                                layer.alert(obj.msg);
+                            }
+                        }
+                    });
+                }, function () { });
+            });
+        }
+        //搜索
+        $('#searchBlog').bind('click', function () {
+            var $target = $('#searchTxt');
+            var key = $target.val();
+            onTable(1, key);
+        });
+        $('#searchTxt').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                var $target = $('#searchTxt');
+                var key = $target.val();
+                onTable(1, key);
+            }
+        });        
+    })
+</script>
+

@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html class="h100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>layout example3</title>
+    <link rel="stylesheet" href="/PureUI/src/pureplus.css">
+    <link rel="stylesheet" href="/PureUI/Font-Awesome-4.5.0/css/font-awesome.css">
+    <link href="/PureUI/pureUI/public.css" rel="stylesheet" />
+    <style>
+        .b {
+            border: 1px solid #999;
+        }
+
+        .c-1 {
+            background-color: #999;
+        }
+
+        .c-2 {
+            background-color: #0ff;
+        }
+
+        .c-3 {
+            background-color: #00ff90;
+        }
+
+        .c-4 {
+            background-color: #ffd800;
+        }
+
+        .c-5 {
+            background-color: #ff00dc;
+        }
+
+        .left-menu {
+            position: fixed;
+            z-index: 1001;
+            height: 100%;
+            background: #2f4050;
+        }
+
+        .right-content {
+            position: inherit;
+            height: 100%;
+            width: auto;
+        }
+
+        .right-top-menu {
+            background: #f3f3f4;
+            border-bottom: 1px solid #e7eaec !important;
+        }
+
+            .right-top-menu .pure-menu-link {
+                padding: 20px 10px 20px 10px;
+
+            }
+
+            .right-top-menu .pure-menu-children .pure-menu-link {
+                padding: .5em .5em;
+            }
+
+        .right-top-tab {
+            background: #f3f3f4;
+            border-bottom: 1px solid #e7eaec !important;
+        }
+
+        .main-content {
+            /*height: calc(100% - 140px);*/
+            height: 100%;
+            overflow: hidden;
+            background: #f3f3f4;
+        }
+
+        .footer {
+            background: none repeat scroll 0 0 #fff;
+            border-top: 1px solid #e7eaec;
+            overflow: hidden;
+            padding: 10px 20px;
+            margin: 0 -20px;
+            height: 36px;
+            text-align: right;
+        }
+
+        .h100 {
+            height: 100%;
+        }
+
+        .pure-label {
+            display: inline-block;
+            min-width: 10px;
+            padding: .25em .625em;
+            color: #fff;
+            line-height: 1;
+            vertical-align: baseline;
+            white-space: nowrap;
+            text-align: center;
+            font-weight: 700;
+            border-radius: 0;
+        }
+
+        .big {
+            width: 220px;
+        }
+            .big+.right-content {
+                margin: 0 0 0 220px;
+            }
+            .big .userface {
+                height: 104px;
+            }
+
+            .big #userface {
+                width: 64px;
+                height: 64px;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .big #smallMenu {
+                display: none;
+            }
+
+        .small {
+            width: 50px;
+        }
+            .small+.right-content {
+                margin: 0 0 0 220px;
+            }
+            .small .userface {
+                height: 88px;
+            }
+
+            .small #userface {
+                width: 48px;
+                height: 48px;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .small #bigMenu {
+                display: none;
+            }
+
+        .f-right {
+            float: right;
+        }
+
+        .f-left {
+            float: left;
+        }
+
+        .left-menu .pure-menu-link {
+            color: white;
+        }
+
+            .left-menu .pure-menu-link:hover,
+            .left-menu .pure-menu-link:focus {
+                /*覆盖默认样式*/
+                background-color: rgb(41,56,70);
+            }
+
+        .left-menu .pure-menu-selected .pure-menu-link:hover,
+        .left-menu .pure-menu-selected .pure-menu-link:focus {
+            /*覆盖默认样式*/
+            background-color: #0D80BA;
+        }
+    </style>
+</head>
+<body class="pure-family h100" style="overflow-x: hidden;">
+    <div class="left-menu big">
+        <!--big small 的切换导致更多的变化-->
+        <div class="pure-u-1 userface">
+            <img id="userface" src="/PureUI/Img/test.jpg" class="pure-input pure-circle" />
+            <div class="pure-u-1"><span class="pure-label" style="margin: 0 auto;">欢迎，晚安</span></div>
+            <div class="pure-u-1"><a class="pure-label" style="margin: 0 auto;">超级管理员</a></div>
+        </div>
+        <!--bigMenu-->
+        <div class="pure-menu pure-menu-vertical" id="bigMenu">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item pure-menu-selected">
+                    <a href="#" class="pure-menu-link">
+                        <span class="pure-label">Flickr</span>
+                        <span class="pure-label" style="background-color: #0ff;">1</span>
+                    </a>
+                </li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Messenger</span><span class="pure-label" style="background-color: #0ff;">1</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Sports</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Finance</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Finance</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Finance</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Finance</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Finance</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Finance</span></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i><span class="pure-label">Finance</span></a></li>
+            </ul>
+        </div>
+        <!--smallMenu-->
+        <div class="pure-menu pure-menu-vertical" id="smallMenu">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i></a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-tag"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="right-content">
+        <div class="pure-g h100">
+            <div class="pure-u-1 right-top-menu">
+                <div class="pure-menu pure-menu-horizontal pure-menu-right">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                            <a href="#" id="menuLink1" class="pure-menu-link">操作</a>
+                            <ul class="pure-menu-children">
+                                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Email</a></li>
+                                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Twitter</a></li>
+                                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Tumblr Blog</a></li>
+                            </ul>
+                        </li>
+                        <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link">退出</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pure-u-1  h100">
+                <div class="main-content h100">
+                    111111<br />
+                    111111<br />
+                    111111<br />
+                </div>
+                <div class="pure-g">
+                    <div class="pure-u-1 footer">© 2016 1111</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

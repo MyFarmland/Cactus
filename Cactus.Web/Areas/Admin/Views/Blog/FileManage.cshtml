@@ -1,0 +1,278 @@
+﻿@{
+    Layout = null;
+}
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" name="createCurrentDir" class="pure-button pure-button-primary pure-split">创建文件夹</a>
+        <a href="javascript:;" name="flushCurrentDir" class="pure-button pure-button-primary pure-split">刷新当前目录</a>
+    </div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1-1">
+        <label style="width: 5em;">上传文件</label>
+        <input name="uploadFile" type="file" />
+        <a href="javascript:;" name="uploadFile_submit" class="pure-link pure-link-default">上传</a>
+        <a href="javascript:;" name="uploadFile_clean" class="pure-link pure-link-default">清空</a>
+        <div class="pure-error pure-c-error" name="uploadFile"></div>
+    </div>
+</div>
+<table class="pure-table pure-table-horizontal table-p" id="fileSys_Root">
+    <thead>
+        <tr>
+            <th>名称</th>
+            <th>创建时间</th>
+            <th>修改时间</th>
+            <th>大小</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody id="fileSys_Body">
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
+        onSysList('', '', function () { });//根目录
+        //刷新当前目录
+        $('a[name=flushCurrentDir]').bind('click', function () {
+            var root = $('a[name=root]').attr('data-value');
+            var flush_Action = $('a[name=flushCurrentDir]');
+            flush_Action.attr("disabled", "disabled");
+            var _name = flush_Action.html();
+            flush_Action.html('刷新中...');
+            onSysList(root, '', function () {
+                flush_Action.removeAttr("disabled");
+                flush_Action.html(_name);
+            });
+        });
+
+        $('a[name=createCurrentDir]').bind('click', function () {
+            var create_Action = $('a[name=createCurrentDir]');
+            create_Action.attr("disabled", "disabled");
+            var dirName = prompt("新目录的名字", '');//新名字
+            var currentDir = $('a[name=root]').attr('data-value');
+            if (dirName != null
+               && dirName != '') {
+                $.ajax({
+                    url: "/Admin/Blog/FileNewDir",
+                    type: "post",
+                    data: { currentDir: currentDir, newDirName: dirName },
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        if (obj.pass) {
+                            onSysList(currentDir, '', function () { });
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                        create_Action.removeAttr("disabled");
+                    }
+                });
+            }
+        });
+
+        $('a[name=uploadFile_clean]').bind('click', function () {
+            $("input[name=uploadFile]").upload("clean");
+        });
+
+        $('a[name=uploadFile_submit]').bind('click', function () {
+            var file = $("input[name=uploadFile]").upload("getFileVal");
+            var $error_msg = $("div[name=uploadFile]");
+            if (file == '' || file == undefined) {
+                $error_msg.html("请选择文件");
+                return;
+            }
+            var currentDir = $('a[name=root]').attr('data-value');
+            Admin.loadDialog_show();
+            var $target = $(this);
+            $target.attr("disabled", "disabled");
+            $("input[name=uploadFile]").upload({
+                url: '/Admin/Blog/FileUpload',
+                // 上传完成后, 返回json, text
+                dataType: 'json',
+                params: { currentDir: currentDir },
+                onSend: function (obj, str) { $error_msg.html("上传中"); return true; },
+                // 上传之后回调
+                onComplate: function (data) {
+                    Admin.loadDialog_hide();
+                    $target.removeAttr("disabled");
+                    if (data.pass) {
+                        $error_msg.html('上传成功');
+
+                        onSysList(currentDir, '', function () { });
+                    } else {
+                        $error_msg.html(data.msg);
+                    }
+                },
+                onProgress: function (evt) {
+                    var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+                    $error_msg.html("进度:" + percentComplete + "%");
+                }
+            });
+            $("input[name=uploadFile]").upload("ajaxSubmit");
+        });
+
+        function onSysList(currentDir, viewDir, callback) {
+            $('#fileSys_Body').html('<tr><td colspan="5">加载中...</td></tr>');
+            Admin.loadDialog_show();
+            $.ajax({
+                url: "/Admin/Blog/FileList",
+                type: "post",
+                data: { currentDir: currentDir, viewDir: viewDir },
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    $('#fileSys_Body').html('');
+                    if (obj.pass) {
+                        //刷新列表
+                        renderSysTable(obj.append);
+                    } else {
+                        //失败 
+                        layer.alert(obj.msg);
+                    }
+                    callback();
+                }
+            });
+        }
+
+        function renderSysTable(raws) {
+            //目录列表
+            var dir_list = raws.dir_list;
+            //文件列表
+            var f_list = raws.f_list;
+            //是否root目录
+            var isRoot = raws.isRoot;
+            //
+            var RootPath = raws.RootPath;
+            //
+            var temp_dir = '<tr><td><i class="fa fa-folder"></i><a href="javascript:;" name="dir" data-value="{dir_name}"> {dir_name} </a></td><td>{dir_lasttime}</td><td>{dir_createtime}</td><td></td>' +
+                            '<td><a href="javascript:;" class="pure-link pure-link-purple" name="action_del" data-value="{dir_name}">删除</a><a href="javascript:;" class="pure-link pure-link-purple" name="action_rename" data-value="{dir_name}">重命名</a></td></tr>';
+            var temp_file = '<tr><td><i class="fa fa-file"></i><a href="{file_link}" name="file" data-value="{file_name}" {file_args}> {file_name} </a></td><td>{file_lasttime}</td><td>{file_createtime}</td><td>{file_size}kb</td>' +
+                            '<td><a href="javascript:;" class="pure-link pure-link-purple" name="action_del" data-value="{file_name}">删除</a><a href="javascript:;" class="pure-link pure-link-purple" name="action_rename" data-value="{file_name}">重命名</a><input type="text" value="{file_url}" style="width:150px" onclick="$(this).select();"/></td></tr>';
+            //data-clipboard-text="1"
+            var temp_root = '<tr><td colspan="5"><i class="fa fa-folder-open-o"></i><a href="javascript:;" name="root" data-value="{dir_args}">{dir_name}</a></td></tr>';
+            var $body = $('#fileSys_Body');
+            $body.html('');
+            $body.append(temp_root.replace('{dir_args}', RootPath).replace('{dir_name}', RootPath));
+            if (dir_list != undefined) {
+                for (var i = 0; i < dir_list.length ; i++) {
+                    $body.append(temp_dir.replace(/{dir_name}/g, dir_list[i].DirName).replace('{dir_createtime}', dir_list[i].CreateTime).replace('{dir_lasttime}', dir_list[i].LastTime));
+                }
+            }
+            if (f_list != undefined) {
+                for (var i = 0; i < f_list.length ; i++) {
+                    //if()
+                    var fileName = f_list[i].FileName;
+                    if (fileName.indexOf('.') > 0)//由于linux系统文件没有后缀，用.来分析
+                    {
+                        var agrs = fileName.split('.');
+                        var _name = agrs[0];
+                        var _extension = agrs[1].toLowerCase();
+                        if (_extension == "jpg"
+                            || _extension == "jpeg"
+                            || _extension == "png"
+                            || _extension == "gif"
+                            || _extension == "bmp") {
+                            $body.append(temp_file.replace(/{file_name}/g, fileName)
+                                .replace('{file_createtime}', f_list[i].CreateTime)
+                                .replace('{file_lasttime}', f_list[i].LastTime)
+                                .replace('{file_size}', f_list[i].Length)
+                                .replace('{file_link}', f_list[i].WebUrl)
+                                .replace('{file_url}', window.location.host + f_list[i].WebUrl)
+                                .replace('{file_args}', 'data-rel="lightcase:" title="' + fileName + '" fileurl="' + f_list[i].WebUrl + '"'));
+                        } else {
+                            $body.append(temp_file.replace(/{file_name}/g, fileName)
+                                .replace('{file_createtime}', f_list[i].CreateTime)
+                                .replace('{file_lasttime}', f_list[i].LastTime)
+                                .replace('{file_size}', f_list[i].Length)
+                                .replace('{file_link}', 'javascript:;')
+                                .replace('{file_url}', +window.location.host + f_list[i].WebUrl)
+                                .replace('{file_args}', ''));
+                        }
+                    } else {
+                        $body.append(temp_file.replace(/{file_name}/g, fileName).replace('{file_createtime}', f_list[i].CreateTime).replace('{file_lasttime}', f_list[i].LastTime).replace('{file_size}', f_list[i].Length).replace('{file_link}', 'javascript:;').replace('{file_args}', ''));
+                    }
+                }
+            }
+            bindAction();
+        }
+
+        function bindAction() {
+            //点击目录
+            $('#fileSys_Root a[name=dir]').bind('click', function () {
+                var dir = $(this).attr('data-value');
+                var root = $('a[name=root]').attr('data-value');
+                onSysList(root, dir, function () { });
+            });
+            //相册
+            $('#fileSys_Body a[data-rel="lightcase:"]').lightcase({
+                showSequenceInfo: false,
+                transition: 'scrollHorizontal'
+            });
+            //点击返回上级目录
+            $('#fileSys_Root a[name=root]').bind('click', function () {
+                var currentDir = $(this).attr('data-value');
+                if (currentDir != '/' && currentDir != '\\') {
+                    onSysList(currentDir, '..', function () { });
+                }
+            });
+            //点击删除
+            $('#fileSys_Root a[name=action_del]').bind('click', function () {
+                var fileOrDir = $(this).attr('data-value');
+                var currentDir = $('a[name=root]').attr('data-value');
+                layer.confirm('是否删除？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    Admin.loadDialog_show();
+                    $.ajax({
+                        url: "/Admin/Blog/FileDel",
+                        type: "post",
+                        data: { currentDir: currentDir, fileOrDir: fileOrDir },
+                        success: function (obj) {
+                            Admin.loadDialog_hide();
+                            layer.close(index);
+                            if (obj.pass) {
+                                var root = $('a[name=root]').attr('data-value');
+                                onSysList(root, '', function () { });
+                            } else {
+                                layer.alert(obj.msg);
+                            }
+                        }
+                    });
+                }, function () { });
+            });
+            //点击重命名
+            $('#fileSys_Root a[name=action_rename]').bind('click', function () {
+                var oldName = $(this).attr('data-value');//老名字
+                var _name = oldName;
+                var _extension = '';
+                if (oldName.indexOf('.') > 0) {
+                    var _arr = oldName.split('.');
+                    _name = _arr[0];
+                    _extension = _arr[1];
+                }
+                var currentDir = $('a[name=root]').attr('data-value');
+                var newName = prompt("新的名字", _name);//新名字
+                if (newName != null
+                    && newName != '') {
+                    if (_extension != '') {
+                        newName = newName + '.' + _extension;
+                    }
+                    $.ajax({
+                        url: "/Admin/Blog/FileRename",
+                        type: "post",
+                        data: { currentDir: currentDir, oldName: oldName, newName: newName },
+                        success: function (obj) {
+                            Admin.loadDialog_hide();
+                            if (obj.pass) {
+                                var root = $('a[name=root]').attr('data-value');
+                                onSysList(root, '', function () { });
+                            } else {
+                                layer.alert(obj.msg);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+    })
+
+</script>

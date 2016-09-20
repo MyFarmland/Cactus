@@ -1,0 +1,119 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TemplateAdd');" class="pure-button pure-button-primary pure-split">添加模板</a>
+        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/StaticHtmlManage');" class="pure-button pure-button-primary pure-split">返回</a>*@
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split">返回</a>
+    </div>
+</div>
+
+<table class="pure-table pure-table-bordered table-p" id="temp"></table>
+<ul class="pure-paginator" id="table_paginator"></ul>
+<script type="text/javascript">
+    function onTable(index) {
+        Admin.tipTable($('#temp'), '数据加载中...');
+        $.ajax({
+            url: "/Admin/Blog/TemplateManage",
+            type: "post",
+            data: { page: index },
+            success: function (obj) {
+                if (obj.pass) {
+                    Admin.renderTable($('#temp'), obj.rows, [
+                        { field: "TempPage_Id", title: "#" },
+                        {
+                            field: "TempName", title: "模板名", formatter: function (val, rec, row) {
+                                if (val.length > 25) {
+                                    return val.substring(0, 25) + "...";
+                                }
+                                return val;
+                            }
+                        },{ field: "TempPath", title: "路径地址" },
+                        { field: "CreateTime", title: "创建时间" },
+                        { field: "LastTime", title: "最后编辑时间" },
+                        {
+                            field: "TempPage_Id", title: "操作", formatter: function (val, rec, row) {
+                                var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
+                                        '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>' +
+                                        '<a href="javascript:;" class="pure-link pure-link-purple" name="render" data-value="' + val + '">生成模板文件</a>';
+
+                                return str;
+                            }
+                        }]);
+                    bindFunc();
+                    //onPaginator(obj.pagination);
+                } else {
+                    layer.alert(obj.msg)
+                }
+            }
+        });
+    }
+
+    //function onPaginator(p) {
+    //    bindFunc();
+    //    $('#table_paginator').pure_paginator({
+    //        spacerNum: 2,
+    //        prevStr: '上一页',
+    //        nextStr: '下一页',
+    //        countStr: '共{count}页',
+    //        count: p.PageCount,
+    //        inPage: p.PageIndex,
+    //        onPage: function (index) {
+    //            onTable(index);
+    //        }
+    //    });
+    //}
+    //操作绑定
+    function bindFunc() {
+        $('#temp a[name=upd]').bind('click', function () {
+            var $target = $(this);
+            var id = $target.attr('data-value');
+            Admin.loadContent_Jq('main-content', '/Admin/Blog/TemplateUpdate?id=' + id);
+        });
+
+        $('#temp a[name=render]').bind('click', function () {
+            var $target = $(this);
+            var id = $target.attr('data-value');
+            Admin.loadDialog_show();
+            $.ajax({
+                url: "/Admin/Blog/TemplateCSHtmlRender",
+                type: "post",
+                data: { id: id },
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                }
+            });
+        });
+
+        $('#temp a[name=del]').bind('click', function () {
+            var $target = $(this);
+            var id = $target.attr('data-value');
+            layer.confirm('确定真的删除吗？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                Admin.loadDialog_show();
+                $.ajax({
+                    url: "/Admin/Blog/TemplateDelete",
+                    type: "post",
+                    data: { ids: id },
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        layer.close(index);
+                        if (obj.pass) {
+                            $target.parent().parent().remove();
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                    }
+                });
+            }, function () { });
+        });
+    }
+
+    $(function () {
+        onTable(1);
+    })
+</script>

@@ -1,0 +1,168 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="pure-g">
+    <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Store/StoreAdd');" class="pure-link pure-link-default">添加店铺</a>
+</div>
+<table class="pure-table pure-table-bordered table-p" id="store"></table>
+<ul class="pure-paginator" id="table_paginator"></ul>
+<script type="text/javascript">
+    $(function () {
+        function onTable(index, title) {
+            Admin.tipTable($('#store'), '数据加载中...');
+            $.ajax({
+                url: "/Admin/STore/StoreList",
+                type: "post",
+                data: { page: index},
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.renderTable($('#store'), obj.rows, [
+                            { field: "Store_Id", title: "#" },
+                            {
+                                field: "StoreName", title: "店铺名", formatter: function (val, rec, row) {
+                                    if (val.length > 25) {
+                                        return val.substring(0, 25) + "...";
+                                    }
+                                    return val;
+                                }
+                            },
+                            { field: "StoreSwitch", title: "店铺状态" },
+                            { field: "CreateTime", title: "创建时间" },
+                            { field: "LastTime", title: "最后编辑时间" },
+                            {
+                                field: "Store_Id", title: "操作", formatter: function (val, rec, row) {
+                                    var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
+                                            '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>';
+                                    if (row.StoreSwitch) {
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="switch" data-value="' + val + '">关店</a>';
+                                    } else {
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="switch" data-value="' + val + '">开店</a>';
+                                    }
+                                    return str;
+                                }
+                            }]);
+                        onPaginator(obj.pagination);
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        }
+
+        function onPaginator(p) {
+            bindFunc();
+            $('#table_paginator').pure_paginator({
+                spacerNum: 2,
+                prevStr: '上一页',
+                nextStr: '下一页',
+                countStr: '共{count}页',
+                count: p.PageCount,
+                inPage: p.PageIndex,
+                onPage: function (index) {
+                    onTable(index);
+                }
+            });
+        }
+        ////操作绑定
+        //function bindFunc() {
+        //    $('#blog a[name=upd]').bind('click', function () {
+        //        var $target = $(this);
+        //        var id = $target.attr('data-value');
+        //        Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogUpdate?id=' + id);
+        //    });
+
+        //    $('#blog a[name=del]').bind('click', function () {
+        //        var $target = $(this);
+        //        var id = $target.attr('data-value');
+        //        if (confirm('确定真的删除吗')) {
+        //            Admin.loadDialog_show();
+        //            $.ajax({
+        //                url: "/Admin/Blog/BlogDelete",
+        //                type: "post",
+        //                data: { ids: id },
+        //                success: function (obj) {
+        //                    Admin.loadDialog_hide();
+        //                    if (obj.pass) {
+        //                        $target.parent().parent().remove();
+        //                    } else {
+        //                        alert('删除失败');
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    });
+
+        //    $('#blog a[name=top]').bind('click', function () {
+        //        var $target = $(this);
+        //        var id = $target.attr('data-value');
+        //        var b = true;
+        //        if ($target.html() == '置顶') {
+        //            b = true;
+        //        } else {
+        //            b = false;
+        //        }
+        //        if (confirm('确定改变置顶')) {
+        //            Admin.loadDialog_show();
+        //            $.ajax({
+        //                url: "/Admin/Blog/FileList",
+        //                type: "post",
+        //                data: { id: id, on_off: b },
+        //                success: function (obj) {
+        //                    Admin.loadDialog_hide();
+        //                    if (obj.pass) {
+        //                        $target.html(b ? '取消置顶' : '置顶');
+        //                    } else {
+        //                        alert(obj.msg);
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    });
+
+        //    $('#blog a[name=show]').bind('click', function () {
+        //        var $target = $(this);
+        //        var id = $target.attr('data-value');
+        //        var b = true;
+        //        if ($target.html() == '显示') {
+        //            b = true;
+        //        } else {
+        //            b = false;
+        //        }
+        //        if (confirm('确定改变显示')) {
+        //            Admin.loadDialog_show();
+        //            $.ajax({
+        //                url: "/Admin/Blog/BlogIsShow",
+        //                type: "post",
+        //                data: { id: id, on_off: b },
+        //                success: function (obj) {
+        //                    Admin.loadDialog_hide();
+        //                    if (obj.pass) {
+        //                        $target.html(b ? '隐藏' : '显示');
+        //                    } else {
+        //                        alert(obj.msg);
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    });
+        //}
+        ////搜索
+        //$('#searchBlog').bind('click', function () {
+        //    var $target = $('#searchTxt');
+        //    var key = $target.val();
+        //    onTable(1, key);
+        //});
+        //$('#searchTxt').bind('keypress', function (event) {
+        //    if (event.keyCode == "13") {
+        //        var $target = $('#searchTxt');
+        //        var key = $target.val();
+        //        onTable(1, key);
+        //    }
+        //});
+
+        //初始化
+        onTable(1,"");
+    })
+</script>
+

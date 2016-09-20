@@ -1,0 +1,194 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/StaticHtmlManage');" class="pure-button pure-button-primary ">返回</a>*@
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary ">返回</a>
+    </div>
+</div>
+
+<form class="pure-form  pure-form-aligned" id="p_scents">
+    <fieldset>
+        <legend>添加页面</legend>
+        <div class="pure-control-group">
+            <label>页面名</label>
+            <input name="PageName" type="text" value="" placeholder="页面名" />
+            <div class="pure-error pure-c-error" name="PageName"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>选择模板</label>
+            <select name="tempList"></select>
+            <div class="pure-error pure-c-error" name="tempList"></div>
+        </div>
+        <div id="param_html">
+
+        </div>
+        <div class="pure-controls">
+            <button type="button" class="pure-button pure-button-primary" name="staticpageadd">添加</button>
+        </div>
+    </fieldset>
+</form>
+<script>
+    $(function () {
+        function getTempList() {
+            $.ajax({
+                url: "/Admin/Blog/TemplateList",
+                type: "post",
+                success: function (obj) {
+                    if (obj.pass) {
+                        if (obj.rows.length > 0) {
+                            for (var i = 0; i < obj.rows.length ; i++) {
+                                $("#p_scents select[name=tempList]").append("<option value='" + obj.rows[i].TempPage_Id + "'>" + obj.rows[i].TempByname + "(" + obj.rows[i].TempName + ")" + "</option>");
+                            }
+                            //加载第一个
+                            getTempParam($("#p_scents select[name=tempList]").val());
+                            //
+                            $("#p_scents select[name=tempList]").bind('change', function () {
+                                getTempParam($("#p_scents select[name=tempList]").val());
+                            })
+                        } else {
+                            $("#p_scents select[name=tempList]").html("<option>暂无模板</option>");
+                        }
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        }
+        //初始化模板
+        getTempList();
+        function getTempParam(id) {
+            $.ajax({
+                url: "/Admin/Blog/TemplateFind",
+                type: "post",
+                data: { id: id },
+                success: function (obj) {
+                    if (obj.pass) {
+                        ParamReaderHtml(JSON.parse(obj.obj.TempParameter));
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        }
+        var editor_arr = [];
+        var editor_obj_arr = [];
+        var input_arr = [];
+        var m_parm = null;
+        function ParamReaderHtml(parm) {
+            if (parm == null) { return; }
+            if (parm.length == 0) { return; }
+            m_parm = parm;
+            //type 1:普通输入 2:富文本输入
+            var temp_input = '<div class="pure-control-group"><label>{label}</label>' +
+                '<input id="{key}" type="text" value="{value}" placeholder="{tiplabel}" />' +
+                '<div class="pure-error pure-c-error" name="{error_key}"></div></div>';
+            var temp_editor = ' <div class="pure-control-group"><label>{label}</label>' +
+                '<div style="width:650px;display: inline-block;vertical-align: middle;"><div id="{key}" style="height:200px;max-height:300px;">{value}</div>' +
+                '</div><div class="pure-error pure-c-error" name="{error_key}"></div></div>';
+            function renderHtml() {
+                $('#param_html').html('');
+                for (var i = 0; i < parm.length; i++) {
+                    if (parm[i]["type"] == "1") {
+                        $('#param_html').append(temp_input.replace("{label}", parm[i]["label"]).replace("{tiplabel}", parm[i]["tiplabel"]).replace("{value}", parm[i]["value"]).replace("{key}", parm[i]["key"]).replace("{error_key}", parm[i]["key"]));
+                        input_arr.push(parm[i]["key"]);
+                    } else if (parm[i]["type"] == "2") {
+                        $('#param_html').append(temp_editor.replace("{label}", parm[i]["label"]).replace("{value}", parm[i]["value"]).replace("{key}", parm[i]["key"]).replace("{error_key}", parm[i]["key"]));
+                        var editor = new wangEditor(parm[i]["key"]);
+                        editor.config.uploadImgUrl = '/Admin/Blog/UploadImg';
+                        editor.config.zindex = 1000;
+                        editor.config.lang = wangEditor.langs['zh-cn'];
+                        editor.config.menus = [
+            'source',
+            '|',
+            'bold',
+            'underline',
+            'italic',
+            'strikethrough',
+            'eraser',
+            'forecolor',
+            'bgcolor',
+            '|',
+            'quote',
+            'fontfamily',
+            'fontsize',
+            'head',
+            'unorderlist',
+            'orderlist',
+            'alignleft',
+            'aligncenter',
+            'alignright',
+            '|',
+            'link',
+            'unlink',
+            'table',
+            'emotion',
+            '|',
+            'img',
+            'video',
+            'insertcode',
+            '|',
+            'undo',
+            'redo',
+            'fullscreen'
+                        ];
+                        editor.create();
+                        editor_arr.push(parm[i]["key"]);
+                        editor_obj_arr.push(editor);
+                    }
+                }
+            }
+            renderHtml();
+        }
+        $('button[name=staticpageadd]').bind('click', function () {
+            
+            var PageName = $("#p_scents input[name=PageName]").val();
+            if (PageName == '' || PageName == undefined) {
+                $('#p_scents div[name=PageName]').html('请填写页面名'); return;
+            } else {
+                $('#p_scents div[name=PageName]').html('');
+            }
+            var PageParameter = getParmValue();
+            var TempPageId = $("#p_scents select[name=tempList]").val();
+            $.ajax({
+                url: "/Admin/Blog/StaticHtmlAdd",
+                type: "post",
+                data: { PageName: PageName, PageParameter: JSON.stringify(PageParameter), TempPageId: TempPageId },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.loadBackPage('main-content');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        })
+        //数据转对象
+        function getParmValue() {
+            //后期扩展验证
+            var obj = m_parm;
+            for (var i = 0; i < input_arr.length; i++) {
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j]["key"] == input_arr[i])
+                    {
+                        obj[j]["value"] = $("#param_html #" + input_arr[i]).val();
+                    }
+                }
+                
+            }
+            for (var i = 0; i < editor_arr.length; i++) {
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j]["key"] == editor_arr[i]) {
+                        obj[j]["value"] = editor_obj_arr[i].$txt.html();
+                    }
+                }
+            }
+            console.log(JSON.stringify(obj));
+            return obj;
+        }
+    });
+</script>
+
+

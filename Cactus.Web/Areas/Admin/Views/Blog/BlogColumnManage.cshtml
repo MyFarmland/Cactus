@@ -1,0 +1,108 @@
+﻿@{
+    Layout = null;
+    var list = ViewData["ColumnList"] as List<Cactus.Model.CMS.Column>;
+}
+
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnAdd');" class="pure-button pure-button-primary pure-split">添加主栏目</a>
+        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogIndex');" class="pure-button pure-button-primary pure-split">查找文章</a>
+    </div>
+</div>
+
+<table class="pure-table " id="column">
+    <thead>
+        <tr>
+            <th>栏目名</th>
+            <th>排序</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (list != null)
+        {
+            bool b = true;
+            foreach (var item in list)
+            {
+                <tr @if (b) { b = false; <text> class="pure-table-odd" </text>  } else { b = true; }>
+                    <td>
+                    @if (item.Lv == 1)
+                    {
+                        <text>
+                        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');" class="pure-link pure-link-default"><i class="fa fa-folder-open"></i>@item.ColumnName</a>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                        @if (item.Lv >= 2)
+                        {
+                            <i class="fa fa-long-arrow-down"></i>
+                            <i class="fa fa-long-arrow-right"></i>
+                            for (int i = 2; i < item.Lv; i++)
+                            {
+                                <i class="fa fa-long-arrow-right"></i>
+                                <i class="fa fa-long-arrow-right"></i>
+                            }
+                        }
+                        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');" class="pure-link pure-link-default"><i class="fa fa-folder-open"></i>@item.ColumnName</a>
+                        </text>
+                    }
+                    </td>
+                    <td>@item.Sort</td>
+                    <td>
+                        <a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');">查看文章列表</a>
+                        <a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnAddByColumnId?ColumnId=@(item.Column_Id)');">添加子栏目</a>
+                        <a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnUpdate?ColumnId=@(item.Column_Id)');">编辑</a>
+                        <a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="@item.Column_Id">删除</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="4" style="text-align:center;">(暂无相关记录)</td></tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    //操作绑定
+    function bindFunc(){
+        $('#column a[name=upd]').bind('click', function () {
+            var $target=$(this);
+            var id= $target.attr('data-value');
+            Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnUpdate?id=' + id);
+        });
+
+        $('#column a[name=del]').bind('click', function () {
+            var $target=$(this);
+            var id = $target.attr('data-value');
+            //confirm
+            layer.confirm('确定真的删除吗？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                Admin.loadDialog_show();
+                $.ajax({
+                    url: "/Admin/Blog/ColumnDelete",
+                    type: "post",
+                    data: { ids: id },
+                    success: function (obj) {
+                        layer.close(index);
+                        Admin.loadDialog_hide();
+                        if (obj.pass) {
+                            Admin.loadRefresh('main-content');
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                    }
+                });
+            }, function () {});
+        });
+    }
+    $(function () {
+        bindFunc();
+    })
+</script>
+
+

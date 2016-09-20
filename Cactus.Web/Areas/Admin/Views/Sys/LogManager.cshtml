@@ -1,0 +1,130 @@
+﻿@{
+    Layout = null;
+}
+<div class="tool-list">
+    <div class="pure-button-group">
+        <a href="javascript:;" name="clearFile" class="pure-button pure-button-primary">清空</a>
+    </div>
+</div>
+<table class="pure-table pure-table-horizontal">
+    <thead>
+        <tr>
+            <th>文件名</th>
+            <th>大小</th>
+            <th>创建时间</th>
+            <th>最后修改时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody id="file_Body"></tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
+        $('a[name=clearFile]').bind('click', function () {
+            Admin.loadDialog_show();
+            $.ajax({
+                url: "/Admin/Sys/LogClear",
+                type: "post",
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    layer.alert(obj.msg);
+                    onSysList();
+                }
+            });
+        });
+
+        onSysList();
+
+        function onSysList() {
+            $('#file_Body').html('<tr><td colspan="5">加载中...</td></tr>');
+            Admin.loadDialog_show();
+            $.ajax({
+                url: "/Admin/Sys/LogList",
+                type: "post",
+                success: function (obj) {
+                    Admin.loadDialog_hide();
+                    $('#file_Body').html('');
+                    if (obj.pass) {
+                        //刷新列表
+                        renderFileTable(obj.append);
+                    } else {
+                        //失败 
+                        layer.alert(obj.msg);
+                    }
+                }
+            });
+        }
+
+        function renderFileTable(raws) {
+            //文件列表
+            var f_list = raws.f_list;
+            var temp_file = '<tr><td><i class="fa fa-file"></i><a href="{file_link}" name="file" data-value="{file_name}" {file_args}> {file_name} </a></td><td>{file_createtime}</td><td>{file_lasttime}</td><td>{file_size}kb</td>' +
+                            '<td><a href="javascript:;" class="pure-link pure-link-purple" name="action_del" data-value="{file_name}">删除</a><a href="javascript:;" class="pure-link pure-link-purple" name="action_info" data-value="{file_name}">查看</a></td></tr>';
+            var $body = $('#file_Body');
+            $body.html('');
+            if (f_list != undefined) {
+                if (f_list.length == 0) {
+                    $body.append('<tr><td colspan="5">无数据</td></tr>');
+                    return;
+                }
+                for (var i = 0; i < f_list.length ; i++) {
+                    //if()
+                    var fileName = f_list[i].FileName;
+                    $body.append(temp_file.replace(/{file_name}/g, fileName).replace('{file_createtime}', f_list[i].CreateTime).replace('{file_lasttime}', f_list[i].LastTime).replace('{file_size}', f_list[i].Length).replace('{file_link}', 'javascript:;').replace('{file_args}', ''));
+                }
+            } else {
+                $body.append('<tr><td colspan="5">无数据</td></tr>');
+            }
+            bindAction();
+        }
+
+        function bindAction() {
+            //查看
+            $('#file_Body a[name=action_info]').bind('click', function () {
+                var filename = $(this).attr('data-value');
+                $.ajax({
+                    url: "/Admin/Sys/LogInfo",
+                    type: "post",
+                    data: { filename: filename},
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        if (obj.pass) {
+                            layer.open({
+                                type: 1,
+                                area: ['800px', '400px'],
+                                shadeClose: true, //点击遮罩关闭
+                                content: obj.append.content
+                            });
+                        } else {
+                            layer.alert(obj.msg);
+                        }
+                    }
+                });
+            });
+            //删除
+            $('#file_Body a[name=action_del]').bind('click', function () {
+                var filename = $(this).attr('data-value');
+                layer.confirm('是否删除？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    Admin.loadDialog_show();
+                    $.ajax({
+                        url: "/Admin/Sys/LogDelete",
+                        type: "post",
+                        data: { filename: filename },
+                        success: function (obj) {
+                            layer.close(index);
+                            Admin.loadDialog_hide();
+                            if (obj.pass) {
+                                onSysList();
+                            } else {
+                                layer.alert(obj.msg);
+                            }
+                        }
+                    });
+                }, function () { });
+            });
+        }
+    })
+</script>
+

@@ -1,0 +1,7 @@
+﻿@{
+    ViewBag.Title = "后台管理";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@{Html.RenderAction("ZPanel", "Root", new RouteValueDictionary(new { Area = "Admin", controller = "Root", action = "ZPanel" }));}
+
