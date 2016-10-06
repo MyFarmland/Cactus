@@ -52,11 +52,15 @@ namespace Cactus.Controllers.Expand
             {
                 filterContext.Result = new RedirectResult("/AdminLogin");
             }
-            this.Power = CacheHelper.GetCache(Constant.CacheKey.PowerConfigCacheKey) as PowerConfig;
+            HTools.CacheObj obj = base.cacheService.Get(Constant.CacheKey.PowerConfigCacheKey);
+            this.Power = (obj != null && obj.value != null) ? (obj.value as PowerConfig) : null;
+            //this.Power = CacheHelper.GetCache(Constant.CacheKey.PowerConfigCacheKey) as PowerConfig;
             if (this.Power == null)
             {
                 this.Power = powerConfigService.LoadConfig(Constant.PowerConfigPath);
-                CacheHelper.SetCache(Constant.CacheKey.PowerConfigCacheKey, this.Power);
+                //CacheHelper.SetCache(Constant.CacheKey.PowerConfigCacheKey, this.Power);
+                base.cacheService.Add(Constant.CacheKey.PowerConfigCacheKey,
+                    new HTools.CacheObj() { value = this.Power, AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1) });
             }
             if (base.LoginUser != null)
             {

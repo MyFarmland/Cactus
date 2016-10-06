@@ -23,6 +23,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
     {
         public ActionResult Index()
         {
+            ViewData["logFileCount"] = Directory.GetFiles(HIO.logDirPath).Count();
             return View();
         }
         //参数面板
@@ -47,15 +48,12 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         public ActionResult Logout()
         {
             string token = CookieHelper.GetCookieValue("Admin");
-
             //移除缓存的登录用户信息
-            CacheHelper.RemoveCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
-
+            //CacheHelper.RemoveCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
+            base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
             //用户注销
-
             //FormsAuthentication.SignOut();
             CookieHelper.ClearCookie("Admin");
-
             if (HttpContext.Request.IsAjaxRequest())
             {
                 return Json(new ResultModel
@@ -103,7 +101,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
                 //去除缓存
                 string token = CookieHelper.GetCookieValue("Admin");
-                CacheHelper.RemoveCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
+                //CacheHelper.RemoveCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
+                base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
                 return Json(new ResultModel { msg = "操作成功", pass = true });
             }
             else
@@ -131,7 +130,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     var avatarExt = Path.GetExtension(avatarName);
                     //保存原图
                     var savePath = Path.Combine(MyPath.TempPath, avatarName);
-                    if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions, MyPath.fileSize))
+                    if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split(','), MyPath.fileSize))
                     {
                         if (!System.IO.Directory.Exists(MyPath.AvatarPath))
                         {
@@ -183,6 +182,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
+                u.NickName = u.NickName.Trim();
                 if (string.IsNullOrEmpty(u.NickName))
                 {
                     return Json(new ResultModel { pass = false, msg = "昵称为空" });

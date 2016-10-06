@@ -98,5 +98,10 @@ namespace Cactus.MySQLService.CMS
                 }, new { id = id }, null, "TempPage_Id", null, null).SingleOrDefault();
             }
         }
+
+        public bool IsUsePageName(string pageName, int ignoreId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

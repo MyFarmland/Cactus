@@ -78,5 +78,10 @@ namespace Cactus.MySQLService.CMS
                 return conn.Query<Model.CMS.TempPage>(query, new { id = id }).SingleOrDefault();
             }
         }
+
+        public bool IsUseTempName(string tempName, int ignoreId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

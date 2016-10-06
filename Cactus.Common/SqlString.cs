@@ -56,7 +56,7 @@ namespace Cactus.Common
                 sqlConnectionString = SQLiteString;
             }
 #if Linux
-            SqliteConnection conn = new SqliteConnection(sqlConnectionString);
+            SqliteConnection conn = new SqliteConnection(sqlConnectionString);//提供的跨平台
 #else
             SQLiteConnection conn = new SQLiteConnection(sqlConnectionString);
 #endif

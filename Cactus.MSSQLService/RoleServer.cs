@@ -81,5 +81,10 @@ namespace Cactus.MSSQLService
                 return conn.Query<Model.Sys.Role>(query).SingleOrDefault();
             }
         }
+
+        public bool IsUseName(string rolename, int ignoreId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

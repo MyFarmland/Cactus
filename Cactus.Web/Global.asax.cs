@@ -14,13 +14,12 @@ namespace Cactus.Web
     {
         protected void Application_Start()
         {
+            IocConfig.BuildMvcContainer();
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new ThemeViewEngine());//使用主题引擎
-            //ViewEngines.Engines.Add(new RazorViewEngine());
             AreaRegistration.RegisterAllAreas();
             HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Disabled);//全局禁用session
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            IocConfig.BuildMvcContainer();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             Cactus.Crond.TaskManager.Instance.Initialize(AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.Combine("Configuration", "Plan.config"));
             Cactus.Crond.TaskManager.Instance.Start();

@@ -212,7 +212,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     FileType = FileType.ToLower();
 
                     if (!String.IsNullOrEmpty(avatarExt)
-                        && Config.ImgExtensions.Contains(avatarExt))
+                        && Config.ImgExtensions.Split('*').Contains(avatarExt))
                     {
                         avatarName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + "." + FileType;
                         //保存原图
@@ -293,7 +293,27 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B103", PowerName = "添加用户", PowerDes = "添加用户")]
         public ActionResult UserAdd(string UserName, string Password, string NickName, string Email, string Phone, string Qq, int RoleId)
         {
-
+            if (string.IsNullOrEmpty(UserName))
+            {
+                return Json(new ResultModel { msg = "用户名为空", pass = false });
+            }
+            if (string.IsNullOrEmpty(Password))
+            {
+                return Json(new ResultModel { msg = "密码为空", pass = false });
+            }
+            if (string.IsNullOrEmpty(NickName))
+            {
+                return Json(new ResultModel { msg = "昵称为空", pass = false });
+            }
+            UserName = UserName.Trim();
+            Password = Password.Trim();
+            NickName = NickName.Trim();
+            Email = Email.Trim();
+            Phone = Phone.Trim();
+            Qq = Qq.Trim();
+            if (this.userServer.IsUseName(UserName, 0)) {
+                return Json(new ResultModel { msg = "改用户名已经在使用", pass = true });
+            }
             var b = this.userServer.Insert(new Model.Sys.User()
             {
                 Avatar = Config.DefaultAvatar,
@@ -333,13 +353,16 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         public ActionResult UserUpdate(string NickName, string Email, string Phone, string Qq, int RoleId, int User_Id)
         {
             Model.Sys.User muser = this.userServer.Find(User_Id);
+            if (string.IsNullOrEmpty(NickName))
+            {
+                return Json(new ResultModel { msg = "昵称为空", pass = false });
+            }
 
-            muser.NickName = NickName;
-            muser.Email = Email;
-            muser.Phone = Phone;
-            muser.Qq = Qq;
+            muser.NickName = NickName.Trim();
+            muser.Email = Email.Trim();
+            muser.Phone = Phone.Trim();
+            muser.Qq = Qq.Trim();
             muser.RoleId = RoleId;
-
             try
             {
                 this.userServer.Update(muser);
@@ -412,9 +435,16 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = true, IsShow = false, PowerId = "Sys_C101", PowerName = "添加角色", PowerDes = "添加角色")]
         public ActionResult RoleAdd(string RoleName, string ActionIds)
         {
+            if (string.IsNullOrEmpty(RoleName)) {
+                return Json(new ResultModel { msg = "角色名为空", pass = false });
+            }
+            if (this.roleServer.IsUseName(RoleName.Trim(), 0))
+            {
+                return Json(new ResultModel { msg = "改角色名正在使用", pass = false });
+            }
             var b = this.roleServer.Insert(new Model.Sys.Role()
             {
-                RoleName = RoleName,
+                RoleName = RoleName.Trim(),
                 ActionIds = ActionIds
             });
 
@@ -441,16 +471,20 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = true, IsShow = false, PowerId = "Sys_C102", PowerName = "更新角色信息", PowerDes = "更新角色信息")]
         public ActionResult RoleUpdate(string RoleName, string ActionIds,int Id)
         {
-            Model.Sys.Role maction = new Model.Sys.Role()
+            if (string.IsNullOrEmpty(RoleName))
             {
-                RoleName = RoleName,
-                Role_Id = Id,
-                ActionIds = ActionIds
-            };
-            
+                return Json(new ResultModel { msg = "角色名为空", pass = false });
+            }
+            Model.Sys.Role role = this.roleServer.Find(Id);
+            if (this.roleServer.IsUseName(RoleName.Trim(), 0))
+            {
+                return Json(new ResultModel { msg = "改角色名正在使用", pass = false });
+            }
+            role.RoleName = RoleName.Trim();
+            role.ActionIds = ActionIds;
             try
             {
-                this.roleServer.Update(maction);
+                this.roleServer.Update(role);
                 return Json(new ResultModel { msg = "修改成功", pass = true });
             }
             catch
@@ -465,7 +499,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
-                //int[] list = Array.ConvertAll<string, int>(ids.Split(','), s => int.Parse(s));
                 this.roleServer.Delete(ids);
                 return Json(new ResultModel { msg = "删除成功", pass = true }, JsonRequestBehavior.AllowGet);
             }
@@ -515,19 +548,22 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
-                this.Config.SiteName = site.SiteName;
-                this.Config.SiteTitle = site.SiteTitle;
-                this.Config.SiteCrod = site.SiteCrod;
+                this.Config.SiteName = site.SiteName.Trim();
+                this.Config.SiteTitle = site.SiteTitle.Trim();
+                this.Config.SiteCrod = site.SiteCrod.Trim();
                 this.Config.SiteKeywords = site.SiteKeywords;
                 this.Config.SiteDescr = site.SiteDescr;
                 this.Config.SiteCountCode = site.SiteCountCode;
                 this.Config.SiteCopyRight = site.SiteCopyRight;
                 this.Config.SiteStatus = site.SiteStatus;
                 this.Config.SiteStaticDir = site.SiteStaticDir;
+                this.Config.ImgExtensions = site.ImgExtensions;
+                this.Config.SiteTheme = site.SiteTheme;
                 string s = HttpContext.Request.Form["SiteStatus"].ToString();
                 this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
 
-                CacheHelper.RemoveCache(Constant.CacheKey.SiteConfigCacheKey);
+                //CacheHelper.RemoveCache(Constant.CacheKey.SiteConfigCacheKey);
+                base.cacheService.Remove(Constant.CacheKey.SiteConfigCacheKey);
                 return Json(new ResultModel
                 {
                     pass = true,
@@ -561,7 +597,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
                 //保存原图
                 var savePath = Path.Combine(MyPath.TempPath, "DefaultAvatar" + avatarExt);
-                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions, MyPath.fileSize))
+                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split(','), MyPath.fileSize))
                 {
                     var thumbPath = Path.Combine(MyPath.SysPath, "DefaultAvatar" + avatarExt);
                     //生成头像缩略图
@@ -597,7 +633,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     System.IO.Directory.CreateDirectory(MyPath.SysPath);
                 }
                 var savePath = Path.Combine(MyPath.SysPath, "SiteLogo" + avatarExt);
-                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions, MyPath.fileSize))
+                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split(','), MyPath.fileSize))
                 {
                     this.Config.SiteLogo = MyPath.Web_SysPath + "/SiteLogo" + avatarExt;
                     this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
@@ -639,7 +675,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             {
                 HttpRuntime.Cache.Remove(keys[i]);
             }
-            CacheHelper.RemoveAllCache();
+            //CacheHelper.RemoveAllCache();
+            base.cacheService.RemoveAll();
             return Json(new ResultModel
             {
                 pass = true,
@@ -652,9 +689,11 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
+                key = key.Trim();
                 if (Constant.CacheKey.List[key].Count() > 0)
                 {
-                    CacheHelper.RemoveCache(key);
+                    //CacheHelper.RemoveCache(key);
+                    base.cacheService.Remove(key);
                     return Json(new ResultModel
                     {
                         pass = true,
@@ -700,7 +739,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
                 else if (type < 3)
                 {
-                    CacheHelper.RemoveAllCache(type);
+                    //CacheHelper.RemoveAllCache(type);
+                    base.cacheService.RemoveAll();
                 }
                 return Json(new ResultModel
                 {
@@ -720,7 +760,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = true, IsShow = false, PowerId = "Sys_D106", PowerName = "清除网站缓存", PowerDes = "清除网站缓存")]
         public ActionResult CacheClearYesterday()
         {
-            CacheHelper.RemoveAllCache(DateTime.Now.AddDays(-1),2);
+            //CacheHelper.RemoveAllCache(DateTime.Now.AddDays(-1),2);
+            base.cacheService.RemoveAll();
             return Json(new ResultModel
             {
                 pass = true,
@@ -729,6 +770,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         }
         #endregion
 
+        //初步完成
         #region 日志管理
         [Power(IsSuper = true, IsShow = true, PowerId = "Sys_E101", PowerName = "日志管理", PowerDes = "Error日志管理")]
         public ActionResult LogManager() {

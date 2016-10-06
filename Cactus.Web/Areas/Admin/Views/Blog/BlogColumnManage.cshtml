@@ -10,12 +10,13 @@
     </div>
 </div>
 
-<table class="pure-table " id="column">
+<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table" id="column">
     <thead>
         <tr>
+            <th width="6%">编号</th>
             <th>栏目名</th>
-            <th>排序</th>
-            <th>操作</th>
+            <th width="12%">排序</th>
+            <th width="40%">操作</th>
         </tr>
     </thead>
     <tbody>
@@ -24,29 +25,28 @@
             bool b = true;
             foreach (var item in list)
             {
-                <tr @if (b) { b = false; <text> class="pure-table-odd" </text>  } else { b = true; }>
+                <tr @if (b) { b = false; <text> class="pure-table-odd" </text>   } else { b = true; }>
+                    <td>@item.Column_Id</td>
                     <td>
-                    @if (item.Lv == 1)
+                        @if (item.Lv == 1)
                     {
-                        <text>
-                        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');" class="pure-link pure-link-default"><i class="fa fa-folder-open"></i>@item.ColumnName</a>
-                        </text>
+                            <text>
+                                <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');" class="pure-link pure-link-default"><i class="fa fa-folder"></i>@item.ColumnName</a>
+                            </text>
                     }
                     else
                     {
-                        <text>
-                        @if (item.Lv >= 2)
-                        {
-                            <i class="fa fa-long-arrow-down"></i>
-                            <i class="fa fa-long-arrow-right"></i>
+                            <text>
+                                @if (item.Lv >= 2)
+                        {          
                             for (int i = 2; i < item.Lv; i++)
                             {
-                                <i class="fa fa-long-arrow-right"></i>
-                                <i class="fa fa-long-arrow-right"></i>
+                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             }
+                                     <span style="font-size:16px;font-weight:bold;padding-left:5px;padding-right:5px;height:32px;width:32px;">╠</span>
                         }
-                        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');" class="pure-link pure-link-default"><i class="fa fa-folder-open"></i>@item.ColumnName</a>
-                        </text>
+                                <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');" class="pure-link pure-link-default"><i class="fa fa-folder-o"></i>@item.ColumnName</a>
+                            </text>
                     }
                     </td>
                     <td>@item.Sort</td>

@@ -11,6 +11,13 @@ namespace Cactus.SQLiteService
 {
     public class UserServer : IUserServer
     {
+        public bool IsUseName(string username, int ignoreId) {
+            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            {
+                int i = conn.Query<int>("SELECT c.User_Id FROM sys_user as c WHERE c.Name=@username and c.User_Id not in (@ignoreId) LIMIT 0,1", new { username = username, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
+        }
         public Cactus.Model.Sys.User CheckLogin(string userName, string pwd)
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())

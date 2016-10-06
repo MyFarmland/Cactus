@@ -479,9 +479,10 @@ th {
  * aspect ratio.
  */
 .pure-img {
-    max-width: 100%;
     height: auto;
     display: block;
+    width:100%;
+    max-width: 100%;
 }
 /*csslint regex-selectors:false, known-properties:false, duplicate-properties:false*/
 /*#grids-responsive*/
@@ -2175,7 +2176,7 @@ since IE8 won't execute CSS that contains a CSS3 selector.
 .pure-menu-heading {
     display: block;
     text-decoration: none;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 /* HORIZONTAL MENU */
 .pure-menu-horizontal {

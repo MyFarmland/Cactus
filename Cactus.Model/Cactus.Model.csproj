@@ -41,6 +41,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
@@ -69,6 +70,7 @@
     <Compile Include="Sys\PowerConfig.cs" />
     <Compile Include="CMS\RenderRouteConfig.cs" />
     <Compile Include="Sys\Role.cs" />
+    <Compile Include="CMS\BlogConfig.cs" />
     <Compile Include="Sys\SiteConfig.cs" />
     <Compile Include="CMS\ThemeConfig.cs" />
     <Compile Include="Sys\User.cs" />
@@ -79,6 +81,10 @@
     <ProjectReference Include="..\Cactus.Common\Cactus.Common.csproj">
       <Project>{3de44c87-8f84-4595-b588-ac6b0a5af8fe}</Project>
       <Name>Cactus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HTools\HTools.csproj">
+      <Project>{5a4f0fb3-8f84-4f06-9583-0e34848a8e5b}</Project>
+      <Name>HTools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

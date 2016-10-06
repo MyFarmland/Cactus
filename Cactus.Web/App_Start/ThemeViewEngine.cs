@@ -2,6 +2,7 @@
 using Cactus.IService;
 using Cactus.Model.Sys;
 using Cactus.Model.Sys.Enums;
+using HTools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -88,16 +89,25 @@ namespace Cactus.Web
         {
             return System.Web.Compilation.BuildManager.GetObjectFactory(virtualPath, false) != null;
         }
-
+        public ICacheService cacheService = IocHelper.AutofacResolveNamed<ICacheService>("CacheService");
+        public ISiteConfigService siteConfigService = IocHelper.AutofacResolveNamed<ISiteConfigService>("SiteConfigService");
         protected virtual string GetCurrentTheme()
         {
             string theme = "";
-            SiteConfig config = CacheHelper.GetCache(Constant.CacheKey.SiteConfigCacheKey) as SiteConfig;
+            //SiteConfig config = CacheHelper.GetCache(Constant.CacheKey.SiteConfigCacheKey) as SiteConfig;
+            CacheObj obj = cacheService.Get(Constant.CacheKey.SiteConfigCacheKey);
+            SiteConfig config = (obj != null && obj.value != null) ? (obj.value as SiteConfig) : null;
+
             if (config == null)
             {
-                ISiteConfigService siteConfigService = IocHelper.AutofacResolveNamed<ISiteConfigService>("SiteConfigService");
                 config = siteConfigService.LoadConfig(Constant.SiteConfigPath);
-                CacheHelper.SetCache(Constant.CacheKey.SiteConfigCacheKey, config);
+                cacheService.Add(Constant.CacheKey.SiteConfigCacheKey,
+                    new CacheObj()
+                    {
+                        value = config,
+                        AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1)
+                    });
+                //CacheHelper.SetCache(Constant.CacheKey.SiteConfigCacheKey, config);
             }
             theme = config.SiteTheme;
             return theme;

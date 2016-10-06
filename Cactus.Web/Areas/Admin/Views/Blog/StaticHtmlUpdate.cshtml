@@ -58,7 +58,7 @@
                         $('#param_html').append(temp_editor.replace("{label}", parm[i]["label"]).replace("{value}", parm[i]["value"]).replace("{key}", parm[i]["key"]).replace("{error_key}", parm[i]["key"]));
                         var editor = new wangEditor(parm[i]["key"]);
                         editor.config.uploadImgUrl = '/Admin/Blog/UploadImg';
-                        editor.config.zindex = 1000;
+                        editor.config.zindex = 100;
                         editor.config.lang = wangEditor.langs['zh-cn'];
                         editor.config.menus = [
             'source',

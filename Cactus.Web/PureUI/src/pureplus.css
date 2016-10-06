@@ -479,9 +479,10 @@ th {
  * aspect ratio.
  */
 .pure-img {
-    max-width: 100%;
     height: auto;
     display: block;
+    width:100%;
+    max-width: 100%;
 }
 /*csslint regex-selectors:false, known-properties:false, duplicate-properties:false*/
 /*#grids-responsive*/
@@ -1737,7 +1738,7 @@ input.pure-input-rounded,
 
 .pure-button-primary,
 a.pure-button-primary{
-    background-color: rgb(0, 120, 231);
+    background-color: #4d85d1;
     color: #fff;
 }
 .pure-button-green,
@@ -1998,7 +1999,7 @@ since IE8 won't execute CSS that contains a CSS3 selector.
     margin: 0 1em 0 0;
 }
 .pure-form-aligned .pure-controls {
-    margin: 1.5em 0 0 11em;
+    margin: 0.1em 0 0 11em;
 }
 
 /* Grouped Inputs */
@@ -2175,7 +2176,7 @@ since IE8 won't execute CSS that contains a CSS3 selector.
 .pure-menu-heading {
     display: block;
     text-decoration: none;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 /* HORIZONTAL MENU */
 .pure-menu-horizontal {
@@ -2583,6 +2584,11 @@ padding: 0.3em .8em;
     margin: 0;
     padding: 0;
 }
+.pure-button-group .pure-split {
+    margin-left:1px;
+    margin-right:1px;
+    
+}
 .pure-button-group .pure-button,
 .pure-button-group a.pure-button{
     display: inline-block;
@@ -2660,11 +2666,11 @@ padding: 0.3em .8em;
     color: rgba(0,0, 0, 0.80); /* rgba supported */
     border: none #fff; /*IE9 + everything else*/
     text-decoration: none;
-    background-color: #FFF;
+    background-color: #ddd;
 }
 
 .pure-tab-button:hover {
-    background-color: #E6E6E6;
+    background-color: #c6c6c6;
 }
 
 .pure-tab-active {

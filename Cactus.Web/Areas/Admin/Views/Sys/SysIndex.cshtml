@@ -47,6 +47,16 @@
         </div>
         <div class="pure-tab-content" style="display:none;">
             <div class="pure-control-group">
+                <label>站点主题</label>
+                <input name="SiteTheme" type="text" placeholder="站点主题" value="@config.SiteTheme" />
+                <div class="pure-error pure-c-error"></div>
+            </div>
+            <div class="pure-control-group">
+                <label>图片上传类型</label>
+                <input name="ImgExtensions" type="text" placeholder="图片上传类型" value="@config.ImgExtensions" style="width:300px;" />
+                <div class="pure-error pure-c-error"></div>
+            </div>
+            <div class="pure-control-group">
                 <label>静态文件地址</label>
                 <input name="SiteStaticDir" type="text" placeholder="静态文件地址，方便存放单独文件服务器或者CDN，默认为空即当前" style="width:300px;" value="@config.SiteStaticDir" />
                 <div class="pure-error pure-c-error"></div>
@@ -63,7 +73,7 @@
                     </label>
                 </label>
             </div>
-        </div>
+            </div>
     </div>
     <div class="page-footer">
         <button type="button" name="site" class="pure-button pure-button-primary">保存</button>

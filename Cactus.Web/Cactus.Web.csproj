@@ -265,6 +265,10 @@
       <Project>{7E94E3D9-F98F-4087-AF34-BD40642EE2DC}</Project>
       <Name>Cactus.SQLiteService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HTools\HTools.csproj">
+      <Project>{5a4f0fb3-8f84-4f06-9583-0e34848a8e5b}</Project>
+      <Name>HTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -447,6 +451,8 @@
     <Content Include="Areas\Admin\Views\Blog\RenderManage.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configuration\BlogConfig.config" />
+    <Content Include="Areas\Admin\Views\Blog\BlogConfig.cshtml" />
     <None Include="Properties\PublishProfiles\Linux.pubxml" />
     <Content Include="Themes\Default\Views\Shared\_StoreLayout.cshtml" />
     <Content Include="Themes\Default\Views\Store\Index.cshtml" />

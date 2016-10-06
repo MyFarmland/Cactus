@@ -96,5 +96,14 @@ namespace Cactus.SQLiteService.CMS
                 }, new { id = id }, null, "TempPage_Id", null, null).SingleOrDefault();
             }
         }
+
+        public bool IsUsePageName(string pageName, int ignoreId)
+        {
+            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            {
+                int i = conn.Query<int>("SELECT c.Page_Id FROM cms_staticpage as c WHERE c.PageName=@PageName and c.Page_Id not in (@ignoreId) LIMIT 0,1", new { PageName = pageName, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
+        }
     }
 }

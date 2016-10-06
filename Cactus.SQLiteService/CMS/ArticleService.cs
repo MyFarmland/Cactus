@@ -46,7 +46,7 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                int i = conn.Query<int>("SELECT c.Article_Id FROM cms_article as c WHERE c.Title==@title and c.Article_Id not in (@ignoreId) LIMIT 0,1", new { title = title, ignoreId = ignoreId }).SingleOrDefault();
+                int i = conn.Query<int>("SELECT c.Article_Id FROM cms_article as c WHERE c.Title=@title and c.Article_Id not in (@ignoreId) LIMIT 0,1", new { title = title, ignoreId = ignoreId }).SingleOrDefault();
                 if (i > 0) { return true; } else { return false; }
             }
         }

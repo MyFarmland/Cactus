@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+    var config = ViewData["BlogConfig"] as Cactus.Model.CMS.BlogConfig;
+}
+<form class="pure-form  pure-form-aligned" id="blogForm">
+    <div class="pure-control-group">
+        <label>博客名字</label>
+        <input name="BlogName" type="text" placeholder="博客名字" value="@config.BlogName" />
+        <div class="pure-error pure-c-error"></div>
+    </div>
+    <div class="pure-control-group">
+        <label>博客主题</label>
+        <input name="BlogTheme" type="text" placeholder="博客主题" value="@config.BlogTheme" />
+        <div class="pure-error pure-c-error"></div>
+    </div>
+    <div class="pure-control-group">
+        <label>单页保存目录</label>
+        <input name="PageDir" type="text" placeholder="单页保存目录" value="@config.PageDir" />
+        <div class="pure-error pure-c-error"></div>
+    </div>
+    <div class="pure-control-group">
+        <label>页面后缀</label>
+        <input name="PageExtension" type="text" placeholder="页面后缀" value="@config.PageExtension" />
+        <div class="pure-error pure-c-error"></div>
+    </div>
+    <div class="pure-controls">
+        <button type="button" name="save" class="pure-button pure-button-primary">保存</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        Admin.tabInit(0);
+        $('#blogForm button[name=save]').bind('click', function () {
+            var param = $("#blogForm").serialize();
+            $.ajax({
+                url: "/Admin/Blog/BlogConfig",
+                type: "post",
+                data: param,
+                success: function (obj) {
+                    if (obj.pass) {
+                        layer.alert('保存成功');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cactus.Crond", "Cactus.Cron
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cactus.BaseService", "Cactus.BaseService\Cactus.BaseService.csproj", "{61EEE871-388E-4C17-91F6-B55E25C9EF1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTools", "HTools\HTools.csproj", "{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,15 @@ Global
 		{61EEE871-388E-4C17-91F6-B55E25C9EF1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61EEE871-388E-4C17-91F6-B55E25C9EF1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61EEE871-388E-4C17-91F6-B55E25C9EF1E}.Release|x86.ActiveCfg = Release|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Linux|Any CPU.ActiveCfg = Release|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Linux|Any CPU.Build.0 = Release|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Linux|x86.ActiveCfg = Release|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

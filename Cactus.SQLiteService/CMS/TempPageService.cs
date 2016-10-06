@@ -78,5 +78,14 @@ namespace Cactus.SQLiteService.CMS
                 return conn.Query<Model.CMS.TempPage>(query, new { id = id }).SingleOrDefault();
             }
         }
+
+        public bool IsUseTempName(string tempName, int ignoreId)
+        {
+            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            {
+                int i = conn.Query<int>("SELECT c.TempPage_Id FROM cms_temppage as c WHERE c.TempName=@tempName and c.TempPage_Id not in (@ignoreId) LIMIT 0,1", new { tempName = tempName, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
+        }
     }
 }

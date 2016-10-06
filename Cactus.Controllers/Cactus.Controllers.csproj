@@ -76,8 +76,10 @@
     <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysController.cs" />
     <Compile Include="Controllers\AdminLoginController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Expand\BlogBaseController.cs" />
     <Compile Include="Expand\BaseController.cs" />
     <Compile Include="Expand\PowerBaseController.cs" />
     <Compile Include="Expand\AdminBaseController.cs" />
@@ -99,6 +101,10 @@
     <ProjectReference Include="..\Cactus.Model\Cactus.Model.csproj">
       <Project>{a0b12f00-f361-4002-abbd-5186749e218f}</Project>
       <Name>Cactus.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HTools\HTools.csproj">
+      <Project>{5a4f0fb3-8f84-4f06-9583-0e34848a8e5b}</Project>
+      <Name>HTools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

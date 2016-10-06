@@ -12,7 +12,7 @@
         <a href="javascript:;" name="CacheAllYesterday" class="pure-button pure-button-primary pure-split">重置过去一天前的缓存</a>
     </div>
 </div>
-<table class="pure-table pure-table-bordered table-p" id="table_cache">
+<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table pure-table-bordered table-p" id="table_cache">
     <thead>
         <tr>
             <th>缓存Key</th>
@@ -21,9 +21,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var i in keys)
+        @foreach (var i in keys)
         {
-        
+
             <tr>
                 <td>@i.Key</td>
                 <td>@i.Value</td>
@@ -32,7 +32,7 @@
                     <div class="pure-error pure-c-error"></div>
                 </td>
             </tr>
-            
+
         }
     </tbody>
 </table>

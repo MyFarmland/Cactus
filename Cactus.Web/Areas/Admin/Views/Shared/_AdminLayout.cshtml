@@ -62,7 +62,9 @@
                                     {
                                         <text>
                                             <a href="javascript:;" class="pure-menu-link pure-menu-main">
-                                                <span class=""><i class="fa @m_power[i].Icon"></i>@m_power[i].GroupName</span><i class="fa fa-chevron-right" style=" float:right;"></i>
+                                                <i class="fa @m_power[i].Icon"></i>
+                                                <span>@m_power[i].GroupName</span>
+                                                <span style=" float:right;"><i class="fa fa-chevron-right"></i></span>
                                             </a>
                                         </text>
                                         var count = power_li.Count();
@@ -85,8 +87,6 @@
                         </li>
                         }
                     </ul>
-                    <div class="pure-menu-heading">
-                        <div class="copyright-font">@site.SiteCopyRight</div></div>
                 </div>
                 <!--end-->
             </div>
@@ -117,7 +117,21 @@
             <div id="main-content">
                 @RenderBody()
             </div>
+
+            <div class="footer">
+                <div class="pull-right">
+                    <div class="pure-u-1" style="">@site.SiteCopyRight</div>
+                </div>
+            </div>
         </div>
+    </div>
+    @{
+        var logFileCount = Convert.ToInt32(ViewData["logFileCount"]);
+        var msgCount = logFileCount;
+    }
+    <div onclick="javascript:scroll(0,0);" class="pure-button comment-top" id="comment-top">
+        <span class="comments">@(msgCount)</span>
+        <i class="fa  fa-comments"></i>
     </div>
     <script src="@(_dirhost)/Content/Js/jquery-1.9.1.min.js?_v=@version"></script>
     <script src="@(_dirhost)/Content/Js/jquery.tmpl.js?_v=@version"></script>
@@ -137,9 +151,8 @@
 + '   \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \n'
 + '    \\ \\_\\ \\ \\_\\ \\ \\_\\ \\ \\_\\\n'
 + '     \\/_/  \\/_/  \\/_/  \\/_/\n');
-    console.info('1111 荣誉出品 联系方式QQ:702295399 QQ群:110826636 ');
+    console.info('1111 荣誉出品 联系方式QQ:702295399  QQ群:110826636 ');
     </script>
-
     <script type="text/javascript">
         $(function () {
             $('#menu-tree .pure-menu-link[url-target]').bind('click', function () {
@@ -154,6 +167,15 @@
                     $(this).next().hide();
                     $(this).find('.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-right');
                 }
+            });
+            var msgHtml = '<h4><a href="javascript:;" class="pure-menu-link" url-target="/Admin/Sys/LogManager">有日志<span style="color:red;"> @(logFileCount) </span>条</a></h4>';
+            $('#comment-top').on('click', function () {
+                layer.open({
+                    type: 1,
+                    area: ['600px', '360px'],
+                    shadeClose: true, //点击遮罩关闭
+                    content: '<div style="padding:10px;">' + msgHtml + '</div>'
+                });
             });
         })
         function Logout() {

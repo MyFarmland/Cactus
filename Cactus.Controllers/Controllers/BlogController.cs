@@ -15,7 +15,7 @@ using System.Web.Mvc;
 namespace Cactus.Controllers.Controllers
 {
     [Exception]
-    public class BlogController : BaseController
+    public class BlogController : BlogBaseController
     {
         //public IArticleService articleServer = AutofacDependencyResolver.Current.ApplicationContainer.Resolve<IArticleService>();
         //public IColumnService columnService = AutofacDependencyResolver.Current.ApplicationContainer.Resolve<IColumnService>();

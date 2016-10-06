@@ -20,18 +20,18 @@
         <div class="pure-panel-content">@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</div>
         <div class="pure-panel-title">运行时缓存总数</div>
         <div class="pure-panel-content">@HttpRuntime.Cache.Count 个</div>
-        <div class="pure-panel-title">内存缓存总数</div>
-        <div class="pure-panel-content">@Cactus.Common.CacheHelper.GetCacheCount() 个</div>
-        <div class="pure-panel-title">文件缓存总数</div>
-        <div class="pure-panel-content">@Cactus.Common.CacheHelper.GetFileCacheCount() 个</div>
-        <div class="pure-panel-title">文件缓存目录</div>
-        <div class="pure-panel-content">@Cactus.Common.CacheHelper.filePath</div>
         <div class="pure-panel-title">基目录</div>
         <div class="pure-panel-content">@AppDomain.CurrentDomain.BaseDirectory</div>
         <div class="pure-panel-title">Cactus版本类型</div>
         <div class="pure-panel-content">@OS</div>
         <div class="pure-panel-title">工作目录路径</div>
         <div class="pure-panel-content">@Environment.CurrentDirectory</div>
+        <div class="pure-panel-title">服务器环境</div>
+        <div class="pure-panel-content">@Request.ServerVariables["SERVER_SOFTWARE"]</div>
+        <div class="pure-panel-title">服务器端口</div>
+        <div class="pure-panel-content">@Request.ServerVariables["SERVER_PORT"]</div>
+        <div class="pure-panel-title">服务器IP</div>
+        <div class="pure-panel-content">@Request.ServerVariables["LOCAL_ADDR"]</div>
     </div>
     <div class="pure-panel pure-u-2-5" style="width:360px">
         <div class="pure-panel-title">是否64位系统</div>

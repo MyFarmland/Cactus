@@ -11,6 +11,10 @@ namespace Cactus.Model.Sys.Enums
         /// </summary>
         public static string SiteConfigPath = HttpContext.Current.Server.MapPath("/Configuration/SiteConfig.config");
         /// <summary>
+        /// 站点配置文件路径
+        /// </summary>
+        public static string BlogConfigPath = HttpContext.Current.Server.MapPath("/Configuration/BlogConfig.config");
+        /// <summary>
         /// 权限配置文件路径
         /// </summary>
         public static string PowerConfigPath = HttpContext.Current.Server.MapPath("/Configuration/PowerConfig.config");
@@ -32,6 +36,10 @@ namespace Cactus.Model.Sys.Enums
             /// 站点信息缓存key
             /// </summary>
             public static string SiteConfigCacheKey = "CACHE_SITE_CONFIG";
+            /// <summary>
+            /// Blog信息缓存key
+            /// </summary>
+            public static string BlogConfigCacheKey = "CACHE_BLOG_CONFIG";
             /// <summary>
             /// 权限信息缓存key
             /// </summary>

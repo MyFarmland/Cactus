@@ -11,7 +11,14 @@ namespace Cactus.SQLiteService
 {
     public class RoleServer : IRoleServer
     {
-        //IDbConnection conn = new SqlConnection(SqlString.MSSQLString);
+        public bool IsUseName(string rolename, int ignoreId)
+        {
+            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            {
+                int i = conn.Query<int>("SELECT c.Role_Id FROM sys_role as c WHERE c.RoleName=@rolename and c.Role_Id not in (@ignoreId) LIMIT 0,1", new { rolename = rolename, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
+        }
 
         public bool Insert(Model.Sys.Role entity)
         {

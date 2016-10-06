@@ -32,7 +32,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheService.cs" />
+    <Compile Include="CMS\BlogConfigService.cs" />
     <Compile Include="CMS\ThemeConfigService.cs" />
     <Compile Include="PowerConfigService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +64,10 @@
     <ProjectReference Include="..\Cactus.Model\Cactus.Model.csproj">
       <Project>{a0b12f00-f361-4002-abbd-5186749e218f}</Project>
       <Name>Cactus.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HTools\HTools.csproj">
+      <Project>{5a4f0fb3-8f84-4f06-9583-0e34848a8e5b}</Project>
+      <Name>HTools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -147,5 +147,10 @@ namespace Cactus.MySQLService
                 }, new { id = id }, null, "Role_Id", null, null).SingleOrDefault();
             }
         }
+
+        public bool IsUseName(string username, int ignoreId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -29,11 +29,12 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         public ITagService tagService = IocHelper.AutofacResolveNamed<ITagService>("CMS.TagService");
         public ICommentService commentService = IocHelper.AutofacResolveNamed<ICommentService>("CMS.CommentService");
         public IThemeConfigService themeConfigService = IocHelper.AutofacResolveNamed<IThemeConfigService>("CMS.ThemeConfigService");
+        public IBlogConfigService blogConfigService = IocHelper.AutofacResolveNamed<IBlogConfigService>("CMS.BlogConfigService");
         //
         // GET: /Admin/Blog/
         #region Blog
 
-        [Power(IsSuper = false, IsShow = true, PowerId = "Blog_A101", Icon = "fa-book", PowerName = "文章管理", PowerDes = "文章管理")]
+        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_A101", Icon = "fa-book", PowerName = "文章管理", PowerDes = "文章管理")]
         public ActionResult BlogIndex()
         {
             return View();
@@ -106,6 +107,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_A102", PowerName = "文章添加", PowerDes = "对文章添加")]
         public ActionResult BlogAdd(Model.CMS.Article art)
         {
+            art.Title = art.Title.Trim();
             if (this.articleService.IsUseTitle(art.Title, 0))
             {
                 return Json(new ResultModel { msg = "标题与其他文章相同", pass = false });
@@ -151,6 +153,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
+                art.Title = art.Title.Trim();
                 if (this.articleService.IsUseTitle(art.Title, art.Article_Id))
                 {
                     return Json(new ResultModel { msg = "标题重复", pass = false });
@@ -262,6 +265,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
             }
             else { column.Pid = 0; column.Lv = 1; }
+            column.ColumnName = column.ColumnName.Trim();
             if (!this.columnService.IsUseColumnName(column.ColumnName,0))
             {
                 column.ColumnName = column.ColumnName.Trim();
@@ -290,6 +294,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
+                column.ColumnName = column.ColumnName.Trim();
                 if (this.columnService.IsUseColumnName(column.ColumnName, column.Column_Id))
                 {
                     return Json(new ResultModel { msg = "栏目名重复", pass = false });
@@ -330,96 +335,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
 
         #endregion
 
-        #region 界面管理
-        [Power(IsSuper = false, IsShow = true, PowerId = "Blog_G101", Icon = "fa-th-large", PowerName = "界面管理", PowerDes = "界面管理")]
-        public ActionResult ManageUI() {
-            string pathBlogDir = Path.Combine(MyPath.AppPath, "Themes", this.Config.SiteTheme, "Views", "Blog");
-            string pathSharedDir = Path.Combine(MyPath.AppPath, "Themes", this.Config.SiteTheme, "Views", "Shared");
-            FileInfo[] blogFiles = new DirectoryInfo(pathBlogDir).GetFiles();
-            FileInfo[] sharedFiles = new DirectoryInfo(pathSharedDir).GetFiles();
-            ViewData["Theme"] = this.Config.SiteTheme;
-            ViewData["blogFiles"] = blogFiles;
-            ViewData["sharedFiles"] = sharedFiles;
-            return View();
-        }
-        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G102", PowerName = "编辑视图", PowerDes = "编辑视图")]
-        public ActionResult UIEdit(string dir,string filename) {
-            string pathDir = Path.Combine(MyPath.AppPath,"Themes", this.Config.SiteTheme, "Views", dir);
-            string filePath = Path.Combine(pathDir, filename);
-            if (System.IO.File.Exists(filePath))
-            {
-                ViewData["dir"] = dir;
-                ViewData["fileName"] = filename;
-                ViewData["filePath"] = filePath;
-                return View();
-            }
-            else {
-                return Json(new ResultModel { msg = "文件不存在", pass = false });
-            }
-        }
-        [ValidateInput(false)]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G103", PowerName = "保存视图", PowerDes = "保存视图")]
-        public ActionResult UISave(string dir, string filename, string Content)
-        {
-            try {
-                string pathDir = Path.Combine(MyPath.AppPath, "Themes", this.Config.SiteTheme, "Views", dir);
-                string targetFile_path = Path.Combine(pathDir, filename);
-                if (System.IO.File.Exists(targetFile_path)) {
-                    System.IO.File.WriteAllText(targetFile_path, Content, Encoding.UTF8);
-                    return Json(new ResultModel { msg = "修改成功", pass = true });
-                }
-                else {
-                    return Json(new ResultModel { msg = "文件不存在", pass = true });
-                }
-            }
-            catch {
-                return Json(new ResultModel { msg = "修改失败", pass = false });
-            }
-        }
-        [HttpGet]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G104", PowerName = "选择主题", PowerDes = "选择主题")]
-        public ActionResult UISelect() {
-            ThemeConfig theme=themeConfigService.LoadConfig(Constant.ThemeConfigPath);
-            ViewData["ThemeConfig"] = theme;
-            return View();
-        }
-        [HttpPost]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G104", PowerName = "选择主题", PowerDes = "选择主题")]
-        public ActionResult UISelect(string themeName)
-        {
-            try
-            {
-                ThemeConfig themeConfig = this.themeConfigService.LoadConfig(Constant.ThemeConfigPath);
-                Theme targetTheme=null;
-                foreach (var theme in themeConfig.ThemeList) 
-                {
-                    if (theme.ThemeName == themeName) {
-                        targetTheme=theme;
-                        break;
-                    }
-                }
-                if (targetTheme!=null)
-                {
-                    if (this.Config.SiteTheme != targetTheme.ThemeName)
-                    {
-                        this.Config.SiteTheme = targetTheme.ThemeName;
-                        this.siteConfigService.SaveConfig(this.Config, Constant.SiteConfigPath);
-                        CacheHelper.RemoveCache(Constant.CacheKey.SiteConfigCacheKey);
-                    }
-                    return Json(new ResultModel { msg = "修改成功", pass = true });
-                }
-                else {
-                    return Json(new ResultModel { msg = "主题未找到", pass = false });
-                }
-            }
-            catch
-            {
-                return Json(new ResultModel { msg = "修改失败", pass = false });
-            }
-        }
-
-        #endregion
-
         #region UploadImg
         //编辑器上传图片
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_B101", PowerName = "编辑器上传图片", PowerDes = "编辑器上传图片")]
@@ -445,7 +360,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     System.IO.Directory.CreateDirectory(MyPath.UploadFilePath);
                 }
                 string imagePath = MyPath.EditUploadPath + Path.DirectorySeparatorChar + currentFileName;
-                if (WebHelper.saveUploadFile(file, imagePath, Config.ImgExtensions, MyPath.fileSize))
+                if (WebHelper.saveUploadFile(file, imagePath, Config.ImgExtensions.Split(','), MyPath.fileSize))
                 {
                     //获取图片url地址
                     string imgUrl = MyPath.Web_EditUploadPath + "/" + currentFileName;
@@ -473,8 +388,10 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_C101", PowerName = "文件管理", PowerDes = "文件管理")]
         public ActionResult FileList(string currentDir,string viewDir)
         {
+            currentDir = currentDir.Trim();
             string _root = MyPath.AppPath + "File";//文件主目录（根目录）
             string target = "";
+            viewDir = viewDir.Trim();
             if (string.IsNullOrEmpty(viewDir)) {
                 target = _root + Path.DirectorySeparatorChar + currentDir;//目标目录
             } 
@@ -562,6 +479,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_C102", PowerName = "文件删除", PowerDes = "文件管理，文件删除")]
         public ActionResult FileDel(string currentDir, string fileOrDir)
         {
+            currentDir = currentDir.Trim();
+            fileOrDir = fileOrDir.Trim();
             if (string.IsNullOrEmpty(fileOrDir))
             {
                 ResultModel _result = new ResultModel
@@ -661,6 +580,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_C103", PowerName = "文件重命名", PowerDes = "文件管理，文件重命名")]
         public ActionResult FileRename(string currentDir, string oldName, string newName)
         {
+            currentDir = currentDir.Trim();
             if (string.IsNullOrEmpty(oldName))
             {
                 ResultModel _result = new ResultModel
@@ -769,6 +689,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         }
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_C104", PowerName = "新建目录", PowerDes = "文件管理，新建目录")]
         public ActionResult FileNewDir(string currentDir, string newDirName) {
+            currentDir = currentDir.Trim();
+            newDirName = newDirName.Trim();
             if (string.IsNullOrEmpty(newDirName))
             {
                 ResultModel _result = new ResultModel
@@ -850,6 +772,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         }
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_C105", PowerName = "上传文件", PowerDes = "文件管理，上传文件")]
         public ActionResult FileUpload(string currentDir) {
+            currentDir = currentDir.Trim();
             string _root = MyPath.AppPath + "File";//文件主目录（根目录）
             string target = _root + Path.DirectorySeparatorChar + currentDir;//目标目录或者文件
             string fullpath = "";
@@ -970,10 +893,14 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             try {
                 if (string.IsNullOrEmpty(PageName)) { return Json(new ResultModel { msg = "添加失败", pass = false }, JsonRequestBehavior.AllowGet); }
                 if (string.IsNullOrEmpty(PageParameter)) { return Json(new ResultModel { msg = "添加失败", pass = false }, JsonRequestBehavior.AllowGet); }
+                PageName = PageName.Trim();
+                if (this.staticPageService.IsUsePageName(PageName, 0)) {
+                    return Json(new ResultModel { msg = "该页面名已经使用", pass = false }, JsonRequestBehavior.AllowGet);
+                }
                 StaticPage _page = new StaticPage();
                 _page.CreateTime = DateTime.Now;
                 _page.LastTime = _page.CreateTime;
-                _page.PageName = PageName;
+                _page.PageName = PageName.Trim();
                 _page.PageParameter = PageParameter;
                 _page.TempPageId = TempPageId;
                 this.staticPageService.Insert(_page);
@@ -983,8 +910,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "添加失败", pass = false }, JsonRequestBehavior.AllowGet);
             }
         }
-         [HttpGet]
-         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_D103", PowerName = "修改页面", PowerDes = "修改页面")]
+        [HttpGet]
+        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_D103", PowerName = "修改页面", PowerDes = "修改页面")]
         public ActionResult StaticHtmlUpdate(int id)
         {
             ViewData["staticPage"] = this.staticPageService.Find(id);
@@ -999,7 +926,12 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 if (string.IsNullOrEmpty(PageName)) { return Json(new ResultModel { msg = "修改失败", pass = false }, JsonRequestBehavior.AllowGet); }
                 if (string.IsNullOrEmpty(PageParameter)) { return Json(new ResultModel { msg = "修改失败", pass = false }, JsonRequestBehavior.AllowGet); }
                 StaticPage _page = this.staticPageService.Find(Page_Id);
-                _page.PageName = PageName;
+                if (_page==null) { return Json(new ResultModel { msg = "修改失败", pass = false }, JsonRequestBehavior.AllowGet); }
+                if (this.staticPageService.IsUsePageName(PageName, _page.Page_Id))
+                {
+                    return Json(new ResultModel { msg = "该页面名已经使用", pass = false }, JsonRequestBehavior.AllowGet);
+                }
+                _page.PageName = PageName.Trim();
                 _page.PageParameter = PageParameter;
                 _page.LastTime = DateTime.Now;
                 this.staticPageService.Update(_page);
@@ -1054,8 +986,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 {
                     ViewContext viewContext = new ViewContext(this.ControllerContext, view, vd, td, writer);
                     viewContext.View.Render(viewContext, writer);
-                    string _t = "html";//下次改为配置的
-                    string _e = ".html";
+                    string _t = "html";//下次改为配置的*|*
+                    string _e = ".html";//*|*
                     string _f = _page.PageName + _e;
                     string _dir = Path.Combine(MyPath.AppPath, _t);
                     if (Directory.Exists(_dir) == false)
@@ -1158,10 +1090,14 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             if (string.IsNullOrEmpty(TempName)) { return Json(new ResultModel { msg = "添加失败", pass = false }); }
             if (string.IsNullOrEmpty(TempParameter)) { return Json(new ResultModel { msg = "添加失败", pass = false }); }
             if (string.IsNullOrEmpty(TempContent)) { return Json(new ResultModel { msg = "添加失败", pass = false }); }
+            TempName=TempName.Trim();
+            if (this.tempPageService.IsUseTempName(TempName, 0)) {
+                return Json(new ResultModel { msg = "该模板名已经使用", pass = false });
+            }
             try {
                 TempPage tempPage = new TempPage();
                 tempPage.TempName = TempName;
-                tempPage.TempByname = TempByname;
+                tempPage.TempByname = TempByname.Trim();
                 tempPage.TempParameter = TempParameter;
                 tempPage.TempContent = TempContent;
                 tempPage.CreateTime = DateTime.Now;
@@ -1206,7 +1142,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             try
             {
                 TempPage tempPage = tempPageService.Find(TempPage_Id);
-                tempPage.TempByname = TempByname;
+                tempPage.TempByname = TempByname.Trim();
                 tempPage.TempParameter = TempParameter;
                 tempPage.TempContent = TempContent;
                 tempPage.LastTime = DateTime.Now;
@@ -1287,6 +1223,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_E103", PowerName = "更新标签", PowerDes = "更新标签")]
         public ActionResult TagUpdate(Tag tag) {
 
+            tag.TagName = tag.TagName.Trim();
             if (this.tagService.IsUseTagName(tag.TagName, tag.Tag_Id))
             {
                 return Json(new ResultModel { msg = "标签名与其他标签相同", pass = false });
@@ -1296,9 +1233,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 try
                 {
                     Model.CMS.Tag model = this.tagService.Find(tag.Tag_Id);
-                    model.Tag_Id = tag.Tag_Id;
                     model.LastTime = DateTime.Now;
-                    model.TagName = tag.TagName.Trim();
+                    model.TagName = tag.TagName;
                     model.TagDes = tag.TagDes;
                     this.tagService.Update(model);
                     return Json(new ResultModel { msg = "修改成功", pass = true });
@@ -1317,6 +1253,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [HttpPost]
         [Power(IsSuper = false, IsShow = false, PowerId = "Blog_E104", PowerName = "添加标签", PowerDes = "添加标签")]
         public ActionResult TagAdd(Tag tag) {
+            tag.TagName = tag.TagName.Trim();
             if (this.tagService.IsUseTagName(tag.TagName, 0))
             {
                 return Json(new ResultModel { msg = "标签名与其他标签相同", pass = false });
@@ -1325,7 +1262,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             {
                 tag.CreateTime = DateTime.Now;
                 tag.LastTime = tag.CreateTime;
-                tag.TagName = tag.TagName.Trim();
+                tag.TagDes = tag.TagDes.Trim();
                 var b = this.tagService.Insert(tag);
                 if (b)
                 {
@@ -1381,5 +1318,140 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }
         }
         #endregion
+
+        #region 界面管理
+        [Power(IsSuper = false, IsShow = true, PowerId = "Blog_G101", Icon = "fa-th-large", PowerName = "界面管理", PowerDes = "界面管理")]
+        public ActionResult ManageUI()
+        {
+            string pathBlogDir = Path.Combine(MyPath.AppPath, "Themes", this.Config.SiteTheme, "Views", "Blog");
+            string pathSharedDir = Path.Combine(MyPath.AppPath, "Themes", this.Config.SiteTheme, "Views", "Shared");
+            FileInfo[] blogFiles = new DirectoryInfo(pathBlogDir).GetFiles();
+            FileInfo[] sharedFiles = new DirectoryInfo(pathSharedDir).GetFiles();
+            ViewData["Theme"] = this.Config.SiteTheme;
+            ViewData["blogFiles"] = blogFiles;
+            ViewData["sharedFiles"] = sharedFiles;
+            return View();
+        }
+        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G102", PowerName = "编辑视图", PowerDes = "编辑视图")]
+        public ActionResult UIEdit(string dir, string filename)
+        {
+            string pathDir = Path.Combine(MyPath.AppPath, "Themes", this.Config.SiteTheme, "Views", dir);
+            string filePath = Path.Combine(pathDir, filename);
+            if (System.IO.File.Exists(filePath))
+            {
+                ViewData["dir"] = dir;
+                ViewData["fileName"] = filename;
+                ViewData["filePath"] = filePath;
+                return View();
+            }
+            else
+            {
+                return Json(new ResultModel { msg = "文件不存在", pass = false });
+            }
+        }
+        [ValidateInput(false)]
+        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G103", PowerName = "保存视图", PowerDes = "保存视图")]
+        public ActionResult UISave(string dir, string filename, string Content)
+        {
+            try
+            {
+                string pathDir = Path.Combine(MyPath.AppPath, "Themes", this.Config.SiteTheme, "Views", dir);
+                string targetFile_path = Path.Combine(pathDir, filename);
+                if (System.IO.File.Exists(targetFile_path))
+                {
+                    System.IO.File.WriteAllText(targetFile_path, Content, Encoding.UTF8);
+                    return Json(new ResultModel { msg = "修改成功", pass = true });
+                }
+                else
+                {
+                    return Json(new ResultModel { msg = "文件不存在", pass = true });
+                }
+            }
+            catch
+            {
+                return Json(new ResultModel { msg = "修改失败", pass = false });
+            }
+        }
+        [HttpGet]
+        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G104", PowerName = "选择主题", PowerDes = "选择主题")]
+        public ActionResult UISelect()
+        {
+            ThemeConfig theme = themeConfigService.LoadConfig(Constant.ThemeConfigPath);
+            ViewData["ThemeConfig"] = theme;
+            return View();
+        }
+        [HttpPost]
+        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_G104", PowerName = "选择主题", PowerDes = "选择主题")]
+        public ActionResult UISelect(string themeName)
+        {
+            try
+            {
+                ThemeConfig themeConfig = this.themeConfigService.LoadConfig(Constant.ThemeConfigPath);
+                Theme targetTheme = null;
+                foreach (var theme in themeConfig.ThemeList)
+                {
+                    if (theme.ThemeName == themeName)
+                    {
+                        targetTheme = theme;
+                        break;
+                    }
+                }
+                if (targetTheme != null)
+                {
+                    if (this.Config.SiteTheme != targetTheme.ThemeName)
+                    {
+                        this.Config.SiteTheme = targetTheme.ThemeName;
+                        this.siteConfigService.SaveConfig(this.Config, Constant.SiteConfigPath);
+                        //CacheHelper.RemoveCache(Constant.CacheKey.SiteConfigCacheKey);
+                        base.cacheService.Remove(Constant.CacheKey.SiteConfigCacheKey);
+                    }
+                    return Json(new ResultModel { msg = "修改成功", pass = true });
+                }
+                else
+                {
+                    return Json(new ResultModel { msg = "主题未找到", pass = false });
+                }
+            }
+            catch
+            {
+                return Json(new ResultModel { msg = "修改失败", pass = false });
+            }
+        }
+
+        #endregion
+
+        #region 配置管理
+        [HttpGet]
+        [Power(IsSuper = false, IsShow = true, PowerId = "Blog_H101", Icon = "fa-cog", PowerName = "博客配置", PowerDes = "博客配置")]
+        public ActionResult BlogConfig()
+        {
+            ViewData["BlogConfig"] = this.blogConfigService.LoadConfig(Constant.BlogConfigPath);
+            return View();
+        }
+        [HttpPost]
+        [Power(IsSuper = false, IsShow = false, PowerId = "Blog_H101", PowerName = "博客配置", PowerDes = "博客配置")]
+        public ActionResult BlogConfig(BlogConfig blog)
+        {
+            try
+            {
+                this.blogConfigService.SaveConfig(blog, Constant.BlogConfigPath);
+                base.cacheService.Remove(Constant.CacheKey.BlogConfigCacheKey);
+                return Json(new ResultModel
+                {
+                    pass = true,
+                    msg = "操作成功"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new ResultModel
+                {
+                    pass = false,
+                    msg = e.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
     }
 }

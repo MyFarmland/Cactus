@@ -190,7 +190,7 @@ namespace Cactus.Common
         public static void RemoveAllCache()
         {
             MemoryCache _cache = System.Runtime.Caching.MemoryCache.Default;
-            foreach (var _c in _cache.GetValues(null))
+            foreach (var _c in _cache)
             {
                 _cache.Remove(_c.Key);
             }
@@ -209,7 +209,7 @@ namespace Cactus.Common
             if (type == 1)
             {
                 MemoryCache _cache = System.Runtime.Caching.MemoryCache.Default;
-                foreach (var _c in _cache.GetValues(null))
+                foreach (var _c in _cache)
                 {
                     CacheItem objCache = _cache.GetCacheItem(_c.Key);
                     CacheData _data = (CacheData)objCache.Value;
@@ -244,7 +244,7 @@ namespace Cactus.Common
             if (type == 1) 
             {
                 MemoryCache _cache = System.Runtime.Caching.MemoryCache.Default;
-                foreach (var _c in _cache.GetValues(null))
+                foreach (var _c in _cache)
                 {
                     _cache.Remove(_c.Key);
                 }

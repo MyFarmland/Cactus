@@ -49,6 +49,7 @@
     <Compile Include="IBaseService.cs" />
     <Compile Include="IPowerConfigService.cs" />
     <Compile Include="IRoleServer.cs" />
+    <Compile Include="CMS\IBlogConfigService.cs" />
     <Compile Include="ISiteConfigService.cs" />
     <Compile Include="CMS\IThemeConfigService.cs" />
     <Compile Include="IUserServer.cs" />

@@ -53,8 +53,13 @@ namespace Cactus.Controllers.Controllers
                     u.LastLoginIp = WebHelper.GetClientIPAddress();
                     userServer.Update(u);
                     //加入缓存
-                    //CacheHelper.SetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + sid, u,new DateTimeOffset().AddDays(1));
-                    CacheHelper.SetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + sid, u);
+                    //CacheHelper.SetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + sid, u);
+                    base.cacheService.Add(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + sid,
+                        new HTools.CacheObj()
+                        {
+                            value = u,
+                            AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1)
+                        });
                     //清除验证码code
                     CookieHelper.ClearCookie("code");
                     return Json(new ResultModel { msg = "登陆成功",pass = true });
@@ -70,7 +75,7 @@ namespace Cactus.Controllers.Controllers
         {
             string code = "";
             ValidateCode.CreateValidateGraphic(out code, 4, 140, 40, 24);
-            string name = "cactus_";
+            string name = "cactus_";//需要改成配置*|*
             code = CryptoHelper.MD5Encrypt(name + code);
             CookieHelper.SetCookie("code", code);
         }

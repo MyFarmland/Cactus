@@ -1,0 +1,10 @@
+﻿<Properties StartupItem="Cactus.Web\Cactus.Web.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.Cactus.Controllers PreferredExecutionTarget="ChromeHTML" />
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.ItemProperties.Cactus.Web PreferredExecutionTarget="ChromeHTML" />
+</Properties>

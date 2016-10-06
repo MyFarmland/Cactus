@@ -4,6 +4,7 @@ using Cactus.Common;
 using Cactus.IService;
 using Cactus.Model.Sys;
 using Cactus.Model.Sys.Enums;
+using HTools;
 using System;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -15,7 +16,8 @@ namespace Cactus.Controllers.Expand
     {
 
         public ISiteConfigService siteConfigService = IocHelper.AutofacResolveNamed<ISiteConfigService>("SiteConfigService");
-
+        public ICacheService cacheService = IocHelper.AutofacResolveNamed<ICacheService>("CacheService");
+        
         /// <summary>
         /// 站点配置信息
         /// </summary>
@@ -26,11 +28,17 @@ namespace Cactus.Controllers.Expand
         /// <param name="filterContext"></param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            this.Config = CacheHelper.GetCache(Constant.CacheKey.SiteConfigCacheKey) as SiteConfig;
+            CacheObj obj=cacheService.Get(Constant.CacheKey.SiteConfigCacheKey);
+            this.Config = (obj != null && obj.value != null) ? (obj.value as SiteConfig) : null;
             if (this.Config == null)
             {
                 this.Config = siteConfigService.LoadConfig(Constant.SiteConfigPath);
-                CacheHelper.SetCache(Constant.CacheKey.SiteConfigCacheKey, Config);
+                cacheService.Add(Constant.CacheKey.SiteConfigCacheKey,
+                    new CacheObj()
+                    {
+                        value = Config,
+                        AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1)
+                    });
             }
             if (this.Config != null)
             {

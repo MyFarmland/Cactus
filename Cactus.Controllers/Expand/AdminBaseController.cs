@@ -35,7 +35,9 @@ namespace Cactus.Controllers.Expand
             {
                 m_token = token;
                 //没有系统缓存重新登录
-                this.LoginUser = CacheHelper.GetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token) as User;
+                HTools.CacheObj obj=base.cacheService.Get(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
+                this.LoginUser = (obj != null && obj.value != null) ? (obj.value as User) : null;
+                //this.LoginUser = CacheHelper.GetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token) as User;
             }
         }
     }

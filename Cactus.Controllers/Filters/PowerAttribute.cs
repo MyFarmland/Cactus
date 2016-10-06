@@ -5,6 +5,7 @@ using Cactus.IService;
 using Cactus.Model.Other;
 using Cactus.Model.Sys;
 using Cactus.Model.Sys.Enums;
+using HTools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,11 +50,14 @@ namespace Cactus.Controllers.Filters
 
         //public IPowerConfigService powerConfigService = AutofacDependencyResolver.Current.ApplicationContainer.Resolve<IPowerConfigService>();
         public IPowerConfigService powerConfigService = IocHelper.AutofacResolveNamed<IPowerConfigService>("PowerConfigService");
+        public ICacheService cacheService = IocHelper.AutofacResolveNamed<ICacheService>("CacheService");
         
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var token = CookieHelper.GetCookieValue("Admin");
-            this.LoginUser = CacheHelper.GetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token) as User;
+            //this.LoginUser = CacheHelper.GetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token) as User;
+            HTools.CacheObj obj = cacheService.Get(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
+            this.LoginUser = (obj != null && obj.value != null) ? (obj.value as User) : null;
             bool b = false;
             if (this.IsSuper == false)
             {
@@ -62,12 +66,14 @@ namespace Cactus.Controllers.Filters
                 //权限id集合
                 string[] acts = LoginUser.Role.ActionIds.Split(',');
 
-                this.Power = CacheHelper.GetCache(Constant.CacheKey.PowerConfigCacheKey) as PowerConfig;
-
+                //this.Power = CacheHelper.GetCache(Constant.CacheKey.PowerConfigCacheKey) as PowerConfig;
+                obj = cacheService.Get(Constant.CacheKey.PowerConfigCacheKey);
+                this.Power = (obj != null && obj.value != null) ? (obj.value as PowerConfig) : null;
                 if (this.Power == null)
                 {
                     this.Power = powerConfigService.LoadConfig(Constant.PowerConfigPath);
-                    CacheHelper.SetCache(Constant.CacheKey.PowerConfigCacheKey, this.Power);
+                    //CacheHelper.SetCache(Constant.CacheKey.PowerConfigCacheKey, this.Power);
+                    cacheService.Add(Constant.CacheKey.PowerConfigCacheKey, new CacheObj() { value = this.Power, AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1) });
                 }
                 try
                 {

@@ -3,6 +3,7 @@ namespace Cactus.IService
 {
     public interface IUserServer : IBaseService<Cactus.Model.Sys.User>
     {
+        bool IsUseName(string username, int ignoreId);
         /// <summary>
         /// 验证登陆
         /// </summary>

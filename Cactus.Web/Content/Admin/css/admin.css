@@ -20,13 +20,10 @@
 }
 
 .left-layout {
-    /*background-color: rgb(84,75,176);*/
-    /*background-color: #353432;*/
     background-color: rgb(50,50,50);
     position: fixed;
     top: 0px;
     bottom: 0px;
-    
     width: 200px;
     display: inline-block;
     zoom: 1;
@@ -34,7 +31,7 @@
     word-spacing: normal;
     vertical-align: top;
     text-rendering: auto;
-
+    z-index:1002;
 }
 
 .right-layout {
@@ -49,26 +46,27 @@
     box-sizing: border-box;
 
 }
-
 .logo-img {
     background-image: url(../img/logo.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: 32px 32px;
     height: 32px;
+    padding: 2px;
 }
 
 .logo-font {
-    height: 20px;
-    line-height: 20px;
+    height: 18px;
+    line-height: 18px;
     font-size: 14px;
     font-weight: bold;
     text-align: center;
     text-transform: capitalize;
+    padding: 2px;
 }
 
 #main-content {
-    padding: 65px 5px 0px 5px;
+    padding: 68px 5px 40px 5px;
     width: 100%;
     box-sizing: border-box;
     display: block; 
@@ -78,16 +76,63 @@
 }
 
 #nav {
-    /*background-color:rgb(215, 210, 224);*/
-    background-color: #ddddf1;
+    background-color: #fafafa;
     position: fixed;
     width: 100%;
     height: 60px;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
-    z-index:1000;
+    box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.1);
+    z-index:1001;
     top: 0;
 }
-
+#footer {
+    background-color: #fafafa;
+    position: fixed;
+    width: 100%;
+    height: 60px;
+    z-index:1001;
+    right: 0;
+    bottom: 0;
+}
+.footer {
+    background: none repeat scroll 0 0 #fff;
+    border-top: 1px solid #ddc;
+    padding: 10px 20px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width:100%;
+    z-index:1001;
+}
+.footer .pull-right {
+    float: right!important;
+}
+.comment-top {
+    background-color: #7266BA;
+    border-color: #7266BA;
+    color: #FFF !important;
+    position: fixed;
+    z-index: 9998;
+    right: 60px;
+    bottom: 80px;
+    text-align: center;
+    padding:8px;
+    font-size:24px;
+}
+.comments{
+    background-color: #f31212;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding-bottom: 2px;
+    padding-top:2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-shadow: none;
+    position: absolute;
+    border-radius: 10px;
+    top: -10px;
+    right: -10px;
+}
 #nav-tree {
     top: 5px;
 }
@@ -144,8 +189,11 @@
 }
 
 #menu-tree span.pure-menu-heading {
-    color: rgb(255,255,255);
+    color:#fff;
     height: 60px;
+    padding: 0;
+    /*border-bottom: 1px solid #fff;*/
+    background-color: #4d85d1;
 }
 
 #menu-tree div.pure-menu-heading {
