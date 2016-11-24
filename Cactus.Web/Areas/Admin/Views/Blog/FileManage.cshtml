@@ -16,12 +16,12 @@
         <div class="pure-error pure-c-error" name="uploadFile"></div>
     </div>
 </div>
-<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table pure-table-horizontal table-p" id="fileSys_Root">
+<table width="100%" class="pure-table pure-table-horizontal table-p" id="fileSys_Root">
     <thead>
         <tr>
             <th>名称</th>
-            <th width="12%">创建时间</th>
-            <th width="12%">修改时间</th>
+            <th width="15%">创建时间</th>
+            <th width="15%">修改时间</th>
             <th width="12%">大小</th>
             <th width="30%">操作</th>
         </tr>
@@ -142,9 +142,9 @@
             var RootPath = raws.RootPath;
             //
             var temp_dir = '<tr><td><i class="fa fa-folder"></i><a href="javascript:;" name="dir" data-value="{dir_name}"> {dir_name} </a></td><td>{dir_lasttime}</td><td>{dir_createtime}</td><td></td>' +
-                            '<td><a href="javascript:;" class="pure-link pure-link-purple" name="action_del" data-value="{dir_name}">删除</a><a href="javascript:;" class="pure-link pure-link-purple" name="action_rename" data-value="{dir_name}">重命名</a></td></tr>';
+                            '<td><a href="javascript:;" class="pure-link pure-link-default" name="action_del" data-value="{dir_name}">删除</a><a href="javascript:;" class="pure-link pure-link-default" name="action_rename" data-value="{dir_name}">重命名</a></td></tr>';
             var temp_file = '<tr><td><i class="fa fa-file"></i><a href="{file_link}" name="file" data-value="{file_name}" {file_args}> {file_name} </a></td><td>{file_lasttime}</td><td>{file_createtime}</td><td>{file_size}kb</td>' +
-                            '<td><a href="javascript:;" class="pure-link pure-link-purple" name="action_del" data-value="{file_name}">删除</a><a href="javascript:;" class="pure-link pure-link-purple" name="action_rename" data-value="{file_name}">重命名</a><input type="text" value="{file_url}" style="width:150px" onclick="$(this).select();"/></td></tr>';
+                            '<td><a href="javascript:;" class="pure-link pure-link-default" name="action_del" data-value="{file_name}">删除</a><a href="javascript:;" class="pure-link pure-link-default" name="action_rename" data-value="{file_name}">重命名</a><input type="text" value="{file_url}" style="width:150px" onclick="$(this).select();"/></td></tr>';
             //data-clipboard-text="1"
             var temp_root = '<tr><td colspan="5"><i class="fa fa-folder-open-o"></i><a href="javascript:;" name="root" data-value="{dir_args}">{dir_name}</a></td></tr>';
             var $body = $('#fileSys_Body');

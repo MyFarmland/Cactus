@@ -4,52 +4,49 @@
 }
 
 <div class="tool-list">
+    <label>修改标签</label>
     <div class="pure-button-group">
-        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TagManage');" class="pure-button pure-button-primary">返回</a>*@
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 <form class="pure-form  pure-form-aligned" id="p_tagUpdate">
     <input type="hidden" name="Tag_Id" value="@tag.Tag_Id" />
-    <fieldset>
         <legend>修改标签</legend>
         <div class="pure-control-group">
             <label>标签名</label>
             <input name="TagName" type="text" value="@tag.TagName" placeholder="标签名" />
-            <div class="pure-error pure-c-error" name="TagName"></div>
+            <div class="pure-error pure-c-error msg-box" for="TagName"></div>
         </div>
         <div class="pure-control-group">
             <label>标签描述</label>
             <textarea rows="5" cols="20" name="TagDes" placeholder="标签描述" style="resize: none;">@tag.TagDes</textarea>
         </div>
         <div class="pure-controls">
-            <button type="button" class="pure-button pure-button-primary" name="tagupdate">更新</button>
+            <button type="submit" class="pure-button pure-button-primary">更新</button>
         </div>
-    </fieldset>
 </form>
 <script>
     $(function () {
-        $('#p_tagUpdate button[name=tagupdate]').bind('click', function () {
-            var Tag_Id = $("#p_tagUpdate input[name=Tag_Id]").val();
-            var TagName = $("#p_tagUpdate input[name=TagName]").val();
-            if (TagName == '' || TagName == undefined) {
-                $('#p_tagUpdate div[name=TagName]').html('请填写标签名'); return;
-            } else {
-                $('#p_tagUpdate div[name=TagName]').html('');
-            }
-            var TagDes = $("#p_tagUpdate textarea[name=TagDes]").val();
-            $.ajax({
-                url: "/Admin/Blog/TagUpdate",
-                type: "post",
-                data: {Tag_Id:Tag_Id, TagName: TagName, TagDes: TagDes },
-                success: function (obj) {
-                    if (obj.pass) {
-                        Admin.loadBackPage('main-content');
-                    } else {
+        $('#p_tagUpdate').validator({
+            msgWrapper: 'div',
+            fields: {
+                'TagName': 'required'
+            },
+            valid: function (form) {
+                Admin.loadDialog_show();
+                var param = $(form).serialize();
+                $.ajax({
+                    url: "/Admin/Blog/TagUpdate",
+                    type: "post",
+                    data: param,
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
                         layer.alert(obj.msg)
+                        Admin.loadBackPage('main-content');
                     }
-                }
-            });
-        })
+                });
+            }
+        });
+
     });
 </script>

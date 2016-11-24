@@ -1,21 +1,25 @@
 ﻿@{
     Layout = null;
     var list = ViewData["ColumnList"] as List<Cactus.Model.CMS.Column>;
+    var Power = ViewData["_Power"] as Cactus.Model.Sys.PowerAdmin;
+    var loginUser = ViewData["_LoginUser"] as Cactus.Model.Sys.User;
 }
 
 <div class="tool-list">
     <div class="pure-button-group">
-        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnAdd');" class="pure-button pure-button-primary pure-split">添加主栏目</a>
+        @if (this.ViewContext.IsPower("blogManage", EnumsModel.ActionEnum.Add)) { 
+            <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnAdd');" class="pure-button pure-button-primary pure-split">添加主栏目</a>
+        }
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogIndex');" class="pure-button pure-button-primary pure-split">查找文章</a>
     </div>
 </div>
 
-<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table" id="column">
+<table width="100%" class="pure-table" id="column">
     <thead>
         <tr>
             <th width="6%">编号</th>
             <th>栏目名</th>
-            <th width="12%">排序</th>
+            <th>序号</th>
             <th width="40%">操作</th>
         </tr>
     </thead>
@@ -25,7 +29,7 @@
             bool b = true;
             foreach (var item in list)
             {
-                <tr @if (b) { b = false; <text> class="pure-table-odd" </text>   } else { b = true; }>
+                <tr @if (b) { b = false; <text> class="pure-table-odd" </text>    } else { b = true; }>
                     <td>@item.Column_Id</td>
                     <td>
                         @if (item.Lv == 1)
@@ -38,12 +42,12 @@
                     {
                             <text>
                                 @if (item.Lv >= 2)
-                        {          
+                        {
                             for (int i = 2; i < item.Lv; i++)
                             {
-                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             }
-                                     <span style="font-size:16px;font-weight:bold;padding-left:5px;padding-right:5px;height:32px;width:32px;">╠</span>
+                            <span style="font-size:16px;font-weight:bold;padding-left:5px;padding-right:5px;height:32px;width:32px;">╠</span>
                         }
                                 <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');" class="pure-link pure-link-default"><i class="fa fa-folder-o"></i>@item.ColumnName</a>
                             </text>
@@ -51,10 +55,10 @@
                     </td>
                     <td>@item.Sort</td>
                     <td>
-                        <a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');">查看文章列表</a>
-                        <a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnAddByColumnId?ColumnId=@(item.Column_Id)');">添加子栏目</a>
-                        <a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnUpdate?ColumnId=@(item.Column_Id)');">编辑</a>
-                        <a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="@item.Column_Id">删除</a>
+                        <a href="javascript:;" class="pure-link pure-link-default" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogByColumnId?ColumnId=@(item.Column_Id)');">查看文章列表</a>
+                        <a href="javascript:;" class="pure-link pure-link-default" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnAddByColumnId?ColumnId=@(item.Column_Id)');">添加子栏目</a>
+                        <a href="javascript:;" class="pure-link pure-link-default" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnUpdate?ColumnId=@(item.Column_Id)');">编辑</a>
+                        <a href="javascript:;" class="pure-link pure-link-default" name="del" data-value="@item.Column_Id">删除</a>
                     </td>
                 </tr>
             }

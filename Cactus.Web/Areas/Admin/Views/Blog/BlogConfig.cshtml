@@ -2,49 +2,69 @@
     Layout = null;
     var config = ViewData["BlogConfig"] as Cactus.Model.CMS.BlogConfig;
 }
+<div class="tool-list">
+    <label>博客配置</label>
+</div>
 <form class="pure-form  pure-form-aligned" id="blogForm">
-    <div class="pure-control-group">
-        <label>博客名字</label>
-        <input name="BlogName" type="text" placeholder="博客名字" value="@config.BlogName" />
-        <div class="pure-error pure-c-error"></div>
-    </div>
-    <div class="pure-control-group">
-        <label>博客主题</label>
-        <input name="BlogTheme" type="text" placeholder="博客主题" value="@config.BlogTheme" />
-        <div class="pure-error pure-c-error"></div>
-    </div>
-    <div class="pure-control-group">
-        <label>单页保存目录</label>
-        <input name="PageDir" type="text" placeholder="单页保存目录" value="@config.PageDir" />
-        <div class="pure-error pure-c-error"></div>
-    </div>
-    <div class="pure-control-group">
-        <label>页面后缀</label>
-        <input name="PageExtension" type="text" placeholder="页面后缀" value="@config.PageExtension" />
-        <div class="pure-error pure-c-error"></div>
-    </div>
-    <div class="pure-controls">
-        <button type="button" name="save" class="pure-button pure-button-primary">保存</button>
-    </div>
+        <div class="pure-control-group">
+            <label>博客名字</label>
+            <input name="BlogName" type="text" placeholder="博客名字" value="@config.BlogName" />
+            <div class="pure-error pure-c-error msg-box" for="BlogName"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>博客主题</label>
+            <input name="BlogTheme" type="text" placeholder="博客主题" value="@config.BlogTheme" />
+            <div class="pure-error pure-c-error msg-box" for="BlogTheme"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>html存放基目录</label>
+            <input name="HtmlDir" type="text" placeholder="html存放基目录" value="@config.HtmlDir" />
+            <div class="pure-error pure-c-error msg-box" for="HtmlDir"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>单页存放目录</label>
+            <input name="PageDir" type="text" placeholder="文章存放目录" value="@config.PageDir" />
+            <div class="pure-error pure-c-error msg-box" for="PageDir"></div>
+        </div>    
+        <div class="pure-control-group">
+            <label>页面后缀</label>
+            <input name="PageExtension" type="text" placeholder="页面后缀" value="@config.PageExtension" />
+            <div class="pure-error pure-c-error msg-box" for="PageExtension"></div>
+        </div>
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">保存</button>
+        </div>
 </form>
 
 <script type="text/javascript">
     $(function () {
         Admin.tabInit(0);
-        $('#blogForm button[name=save]').bind('click', function () {
-            var param = $("#blogForm").serialize();
-            $.ajax({
-                url: "/Admin/Blog/BlogConfig",
-                type: "post",
-                data: param,
-                success: function (obj) {
-                    if (obj.pass) {
-                        layer.alert('保存成功');
-                    } else {
-                        layer.alert(obj.msg)
+        $('#blogForm').validator({
+            msgWrapper: 'div',
+            fields: {
+                'BlogName': 'required',
+                'BlogTheme': 'required',
+                'HtmlDir': 'required',
+                'PageDir': 'required',
+                'PageExtension': 'required'
+            },
+            valid: function (form) {
+                Admin.loadDialog_show();
+                var param = $(form).serialize();
+                $.ajax({
+                    url: "/Admin/Blog/BlogConfig",
+                    type: "post",
+                    data: param,
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        if (obj.pass) {
+                            layer.alert('保存成功');
+                        } else {
+                            layer.alert(obj.msg)
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     });
 </script>

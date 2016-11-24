@@ -6,12 +6,15 @@ using Cactus.Model.Sys;
 using Cactus.Model.Sys.Enums;
 using HTools;
 using System;
+using System.IO;
 using System.Web.Mvc;
 using System.Web.Security;
+using Cactus.Controllers.Filters;
 
 namespace Cactus.Controllers.Expand
 {
     //基础站点信息
+    [Exception]
     public class BaseController : Controller
     {
 
@@ -37,12 +40,12 @@ namespace Cactus.Controllers.Expand
                     new CacheObj()
                     {
                         value = Config,
-                        AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1)
+                        AbsoluteExpiration = new TimeSpan(1, 0, 0, 0)
                     });
             }
             if (this.Config != null)
             {
-                ViewData["SiteConfig"] = this.Config;
+                ViewData["_SiteConfig"] = this.Config;
             }
         }
 
@@ -54,6 +57,5 @@ namespace Cactus.Controllers.Expand
         {
 
         }
-
     }
 }

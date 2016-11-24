@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    var site = ViewData["_SiteConfig"] as Cactus.Model.Sys.SiteConfig;
 }
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -11,7 +12,7 @@
     <link href="/Content/PureUI/pureplus-min.css" rel="stylesheet" />
     <style type="text/css">
         body {
-            background-color: rgb(231,255,231);
+            background-color: #f3f3f4;
             overflow-y: hidden;
             -webkit-background-size: cover;
             -moz-background-size: cover;
@@ -22,6 +23,17 @@
             margin: 150px auto;
             width: 300px;
         }
+        .copy-right {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    left: 0;
+    text-align: center;
+        font-size: 14px;
+    color: #83b7ce;
+    line-height: 2em;
+}
         .code {
             border-radius: 4px;
             display: block;
@@ -62,8 +74,8 @@
         <div class="pure-group pure-input-1">
             <a href="/" class="pure-link">回到首页</a>
         </div>
-        <div class="pure-u-1-1">QQ交流群:110826636</div>
     </form>
+    <div class="pure-u-1-1 copy-right">@site.SiteCopyRight</div>
     <script src="~/Content/Js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript">
         $(function () {

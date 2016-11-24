@@ -125,20 +125,11 @@ namespace Cactus.Model.Sys
             set { _sitestaticdir = value; }
         }
 
-        private string _sitetheme = "Default";
-        /// <summary>
-        /// 站点主题
-        /// </summary>
-        public string SiteTheme
-        {
-            get { return _sitetheme; }
-            set { _sitetheme = value; }
-        }
         #endregion
 
         #region 图片上传设置
 
-        private string _imgextensions = "*.jpg,*.jpeg,*.gif,*.bmp,*.png";
+        private string _imgextensions = "*.jpg*.jpeg*.gif*.bmp*.png";
 
         /// <summary>
         /// 图片上传类型

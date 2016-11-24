@@ -8,6 +8,7 @@ using System.Runtime.Caching;
 using System.Runtime.Serialization.Formatters.Binary;
 using HTools;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Cactus.BaseService
 {
@@ -29,7 +30,7 @@ namespace Cactus.BaseService
                 if(obj!=null){
                     m_mcache.Add(key, obj);
                 }
-                return m_dcache.Get(key);
+                return obj;
             }
             else {
                 return obj;

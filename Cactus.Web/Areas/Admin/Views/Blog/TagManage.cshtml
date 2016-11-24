@@ -7,7 +7,7 @@
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TagAdd');" class="pure-button pure-button-primary">添加标签</a>
     </div>
 </div>
-<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table pure-table-bordered table-p" id="tag"></table>
+<table width="100%" class="pure-table table-p" id="tag"></table>
 <ul class="pure-paginator" id="table_paginator"></ul>
 <script type="text/javascript">
     function onTable(index) {
@@ -26,8 +26,8 @@
                         { field: "LastTime", title: "最后编辑时间" },
                         {
                             field: "Tag_Id", title: "操作", formatter: function (val, rec, row) {
-                                var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
-                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>';
+                                var str = '<a href="javascript:;" class="pure-link pure-link-default" name="upd" data-value="' + val + '">编辑</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-default" name="del" data-value="' + val + '">删除</a>';
 
                             return str;
                         } }]);

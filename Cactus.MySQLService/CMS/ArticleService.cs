@@ -181,5 +181,11 @@ namespace Cactus.MySQLService.CMS
                 }, new { id = id }, null, "Column_Id", null, null).SingleOrDefault();
             }
         }
+
+
+        public bool IsLike(int Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

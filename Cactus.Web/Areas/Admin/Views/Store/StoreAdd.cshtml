@@ -1,17 +1,15 @@
 ﻿@{
     Layout = null;
-    var config = ViewData["SiteConfig"] as Cactus.Model.Sys.SiteConfig;
+    var config = ViewData["_SiteConfig"] as Cactus.Model.Sys.SiteConfig;
 }
 
-
-<div class="pure-g">
-    @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Store/index');" class="pure-link pure-link-black">返回</a>*@
-    <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-link pure-link-black">返回</a>
+<div class="tool-list">
+    <label>添加店铺</label>
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split">返回</a>
+    </div>
 </div>
-
 <form class="pure-form  pure-form-aligned" id="StoreAdd">
-    <fieldset>
-        <legend>添加店铺</legend>
         <div class="pure-control-group">
             <label>店铺名</label>
             <input name="StoreName" type="text" value="" placeholder="昵称" />
@@ -48,7 +46,6 @@
         <div class="pure-controls">
             <button type="button" class="pure-button pure-button-primary" name="storeadd">添加</button>
         </div>
-    </fieldset>
 </form>
 
 <script type="text/javascript">

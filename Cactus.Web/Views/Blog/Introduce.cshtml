@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "首页";
+}
+
+<style type="text/css">
+    .posts .t1{
+        font-size: 24px;
+    }
+    .posts .t2{
+        font-size: 18px;
+    }
+    p {
+        margin: 0 0 10px;
+        font-weight: 200;
+        line-height: 1.25;
+        margin-bottom: 10px;
+    }
+</style>
+<form class="pure-form pure-search pure-g" action="@Url.Action("Search", "Blog")" method="get">
+    <input type="text" name="k" placeholder="输入你的关键字">
+    <button type="submit" class="pure-button pure-button-primary">搜索</button>
+</form>
+<div class="posts">
+    <section class="post">
+        <header class="post-header">
+            <h2 class="post-title" style="text-align:center;">欢迎使用Cactus</h2>
+        </header>
+        <div class="post-description-detail" >
+            <div class="pure-g">
+                <div class="pure-u-1">
+                    <div style="width: 198px;height: 99px;margin: 0 auto;outline: 0;display: block; margin-bottom:10px;">
+                        <img src="~/Content/Admin/img/logo.png" style="margin: 0 auto;outline: 0;display: block; float:left; " />
+                        <img src="~/Content/Admin/img/logo_2.png" style="margin: 0 auto;outline: 0;display: block;float:left;" />
+                    </div>
+                </div>
+                <div class="pure-u-1">
+                    
+                </div>
+            </div>
+            <p class="t1" style="text-align:center;">
+                开源、适合学习MVC的开发者，Cactus可部署到win的IIS、或者linux的jexus
+            </p>
+            <p class="t2" style="text-align:center;">
+                目前采用MVC4+Autofac+Dapper制作而成，集成一个Blog和权限系统（QQ交流群:110826636）
+            </p>
+            <p class="t2" style="text-align:center;">
+                数据库提供多种数据库类型（目前是以sqlite为基础，其他数据库可快速另行扩展）
+            </p>
+            <p style="max-width: 200px;margin:0 auto;">
+                <a class="pure-button pure-button-primary" id="downloadfile" style="width: 200px;text-align: center;padding: 15px 0px;" href="#">下载Cactus1.6</a>
+            </p>
+        </div>
+    </section>
+</div>
+@section JavaScript {     
+<script type="text/javascript">
+    $(function () {
+        $('#downloadfile').attr('href', "https://pan.baidu.com/s/1dF8xpJz");
+    })
+</script>
+    
+     }
+

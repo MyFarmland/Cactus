@@ -4,6 +4,7 @@ using Cactus.Model.CMS;
 using Cactus.Model.Sys.Enums;
 using HTools;
 using System;
+using System.IO;
 using System.Web.Mvc;
 
 namespace Cactus.Controllers.Expand
@@ -27,19 +28,19 @@ namespace Cactus.Controllers.Expand
             base.OnActionExecuting(filterContext);
             CacheObj obj = cacheService.Get(Constant.CacheKey.BlogConfigCacheKey);
             this.blogConfig = (obj != null && obj.value != null) ? (obj.value as BlogConfig) : null;
-            if (this.Config == null)
+            if (this.blogConfig == null)
             {
                 this.blogConfig = blogConfigService.LoadConfig(Constant.BlogConfigPath);
                 cacheService.Add(Constant.CacheKey.BlogConfigCacheKey,
                     new CacheObj()
                     {
-                        value = Config,
-                        AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1)
+                        value = blogConfig,
+                        AbsoluteExpiration = new TimeSpan(1,0,0,0)
                     });
             }
-            if (this.Config != null)
+            if (this.blogConfig != null)
             {
-                ViewData["BlogConfig"] = this.Config;
+                ViewData["_BlogConfig"] = this.blogConfig;
             }
         }
 
@@ -51,6 +52,7 @@ namespace Cactus.Controllers.Expand
         {
 
         }
+        
 
     }
 }

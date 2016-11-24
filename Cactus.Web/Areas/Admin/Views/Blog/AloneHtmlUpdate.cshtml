@@ -1,0 +1,157 @@
+﻿@{
+    Layout = null;
+    var _page = ViewData["staticPage"] as Cactus.Model.CMS.StaticPage;
+}
+<div class="tool-list">
+    <label>更改页面</label>
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
+    </div>
+</div>
+<form class="pure-form  pure-form-aligned" id="p_scents">
+    <input type="hidden" name="Page_Id" value="@_page.Page_Id" />
+    
+        <div class="pure-control-group">
+            <label>页面名</label>
+            <input name="PageName" type="text" value="@_page.PageName" placeholder="页面名" />
+            <div class="pure-error pure-c-error" name="PageName"></div>
+        </div>
+        <div class="pure-control-group">
+            <label>已用模板</label>
+            <select name="tempList" disabled><option>@(_page.TempPage.TempName)</option></select>
+        </div>
+        <div id="param_html">
+
+        </div>
+        <div class="pure-controls">
+            <button type="button" class="pure-button pure-button-primary" name="staticpageupdate">更新</button>
+        </div>
+</form>
+<script>
+    $(function () {
+        //初始化模板
+        var editor_arr = [];
+        var editor_obj_arr = [];
+        var input_arr = [];
+        var m_parm = null;
+        ParamReaderHtml(JSON.parse('@(Html.Raw(_page.PageParameter))'));
+        function ParamReaderHtml(parm) {
+            if (parm == null) { return; }
+            if (parm.length == 0) { return; }
+            m_parm = parm;
+            //type 1:普通输入 2:富文本输入
+            var temp_input = '<div class="pure-control-group"><label>{label}</label>' +
+                '<input id="{key}" type="text" value="{value}" placeholder="{tiplabel}" />' +
+                '<div class="pure-error pure-c-error" name="{error_key}"></div></div>';
+            var temp_editor = ' <div class="pure-control-group"><label>{label}</label>' +
+                '<div style="width:650px;display: inline-block;vertical-align: middle;"><div id="{key}" style="height:200px;max-height:300px;">{value}</div>' +
+                '</div><div class="pure-error pure-c-error" name="{error_key}"></div></div>';
+            function renderHtml() {
+                $('#param_html').html('');
+                for (var i = 0; i < parm.length; i++) {
+                    if (parm[i]["type"] == "1") {
+                        $('#param_html').append(temp_input.replace("{label}", parm[i]["label"]).replace("{tiplabel}", parm[i]["tiplabel"]).replace("{value}", parm[i]["value"]).replace("{key}", parm[i]["key"]).replace("{error_key}", parm[i]["key"]));
+                        input_arr.push(parm[i]["key"]);
+                    } else if (parm[i]["type"] == "2") {
+                        $('#param_html').append(temp_editor.replace("{label}", parm[i]["label"]).replace("{value}", parm[i]["value"]).replace("{key}", parm[i]["key"]).replace("{error_key}", parm[i]["key"]));
+                        var editor = new wangEditor(parm[i]["key"]);
+                        editor.config.uploadImgUrl = '/Admin/Blog/UploadImg';
+                        editor.config.zindex = 100;
+                        editor.config.lang = wangEditor.langs['zh-cn'];
+                        editor.config.menus = [
+            'source',
+            '|',
+            'bold',
+            'underline',
+            'italic',
+            'strikethrough',
+            'eraser',
+            'forecolor',
+            'bgcolor',
+            '|',
+            'quote',
+            'fontfamily',
+            'fontsize',
+            'head',
+            'unorderlist',
+            'orderlist',
+            'alignleft',
+            'aligncenter',
+            'alignright',
+            '|',
+            'link',
+            'unlink',
+            'table',
+            'emotion',
+            '|',
+            'img',
+            'video',
+            'insertcode',
+            '|',
+            'undo',
+            'redo',
+            'fullscreen'
+                        ];
+                        editor.create();
+                        editor_arr.push(parm[i]["key"]);
+                        editor_obj_arr.push(editor);
+                    }
+                }
+            }
+            renderHtml();
+        }
+        $('button[name=staticpageupdate]').bind('click', function () {
+            var Page_Id = $("#p_scents input[name=Page_Id]").val();
+            var PageName = $("#p_scents input[name=PageName]").val();
+            if (PageName == '' || PageName == undefined) {
+                $('#p_scents div[name=PageName]').html('请填写页面名'); return;
+            } else {
+                $('#p_scents div[name=PageName]').html('');
+            }
+            var PageParameter = getParmValue();
+            var TempPageId = $("#p_scents select[name=tempList]").val();
+            $.ajax({
+                url: "/Admin/Blog/AloneHtmlUpdate",
+                type: "post",
+                data: { Page_Id: Page_Id, PageName: PageName, PageParameter: JSON.stringify(PageParameter), TempPageId: TempPageId },
+                success: function (obj) {
+                    if (obj.pass) {
+                        Admin.loadBackPage('main-content');
+                    } else {
+                        layer.alert(obj.msg)
+                    }
+                }
+            });
+        })
+        //数据转对象
+        function getParmValue() {
+            //后期扩展验证
+            var obj = m_parm;
+            for (var i = 0; i < input_arr.length; i++) {
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j]["key"] == input_arr[i]) {
+                        obj[j]["value"] = $("#param_html #" + input_arr[i]).val();
+                    }
+                }
+
+            }
+            for (var i = 0; i < editor_arr.length; i++) {
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j]["key"] == editor_arr[i]) {
+                        obj[j]["value"] = editor_obj_arr[i].$txt.html();
+                    }
+                }
+            }
+            console.log(JSON.stringify(obj));
+            return obj;
+        }
+    });
+</script>
+
+
+
+
+
+
+
+

@@ -195,7 +195,7 @@ namespace HTools
         {
             if (string.IsNullOrEmpty(key)) { return null; }
             CacheObj obj=new CacheObj();
-            if (_cacheList.TryGetValue(key, out obj)) {
+             if (_cacheList.TryGetValue(key, out obj)) {
                 if (IsOverdue(obj))
                 {
                     this.Remove(key);

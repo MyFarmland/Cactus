@@ -184,6 +184,7 @@ namespace Cactus.Common
             {
                 var avatarName = file.FileName;
                 var avatarExt = Path.GetExtension(avatarName);
+                var b = Extensions.Contains(avatarExt);
                 if (!String.IsNullOrEmpty(avatarExt) && Extensions.Length>0&& Extensions.Contains(avatarExt))
                 {
                     try

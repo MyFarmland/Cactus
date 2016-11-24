@@ -1,7 +1,11 @@
 ﻿@{
     Layout = null;
-    var config = ViewData["SiteConfig"] as Cactus.Model.Sys.SiteConfig;
+    var config = ViewData["_SiteConfig"] as Cactus.Model.Sys.SiteConfig;
 }
+<div class="tool-list">
+    <label>站点配置</label>
+</div>
+
 <form class="pure-form  pure-form-aligned" id="siteForm">
     <div class="pure-tab">
         <ul class="pure-tab-head">
@@ -12,54 +16,54 @@
             <div class="pure-control-group">
                 <label>网站名字</label>
                 <input name="SiteName" type="text" placeholder="网站名字" value="@config.SiteName" />
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteName"></div>
             </div>
             <div class="pure-control-group">
                 <label>站点标题</label>
                 <input name="SiteTitle" type="text" placeholder="站点标题" value="@config.SiteTitle" />
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteTitle"></div>
             </div>
             <div class="pure-control-group">
                 <label>站点备案号</label>
                 <input name="SiteCrod" type="text" placeholder="站点备案号" value="@config.SiteCrod" />
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteCrod"></div>
             </div>
             <div class="pure-control-group">
                 <label>站点关键字</label>
                 <textarea rows="5" cols="20" name="SiteKeywords" placeholder="站点关键字" style="resize: none;">@config.SiteKeywords</textarea>
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteKeywords"></div>
             </div>
             <div class="pure-control-group">
                 <label>站点描述</label>
                 <textarea rows="5" cols="20" name="SiteDescr" placeholder="站点描述" style="resize: none;">@config.SiteDescr</textarea>
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteDescr"></div>
             </div>
             <div class="pure-control-group">
                 <label>站点统计代码</label>
                 <textarea rows="5" cols="20" name="SiteCountCode" placeholder="站点统计代码" style="resize: none;">@config.SiteCountCode</textarea>
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteCountCode"></div>
             </div>
             <div class="pure-control-group">
                 <label>站点版权信息</label>
                 <textarea rows="5" cols="20" name="SiteCopyRight" placeholder="站点版权信息" style="resize: none;">@config.SiteCopyRight</textarea>
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteCopyRight"></div>
             </div>
         </div>
         <div class="pure-tab-content" style="display:none;">
             <div class="pure-control-group">
                 <label>站点主题</label>
                 <input name="SiteTheme" type="text" placeholder="站点主题" value="@config.SiteTheme" />
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteTheme"></div>
             </div>
             <div class="pure-control-group">
                 <label>图片上传类型</label>
                 <input name="ImgExtensions" type="text" placeholder="图片上传类型" value="@config.ImgExtensions" style="width:300px;" />
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="ImgExtensions"></div>
             </div>
             <div class="pure-control-group">
                 <label>静态文件地址</label>
                 <input name="SiteStaticDir" type="text" placeholder="静态文件地址，方便存放单独文件服务器或者CDN，默认为空即当前" style="width:300px;" value="@config.SiteStaticDir" />
-                <div class="pure-error pure-c-error"></div>
+                <div class="pure-error pure-c-error msg-box" for="SiteStaticDir"></div>
             </div>
             <div class="pure-controls">
                 <label class="pure-checkbox">
@@ -76,29 +80,38 @@
             </div>
     </div>
     <div class="page-footer">
-        <button type="button" name="site" class="pure-button pure-button-primary">保存</button>
+        <button type="submit" class="pure-button pure-button-primary">保存</button>
     </div>
     </form>
 
 <script type="text/javascript">
     $(function () {
         Admin.tabInit(0);
-        $('button[name=site]').bind('click', function () {
-
-            var param = $("#siteForm").serialize();
-            $.ajax({
-                url: "/Admin/Sys/SysSave",
-                type: "post",
-                data: param,
-                success: function (obj) {
-                    if (obj.pass) {
-                        layer.alert('保存成功');
-                    } else {
-                        layer.alert(obj.msg)
+        $('#siteForm').validator({
+            msgWrapper: 'div',
+            fields: {
+                'SiteName': 'required',
+                'SiteTitle': 'required',
+                'SiteTheme': 'required',
+                'SiteStatus': 'checked'
+            },
+            valid: function (form) {
+                Admin.loadDialog_show();
+                var param = $(form).serialize();
+                $.ajax({
+                    url: "/Admin/Sys/SysSave",
+                    type: "post",
+                    data: param,
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        if (obj.pass) {
+                            layer.alert('保存成功');
+                        } else {
+                            layer.alert(obj.msg)
+                        }
                     }
-                }
-            });
-
+                });
+            }
         });
     });
 </script>

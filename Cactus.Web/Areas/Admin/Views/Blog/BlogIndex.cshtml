@@ -1,10 +1,10 @@
 ﻿@{
     Layout = null;
 }
-<label>文章查找</label>
 <div class="tool-list">
+    <label>文章查找</label>
     <div class="pure-button-group">
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 <div class="pure-g">
@@ -16,7 +16,7 @@
         </div>
     </div>
 </div>
-<table width="90%" class="pure-table pure-table-bordered table-p" id="blog"></table>
+<table width="100%" class="pure-table table-p" id="blog"></table>
 <ul class="pure-paginator" id="table_paginator">
 </ul>
 <script type="text/javascript">
@@ -44,17 +44,17 @@
                             { field: "LastTime", title: "最后编辑时间" },
                             {
                                 field: "Article_Id", title: "操作", formatter: function (val, rec, row) {
-                                    var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
-                                            '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>';
+                                    var str = '<a href="javascript:;" class="pure-link pure-link-default" name="upd" data-value="' + val + '">编辑</a>' +
+                                            '<a href="javascript:;" class="pure-link pure-link-default" name="del" data-value="' + val + '">删除</a>';
                                     if (row.IsTop) {
-                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="top" data-value="' + val + '">取消置顶</a>';
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-default" name="top" data-value="' + val + '">取消置顶</a>';
                                     } else {
-                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="top" data-value="' + val + '">置顶</a>';
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-default" name="top" data-value="' + val + '">置顶</a>';
                                     }
                                     if (row.IsShow) {
-                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="show" data-value="' + val + '">隐藏</a>';
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-default" name="show" data-value="' + val + '">隐藏</a>';
                                     } else {
-                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="show" data-value="' + val + '">显示</a>';
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-default" name="show" data-value="' + val + '">显示</a>';
                                     }
                                     return str;
                                 }

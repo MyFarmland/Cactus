@@ -14,18 +14,19 @@ using Cactus.Controllers.Expand;
 using Cactus.Controllers.Filters;
 using Cactus.Model.Other;
 using System.Reflection;
+using Cactus.Model.Sys.Config;
 
 namespace Cactus.Controllers.Areas.Admin.Controllers
 {
-    [Exception]
-    [Group(GroupName = "系统管理", NoGroupId = "Sys2016", IsShow = true, Icon = "fa-cog")]
+    [Group(Title = "系统管理", Icon = "fa-file", IsShow = true)]
     public class SysController : PowerBaseController
     {
+        #region 权限查阅
         [HttpGet]
-        [Power(IsSuper = true, IsShow = true,Icon="fa-edit",PowerId = "Sys_A101", PowerName = "权限设置", PowerDes = "打开权限设置页")]
+        [Power(ModuleName = "powerManage", Title = "权限查阅", IsShow = true, actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult SetPower() { return View(); }
-        [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_A101", PowerName = "权限设置", PowerDes = "打开权限设置页")]
+        //[HttpPost]
+        [Power(ModuleName = "powerManage", actionEnum = EnumsModel.ActionEnum.Build)]
         public ActionResult SetPower(string param)
         {
             try
@@ -41,10 +42,13 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 Type _typeGroup = typeof(GroupAttribute);
                 string _p = _typePower.FullName;
                 string _g = _typeGroup.FullName;
-                //
                 string areStr = "/Admin";
                 //
-                PowerConfig _powerConf = new PowerConfig();
+                PowerAdmin _powerConf = new PowerAdmin();
+                if (_powerConf.list == null)
+                {
+                    _powerConf.list = new List<PowerGroup>();
+                }
                 foreach (Type t in t_arr)//针对每个类型获取详细信息
                 {
 
@@ -54,8 +58,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                         //获取class的Attribute
                         object[] att_class = t.GetCustomAttributes(false);
                         PowerGroup _group = null;
-                        string _controller = className.Replace("Controller", "");
-
+                        //string _controller = className.Replace("Controller", "");
+                        string _controller = className.Remove(className.IndexOf("Controller"), ("Controller").Length);
                         foreach (object obj in att_class)
                         {
                             Type _t = obj.GetType();
@@ -63,114 +67,159 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                             if (t_name == _g)
                             {
                                 _group = new PowerGroup();
-                                PropertyInfo p_NoGroupId = _t.GetProperty("NoGroupId");
-                                object _cc = p_NoGroupId.GetValue(obj, null);
-                                if (_cc != null)
-                                {
-                                    string _NoGroupId = _cc.ToString();
-                                    _group.NoGroupId = _NoGroupId;
-                                }
-                                PropertyInfo p_GroupName = _t.GetProperty("GroupName");
-                                object _tt = p_GroupName.GetValue(obj, null);
-                                if (_tt != null)
-                                {
-                                    string _GroupName = _tt.ToString();
-                                    _group.GroupName = _GroupName;
-                                }
-                                PropertyInfo p_IsShow = _t.GetProperty("IsShow");
-                                object _ss = p_IsShow.GetValue(obj, null);
+                                _group.Name = _controller;
+                                PropertyInfo p_Title = _t.GetProperty("Title");
+                                object _ss = p_Title.GetValue(obj, null);
                                 if (_ss != null)
                                 {
-                                    string _IsShow = _ss.ToString();
-                                    _group.IsShow = Convert.ToBoolean(_IsShow);
+                                    _group.Title = _ss.ToString();
+                                }
+                                PropertyInfo p_Des = _t.GetProperty("Des");
+                                object _dd = p_Des.GetValue(obj, null);
+                                if (_dd != null)
+                                {
+                                    _group.Des = _dd.ToString();
+                                }
+                                PropertyInfo p_IsShow = _t.GetProperty("IsShow");
+                                object _cc = p_IsShow.GetValue(obj, null);
+                                if (_cc != null)
+                                {
+                                    _group.IsShow = Convert.ToBoolean(_cc.ToString());
                                 }
                                 PropertyInfo p_Icon = _t.GetProperty("Icon");
                                 object _oo = p_Icon.GetValue(obj, null);
                                 if (_oo != null)
                                 {
-                                    string _Icon = _oo.ToString();
-                                    _group.Icon = _Icon;
+                                     _group.Icon = _oo.ToString();
                                 }
                                 break;
                             }
                         }
-                        //获取方法信息
-                        MethodInfo[] MethodInfo_arr = t.GetMethods();
-                        foreach (MethodInfo m in MethodInfo_arr)
+                        if (_group != null && _group.module == null)
                         {
-                            string methodName = m.Name;
-                            object[] att_obj = m.GetCustomAttributes(false);
-                            foreach (object obj in att_obj)
+                            _group.module = new List<PowerModule>();
+                            List<PowerModule> modules = new List<PowerModule>();
+                            //获取方法信息
+                            MethodInfo[] MethodInfo_arr = t.GetMethods();
+                            foreach (MethodInfo m in MethodInfo_arr)
                             {
-                                Type _t = obj.GetType();
-                                string t_name = _t.ToString();
-                                if (t_name == _p)
+                                string methodName = m.Name;
+                                object[] att_obj = m.GetCustomAttributes(false);
+
+                                foreach (object obj in att_obj)
                                 {
-                                    Power _power = new Model.Sys.Power();
-                                    PropertyInfo p_PowerId = _t.GetProperty("PowerId");
-                                    object _tt = p_PowerId.GetValue(obj, null);
-                                    if (_tt != null)
+                                    Type _t = obj.GetType();
+                                    string t_name = _t.ToString();
+                                    if (t_name == _p)
                                     {
-                                        string _PowerId = _tt.ToString();
-                                        _power.NoPowerId = _PowerId;
-                                    }
-                                    PropertyInfo p_PowerName = _t.GetProperty("PowerName");
-                                    object _pp = p_PowerName.GetValue(obj, null);
-                                    if (_pp != null)
-                                    {
-                                        string _PowerName = _pp.ToString();
-                                        _power.PowerName = _PowerName;
-                                    }
-                                    PropertyInfo p_PowerDes = _t.GetProperty("PowerDes");
-                                    object _ss = p_PowerDes.GetValue(obj, null);
-                                    if (_ss != null)
-                                    {
-                                        string _PowerDes = _ss.ToString();
-                                        _power.PowerDes = _PowerDes;
-                                    }
-                                    PropertyInfo p_IsShow = _t.GetProperty("IsShow");
-                                    object _cc = p_IsShow.GetValue(obj, null);
-                                    if (_cc != null)
-                                    {
-                                        string _IsShow = _cc.ToString();
-                                        _power.IsShow = Convert.ToBoolean(_IsShow);
-                                    }
-                                    PropertyInfo p_Icon = _t.GetProperty("Icon");
-                                    object _oo = p_Icon.GetValue(obj, null);
-                                    if (_oo != null)
-                                    {
-                                        string _Icon = _oo.ToString();
-                                        _power.Icon = _Icon;
-                                    }
-                                    _power.NoGroupId = _group.NoGroupId;
-                                    _power.ParamStr = areStr + "/" + _controller + "/" + methodName;
-                                    if (_group.PowerList == null)
-                                    {
-                                        _group.PowerList = new List<Power>();
-                                    }
-                                    if (_group.PowerList == null)
-                                    {
-                                        _group.PowerList = new List<Power>();
-                                    }
-                                    if (_group.PowerList.Count == 0 || _group.PowerList.All(p => p.NoPowerId != _power.NoPowerId))
-                                    {
-                                        _group.PowerList.Add(_power);
+                                        PowerModule _power = new PowerModule();
+                                        PropertyInfo p_Name = _t.GetProperty("ModuleName");
+                                        object _pp = p_Name.GetValue(obj, null);
+                                        if (_pp != null)
+                                        {
+                                            _power.Name = _pp.ToString();
+                                        }
+                                        PropertyInfo p_actionEnum = _t.GetProperty("actionEnum");
+                                        object _aa = p_actionEnum.GetValue(obj, null);
+                                        if (_aa != null)
+                                        {
+                                            _power.Action_Type = _aa.ToString();
+                                        }
+                                        PropertyInfo p_IsShow = _t.GetProperty("IsShow");
+                                        object _cc = p_IsShow.GetValue(obj, null);
+                                        if (_cc != null)
+                                        {
+                                            _power.IsShow = Convert.ToBoolean(_cc.ToString());
+                                        }
+                                        PropertyInfo p_Title = _t.GetProperty("Title");
+                                        object _ss = p_Title.GetValue(obj, null);
+                                        if (_ss != null)
+                                        {
+                                            _power.Title = _ss.ToString();
+                                        }
+                                        PropertyInfo p_Icon = _t.GetProperty("Icon");
+                                        object _oo = p_Icon.GetValue(obj, null);
+                                        if (_oo != null)
+                                        {
+                                            _power.Icon = _oo.ToString();
+                                        }
+                                        _power.ParamStr = areStr + "/" + _controller + "/" + methodName;
+                                        modules.Add(_power);
                                     }
                                 }
                             }
-                        }
-                        if (_group != null)
-                        {
-                            if (_powerConf.PowerGroupList == null) { _powerConf.PowerGroupList = new List<PowerGroup>(); }
-                            if (_powerConf.PowerGroupList.Count == 0
-                                || _powerConf.PowerGroupList.All(g => g.NoGroupId != _group.NoGroupId))
+
+                            //去重后的模块
+                            Dictionary<string, PowerModule> module_dic_temp = new Dictionary<string, PowerModule>();
+                            //去重后的模块Action
+                            Dictionary<string, Dictionary<string, string>> moduleaction_dic = new Dictionary<string, Dictionary<string, string>>();
+                            //过滤重复模块名
+                            foreach (var module in modules)
                             {
-                                _powerConf.PowerGroupList.Add(_group);
+                                if (module.IsShow)
+                                {
+                                    if (!module_dic_temp.ContainsKey(module.Name))
+                                    {
+                                        module_dic_temp.Add(module.Name, module);
+                                    }
+                                    else
+                                    {
+                                        module_dic_temp[module.Name] = module;
+                                    }
+                                }
+                                else
+                                {
+                                    if (!module_dic_temp.ContainsKey(module.Name))
+                                    {
+                                        module_dic_temp.Add(module.Name, module);
+                                    }
+                                }
+
+                                if (!moduleaction_dic.ContainsKey(module.Name))
+                                {
+                                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                                    dic.Add(module.Action_Type, module.Action_Type);
+                                    moduleaction_dic.Add(module.Name, dic);
+                                }
+                                else
+                                {
+                                    Dictionary<string, string> dic = moduleaction_dic[module.Name];
+                                    if (!dic.ContainsKey(module.Action_Type))
+                                    {
+                                        dic.Add(module.Action_Type, module.Action_Type);
+                                    }
+                                    moduleaction_dic[module.Name] = dic;
+                                }
                             }
+                            Dictionary<string, PowerModule> module_dic = new Dictionary<string, PowerModule>();
+                            //合并操作标示
+                            foreach (var dic in module_dic_temp)
+                            {
+                                if (moduleaction_dic.ContainsKey(dic.Key))
+                                {
+                                    string Action_Type = "";
+                                    foreach (var m_dic in moduleaction_dic[dic.Key])
+                                    {
+                                        if (string.IsNullOrEmpty(Action_Type))
+                                        {
+                                            Action_Type += m_dic.Value;
+                                        }
+                                        else
+                                        {
+                                            Action_Type += "," + m_dic.Value;
+                                        }
+                                    }
+                                    dic.Value.Action_Type = Action_Type;
+                                    module_dic.Add(dic.Key, dic.Value);
+                                }
+                            }
+                            //
+                            _group.module = module_dic.Values.ToList();
+                            _powerConf.list.Add(_group);
                         }
                     }
                 }
-                SerializeHelper.Serialize(_powerConf, AppDomain.CurrentDomain.BaseDirectory + "Configuration" + Path.AltDirectorySeparatorChar + "PowerConfig.config");
+                SerializeHelper.Serialize(_powerConf, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration", "PowerConfig.config"));
                 return Json(new ResultModel
                 {
                     pass = true,
@@ -184,11 +233,42 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }
         }
 
+        #endregion
         //初步完成
         #region 用户
-        //修改头像
+        [Power(ModuleName = "userManage",Title="用户管理", IsShow=true,  actionEnum = EnumsModel.ActionEnum.Show)]
+        public ActionResult UserIndex()
+        {
+            int count = 0;
+            PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
+            pageturn.PageIndex = 1;
+            var list = this.userServer.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count);
+            pageturn.CountSize = count;
+            ViewData["UserList"] = list;
+            ViewData["Pageturn"] = pageturn;
+            return View("UserList");
+        }
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Show)]
+        public ActionResult UserList(int? page)
+        {
+            if (!page.HasValue) { page = 1; }
+            PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
+            pageturn.PageIndex = page;
+            int count = 0;
+            var list = this.userServer.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count).Select(t => new
+            {
+                t.User_Id,
+                t.Name,
+                t.NickName,
+                t.Role.RoleName,
+                AddTime = t.AddTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                LastLoginTime = t.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")
+            });
+            pageturn.CountSize = count;
+            return Json(new RowResultModel { rows = list, pagination = pageturn, pass = true }, JsonRequestBehavior.AllowGet);
+        }
         [HttpGet]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B101", PowerName = "修改用户头像", PowerDes = "用户头像修改")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserAlterFace(int id)
         {
             var act = this.userServer.Find(id);
@@ -196,14 +276,14 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B101", PowerName = "修改用户头像", PowerDes = "用户头像修改")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserAlterFacePost(int Id)
         {
             var avatarFile = Request.Files["AvatarFile"];
             string Avatar = "";
             if (avatarFile != null && avatarFile.ContentLength > 0)
             {
-                if (avatarFile.ContentLength <= 200 * 1024)
+                if (avatarFile.ContentLength <= this.pathConfig.dic["avatar"].FileSize * 1024)
                 {
                     var avatarName = avatarFile.FileName;
                     var avatarExt = Path.GetExtension(avatarName);
@@ -218,16 +298,16 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                         //保存原图
                         if (!System.IO.Directory.Exists(MyPath.TempPath))
                         {
-                            System.IO.Directory.CreateDirectory(MyPath.AvatarPath);
+                            System.IO.Directory.CreateDirectory(MyPath.TempPath);
                         }
                         var savePath = Path.Combine(MyPath.TempPath, avatarName);
                         avatarFile.SaveAs(savePath);
-                        if (!System.IO.Directory.Exists(MyPath.AvatarPath))
+                        if (!System.IO.Directory.Exists(this.pathConfig.dic["avatar"].DirPath))
                         {
-                            System.IO.Directory.CreateDirectory(MyPath.AvatarPath);
+                            System.IO.Directory.CreateDirectory(this.pathConfig.dic["avatar"].DirPath);
                         }
                         //缩略图路径
-                        var thumbPath = Path.Combine(MyPath.AvatarPath, "Avatar_" + Id + avatarExt);
+                        var thumbPath = Path.Combine(this.pathConfig.dic["avatar"].DirPath, "Avatar_" + Id + avatarExt);
 
 
                         //生成头像缩略图
@@ -237,7 +317,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                         //System.IO.Directory.Delete(savePath,true);
                         System.IO.File.Delete(savePath);
 
-                        Avatar = MyPath.Web_AvatarPath + "/" + "Avatar_" + Id + avatarExt;
+                        Avatar = this.pathConfig.dic["avatar"].WebPath + "/" + "Avatar_" + Id + avatarExt;
 
                         Model.Sys.User u = this.userServer.Find(Id);
                         u.Avatar = Avatar;
@@ -260,7 +340,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "上传文件错误", pass = false });
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B102", PowerName = "重置用户密码", PowerDes = "重置用户密码")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserResetPwd(int id)
         {
             var act = this.userServer.Find(id);
@@ -275,7 +355,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "重置失败", pass = false }, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B102", PowerName = "查看用户信息", PowerDes = "查看用户信息")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult UserInfo(int id)
         {
             var act = this.userServer.Find(id);
@@ -283,14 +363,14 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B103", PowerName = "添加用户", PowerDes = "添加用户")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Add)]
         public ActionResult UserAdd()
         {
             ViewData["RoleList"] = this.roleServer.GetAll().ToList();
             return View();
         }
         [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B103", PowerName = "添加用户", PowerDes = "添加用户")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Add)]
         public ActionResult UserAdd(string UserName, string Password, string NickName, string Email, string Phone, string Qq, int RoleId)
         {
             if (string.IsNullOrEmpty(UserName))
@@ -341,7 +421,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
 
         }
         [HttpGet]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B104", PowerName = "修改用户信息", PowerDes = "修改用户信息")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserUpdate(int id)
         {
             ViewData["RoleList"] = this.roleServer.GetAll().ToList();
@@ -349,7 +429,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B104", PowerName = "修改用户信息", PowerDes = "修改用户信息")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserUpdate(string NickName, string Email, string Phone, string Qq, int RoleId, int User_Id)
         {
             Model.Sys.User muser = this.userServer.Find(User_Id);
@@ -373,12 +453,11 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "修改失败", pass = false });
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_B104", PowerName = "删除用户", PowerDes = "删除用户")]
+        [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult UserDelete(string ids)
         {
             try
             {
-                //int[] list = Array.ConvertAll<string, int>(ids.Split(','), s => int.Parse(s));
                 this.userServer.Delete(ids);
                 return Json(new ResultModel { msg = "删除成功", pass = true }, JsonRequestBehavior.AllowGet);
             }
@@ -387,52 +466,48 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "删除失败", pass = false }, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_B105", PowerName = "用户列表", PowerDes = "查看用户列表")]
-        public ActionResult UserIndex()
-        {
-            int count = 0;
-            PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
-            pageturn.PageIndex = 1;
-            var list = this.userServer.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count);
-            pageturn.CountSize = count;
-            ViewData["UserList"] = list;
-            ViewData["Pageturn"] = pageturn;
-            return View("UserList");
-        }
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_B105", PowerName = "用户列表", PowerDes = "查看用户列表")]
-        public ActionResult UserList(int? page)
-        {
-            if (!page.HasValue) { page = 1; }
-            PageTurnModel pageturn = new PageTurnModel() {  ItemSize=10 };
-            pageturn.PageIndex = page;
-            int count = 0;
-            var list = this.userServer.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count).Select(t => new
-            {
-                t.User_Id,
-                t.Name,
-                t.NickName,
-                t.Role.RoleName,
-                AddTime = t.AddTime.ToString("yyyy-MM-dd HH:mm:ss"),
-                LastLoginTime = t.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")
-            });
-            pageturn.CountSize = count;
-            return Json(new RowResultModel { rows = list, pagination = pageturn, pass = true }, JsonRequestBehavior.AllowGet);
-        }
+
 
         #endregion
 
         //初步完成
         #region 角色
+        [Power(ModuleName = "roleManage", Title = "角色管理", IsShow = true, actionEnum = EnumsModel.ActionEnum.Show)]
+        public ActionResult RoleList(int? page)
+        {
+            PageTurnModel pageturn = new PageTurnModel() { ItemSize = 100 };
+            if (!page.HasValue)
+            {
+                page = 1;
+                pageturn.PageIndex = page;
+                int count = 0;
+                var list = this.roleServer
+                    .ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "Role_Id", out count);
+                pageturn.CountSize = count;
 
+                ViewData["RoleList"] = list;
+                return View();
+            }
+            else
+            {
+                pageturn.PageIndex = page;
+                int count = 0;
+                var list = this.roleServer
+                    .ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "Role_Id", out count);
+                pageturn.CountSize = count;
+
+                return Json(new RowResultModel { rows = list.Select(t => new { t.Role_Id, t.RoleName }), pagination = pageturn, pass = true });
+            }
+        }
         [HttpGet]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_C101", PowerName = "添加角色", PowerDes = "添加角色")]
+        [Power(ModuleName = "roleManage", actionEnum = EnumsModel.ActionEnum.Add)]
         public ActionResult RoleAdd()
         {
             return View();
         }
         
         [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_C101", PowerName = "添加角色", PowerDes = "添加角色")]
+        [Power(ModuleName = "roleManage", actionEnum = EnumsModel.ActionEnum.Add)]
         public ActionResult RoleAdd(string RoleName, string ActionIds)
         {
             if (string.IsNullOrEmpty(RoleName)) {
@@ -459,7 +534,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         }
         
         [HttpGet]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_C102", PowerName = "更新角色信息", PowerDes = "更新角色信息")]
+        [Power(ModuleName = "roleManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult RoleUpdate(int id)
         {
             var act = this.roleServer.Find(id);
@@ -468,7 +543,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         }
         
         [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_C102", PowerName = "更新角色信息", PowerDes = "更新角色信息")]
+        [Power(ModuleName = "roleManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult RoleUpdate(string RoleName, string ActionIds,int Id)
         {
             if (string.IsNullOrEmpty(RoleName))
@@ -476,7 +551,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "角色名为空", pass = false });
             }
             Model.Sys.Role role = this.roleServer.Find(Id);
-            if (this.roleServer.IsUseName(RoleName.Trim(), 0))
+            if (this.roleServer.IsUseName(RoleName.Trim(), role.Role_Id))
             {
                 return Json(new ResultModel { msg = "改角色名正在使用", pass = false });
             }
@@ -494,7 +569,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         }
         
         [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_C103", PowerName = "删除角色", PowerDes = "删除角色")]
+        [Power(ModuleName = "roleManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult RoleDelete(string ids)
         {
             try
@@ -507,43 +582,17 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "删除失败", pass = false }, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_C104", PowerName = "角色列表", PowerDes = "查看角色列表")]
-        public ActionResult RoleList(int? page)
-        {
-            PageTurnModel pageturn = new PageTurnModel() { ItemSize = 100 };
-            if (!page.HasValue)
-            {
-                page = 1;
-                pageturn.PageIndex = page;
-                int count = 0;
-                var list = this.roleServer
-                    .ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "Role_Id", out count);
-                pageturn.CountSize = count;
 
-                ViewData["RoleList"] = list;
-                return View();
-            }
-            else {
-                pageturn.PageIndex = page;
-                int count = 0;
-                var list = this.roleServer
-                    .ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "Role_Id", out count);
-                pageturn.CountSize = count;
-
-                return Json(new RowResultModel { rows = list.Select(t => new { t.Role_Id, t.RoleName }), pagination = pageturn, pass = true });
-            }
-        }
         #endregion
 
         //初步完成
         #region 网站参数
-
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_D101", PowerName = "网站设置", PowerDes = "网站设置")]
+        [Power(ModuleName = "sysManage", IsShow = true, Title = "网站参数", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult SysIndex()
         {
             return View();
         }
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_D101", PowerName = "网站设置", PowerDes = "网站设置")]
+        [Power(ModuleName = "sysManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult SysSave(SiteConfig site)
         {
             try
@@ -558,11 +607,9 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 this.Config.SiteStatus = site.SiteStatus;
                 this.Config.SiteStaticDir = site.SiteStaticDir;
                 this.Config.ImgExtensions = site.ImgExtensions;
-                this.Config.SiteTheme = site.SiteTheme;
                 string s = HttpContext.Request.Form["SiteStatus"].ToString();
                 this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
 
-                //CacheHelper.RemoveCache(Constant.CacheKey.SiteConfigCacheKey);
                 base.cacheService.Remove(Constant.CacheKey.SiteConfigCacheKey);
                 return Json(new ResultModel
                 {
@@ -578,12 +625,12 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_D102", PowerName = "基本图片", PowerDes = "网站基本图片")]
+        [Power(ModuleName = "sysManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult SysImage() 
         {
             return View();
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_D103", PowerName = "上传默认头像", PowerDes = "上传默认用户头像")]
+        [Power(ModuleName = "sysManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult SysDefaultAvatar()
         {
             var avatarFile = Request.Files["SysDefaultAvatar"];
@@ -591,19 +638,19 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             {
                 var avatarName = avatarFile.FileName;
                 var avatarExt = Path.GetExtension(avatarName);
-                if (!System.IO.Directory.Exists(MyPath.SysPath))
+                if (!System.IO.Directory.Exists(this.pathConfig.dic["sys"].DirPath))
                 {
-                    System.IO.Directory.CreateDirectory(MyPath.SysPath);
+                    System.IO.Directory.CreateDirectory(this.pathConfig.dic["sys"].DirPath);
                 }
                 //保存原图
                 var savePath = Path.Combine(MyPath.TempPath, "DefaultAvatar" + avatarExt);
-                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split(','), MyPath.fileSize))
+                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split('*'), this.pathConfig.dic["sys"].FileSize))
                 {
-                    var thumbPath = Path.Combine(MyPath.SysPath, "DefaultAvatar" + avatarExt);
+                    var thumbPath = Path.Combine(this.pathConfig.dic["sys"].DirPath, "DefaultAvatar" + avatarExt);
                     //生成头像缩略图
                     ImageHelper.MakeThumbnailImage(savePath, thumbPath, 48, 48, "HW");
                     System.IO.File.Delete(savePath);
-                    this.Config.DefaultAvatar = MyPath.Web_SysPath + "/DefaultAvatar" + avatarExt;
+                    this.Config.DefaultAvatar = this.pathConfig.dic["sys"].WebPath + "/DefaultAvatar" + avatarExt;
                     this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
                     if (Constant.CacheKey.List[Constant.CacheKey.SiteConfigCacheKey].Count() > 0)
                     {
@@ -613,14 +660,14 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
                 else
                 {
-                    return Json(new ResultModel { msg = "上传文件错误,注意文件大小" + MyPath.fileSize + "kb以内或文件类型为" + Config.ImgExtensions, pass = false });
+                    return Json(new ResultModel { msg = "上传文件错误,注意文件大小" + this.pathConfig.dic["sys"].FileSize + "kb以内或文件类型为" + Config.ImgExtensions, pass = false });
                 }
             }
             else {
                 return Json(new ResultModel { msg = "上传文件错误", pass = false });
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_D104", PowerName = "上传网站Logo", PowerDes = "上传网站")]
+        [Power(ModuleName = "sysManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult SysSiteLogo()
         {
             var avatarFile = Request.Files["SysSiteLogo"];
@@ -628,20 +675,20 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             {
                 var avatarName = avatarFile.FileName;
                 var avatarExt = Path.GetExtension(avatarName);
-                if (!System.IO.Directory.Exists(MyPath.SysPath))
+                if (!System.IO.Directory.Exists(this.pathConfig.dic["sys"].Name))
                 {
-                    System.IO.Directory.CreateDirectory(MyPath.SysPath);
+                    System.IO.Directory.CreateDirectory(this.pathConfig.dic["sys"].Name);
                 }
-                var savePath = Path.Combine(MyPath.SysPath, "SiteLogo" + avatarExt);
-                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split(','), MyPath.fileSize))
+                var savePath = Path.Combine(this.pathConfig.dic["sys"].DirPath, "SiteLogo" + avatarExt);
+                if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split('*'), this.pathConfig.dic["sys"].FileSize))
                 {
-                    this.Config.SiteLogo = MyPath.Web_SysPath + "/SiteLogo" + avatarExt;
+                    this.Config.SiteLogo = this.pathConfig.dic["sys"].WebPath + "/SiteLogo" + avatarExt;
                     this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
                     return Json(new ResultModel { msg = "上传成功", pass = true, append = new { url = this.Config.SiteLogo } });
                 }
                 else
                 {
-                    return Json(new ResultModel { msg = "上传文件错误,注意文件大小" + MyPath.fileSize + "kb以内或文件类型为" + Config.ImgExtensions, pass = false });
+                    return Json(new ResultModel { msg = "上传文件错误,注意文件大小" + this.pathConfig.dic["sys"].FileSize + "kb以内或文件类型为" + Config.ImgExtensions, pass = false });
                 }
             }
             else
@@ -649,16 +696,115 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new ResultModel { msg = "上传文件错误", pass = false });
             }
         }
-        //清理全部缓存
+        #endregion
+        
+        //初步完成
+        #region 文件地址
+        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Show)]
+        public ActionResult SysPath()
+        {
+            return View();
+        }
+        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Edit)]
         [HttpGet]
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_D105", PowerName = "网站缓存", PowerDes = "网站缓存")]
+        public ActionResult PathUpdate(string name) {
+            PathModel p = new PathModel();
+            if (this.pathConfig.dic.TryGetValue(name, out p))
+            {
+                p.DirPath = p.DirPath.Replace("/", ";");
+                p.DirPath = p.DirPath.Replace("\\", ";");
+                p.WebPath = p.WebPath.Replace("/", ";");
+                p.WebPath = p.WebPath.Replace("\\", ";");
+                ViewData["PathModel"] = p; 
+                return View();
+            }
+            return Content("不存在");
+        }
+        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Edit)]
+        [HttpPost]
+        public ActionResult PathUpdate(PathModel pm) {
+            PathModel p = new PathModel();
+            if (this.pathConfig.dic.TryGetValue(pm.Name, out p))
+            {
+                pm.DirPath = pm.DirPath.Replace(";",System.IO.Path.DirectorySeparatorChar.ToString());
+                pm.WebPath = pm.WebPath.Replace(";", pathConfig.WebSeparatorChar);
+                this.pathConfig.dic[pm.Name] = pm;
+                this.pathConfigService.SaveConfig(this.pathConfig, Constant.PathConfigPath);
+                return Json(new ResultModel
+                {
+                    pass = true,
+                    msg = "修改成功"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new ResultModel
+                {
+                    pass = true,
+                    msg = "修改失败，不存在"
+                }, JsonRequestBehavior.AllowGet);
+            }
+        
+        }
+        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Add)]
+        [HttpPost]
+        public ActionResult PathAdd(PathModel pm) {
+            PathModel p = new PathModel();
+            if (this.pathConfig == null) {
+                this.pathConfig = new PathConfig();
+                if (this.pathConfig.dic == null) { this.pathConfig.dic = new SerializableDictionary<string, PathModel>(); }
+            }
+            if (this.pathConfig.dic.TryGetValue(pm.Name, out p))
+            {
+                return Json(new ResultModel
+                {
+                    pass = true,
+                    msg = "添加失败，已经存在"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else {
+                pm.DirPath = pm.DirPath.Replace(";", System.IO.Path.DirectorySeparatorChar.ToString());
+                pm.WebPath = pm.WebPath.Replace(";", pathConfig.WebSeparatorChar);
+                this.pathConfig.dic.Add(pm.Name,pm);
+                this.pathConfigService.SaveConfig(this.pathConfig, Constant.PathConfigPath);
+                return Json(new ResultModel
+                {
+                    pass = true,
+                    msg = "操作成功"
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Add)]
+        [HttpGet]
+        public ActionResult PathAdd() { return View(); }
+        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Delete)]
+        public ActionResult PathDelete(string name) {
+            PathModel p = new PathModel();
+            if (this.pathConfig.dic.TryGetValue(name, out p))
+            {
+                this.pathConfig.dic.Remove(name);
+                this.pathConfigService.SaveConfig(this.pathConfig, Constant.PathConfigPath);
+                return Json(new ResultModel
+                {
+                    pass = true,
+                    msg = "删除成功"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            return Content("不存在");
+        }
+
+        #endregion
+
+        #region 缓存管理
+        [HttpGet]
+        [Power(ModuleName = "cacheManage", IsShow = true, Title = "缓存管理", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult CacheManage()
         {
             ViewData["CacheKey"] = Constant.CacheKey.List;
             return View();
         }
         [HttpGet]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_D106", PowerName = "清除网站缓存", PowerDes = "清除网站缓存")]
+        [Power(ModuleName = "cacheManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult CacheClear()
         {
             //清理全局缓存
@@ -675,7 +821,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             {
                 HttpRuntime.Cache.Remove(keys[i]);
             }
-            //CacheHelper.RemoveAllCache();
             base.cacheService.RemoveAll();
             return Json(new ResultModel
             {
@@ -684,7 +829,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_D106", PowerName = "清除网站缓存", PowerDes = "清除网站缓存")]
+        [Power(ModuleName = "cacheManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult CacheClearKey(string key)
         {
             try
@@ -692,7 +837,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 key = key.Trim();
                 if (Constant.CacheKey.List[key].Count() > 0)
                 {
-                    //CacheHelper.RemoveCache(key);
                     base.cacheService.Remove(key);
                     return Json(new ResultModel
                     {
@@ -716,7 +860,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_D106", PowerName = "清除网站缓存", PowerDes = "清除网站缓存")]
+        [Power(ModuleName = "cacheManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult CacheClearType(int type) {
             try
             {
@@ -757,10 +901,9 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_D106", PowerName = "清除网站缓存", PowerDes = "清除网站缓存")]
+        [Power(ModuleName = "cacheManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult CacheClearYesterday()
         {
-            //CacheHelper.RemoveAllCache(DateTime.Now.AddDays(-1),2);
             base.cacheService.RemoveAll();
             return Json(new ResultModel
             {
@@ -772,11 +915,11 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
 
         //初步完成
         #region 日志管理
-        [Power(IsSuper = true, IsShow = true, PowerId = "Sys_E101", PowerName = "日志管理", PowerDes = "Error日志管理")]
+        [Power(ModuleName = "logManage",IsShow=true, Title="日志管理", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult LogManager() {
             return View(); 
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_E101", PowerName = "日志管理", PowerDes = "Error日志管理")]
+        [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult LogList()
         {
             if (System.IO.Directory.Exists(HIO.logDirPath))
@@ -812,7 +955,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(_result, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_E102", PowerName = "日志内容", PowerDes = "日志内容")]
+        [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult LogInfo(string filename) {
             if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
             {
@@ -863,7 +1006,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
             }
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_E103", PowerName = "清空日志", PowerDes = "清空日志")]
+        [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult LogClear() {
             Directory.Delete(HIO.logDirPath, true);
             Directory.CreateDirectory(HIO.logDirPath);
@@ -874,7 +1017,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             };
             return Json(_result, JsonRequestBehavior.AllowGet);
         }
-        [Power(IsSuper = true, IsShow = false, PowerId = "Sys_E104", PowerName = "删除日志", PowerDes = "删除日志")]
+        [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult LogDelete(string filename)
         {
             if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)

@@ -3,45 +3,42 @@
     var role = ViewData["RoleList"] as List<Cactus.Model.Sys.Role>;
 }
 
-
 <div class="tool-list">
+    <label>添加用户</label>
     <div class="pure-button-group">
-        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Sys/UserIndex');" class="pure-button pure-button-primary">返回</a>*@
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 <form class="pure-form  pure-form-aligned" id="userAdd">
-        <fieldset>
-            <legend>添加用户</legend>
             <div class="pure-control-group">
                 <label>用户账户</label>
                 <input name="UserName" type="text" value="" placeholder="用户账户" />
-                <div class="pure-error pure-c-error" name="UserName"></div>
+                <div class="pure-error pure-c-error msg-box" for="UserName"></div>
             </div>
             <div class="pure-control-group">
                 <label>用户昵称</label>
                 <input name="NickName" type="text" value="" placeholder="用户昵称" />
-                <div class="pure-error pure-c-error" name="NickName"></div>
+                <div class="pure-error pure-c-error msg-box" for="NickName"></div>
             </div>
             <div class="pure-control-group">
                 <label>密码</label>
                 <input name="Password" type="password" value="" placeholder="密码" />
-                <div class="pure-error pure-c-error" name="Password"></div>
+                <div class="pure-error pure-c-error msg-box" for="Password"></div>
             </div>
             <div class="pure-control-group">
                 <label>邮箱</label>
                 <input name="Email" type="text" value="" placeholder="邮箱" />
-                <div class="pure-error pure-c-error" name="Email"></div>
+                <div class="pure-error pure-c-error msg-box" for="Email"></div>
             </div>
             <div class="pure-control-group">
                 <label>电话</label>
                 <input name="Phone" type="text" value="" placeholder="电话" />
-                <div class="pure-error pure-c-error" name="Phone"></div>
+                <div class="pure-error pure-c-error msg-box" for="Phone"></div>
             </div>
             <div class="pure-control-group">
                 <label>QQ</label>
                 <input name="Qq" type="text" value="" placeholder="QQ" />
-                <div class="pure-error pure-c-error" name="Qq"></div>
+                <div class="pure-error pure-c-error msg-box" for="Qq"></div>
             </div>
             <div class="pure-control-group">
                 <label>角色</label>
@@ -51,54 +48,41 @@
                         <option value="@r.Role_Id">@r.RoleName</option>
                     }
                 </select>
-                <div class="pure-error pure-c-error" name="RoleId"></div>
+                <div class="pure-error pure-c-error msg-box" for="RoleId"></div>
             </div>
             <div class="pure-controls">
-                <button type="button" class="pure-button pure-button-primary" name="useradd">提交</button>
+                <button class="pure-button pure-button-primary" type="submit" >提交</button>
             </div>
-        </fieldset>
     </form>
 <script type="text/javascript">
     $(function () {
-        $('#userAdd button[name=useradd]').bind('click', function () {
-            var UserName = $('#userAdd input[name=UserName]').val();
-            if (UserName == '' || UserName == undefined) {
-                $('#userAdd div[name=UserName]').html('请填写用户账户');
-                return;
-            } else { $('#userAdd div[name=UserName]').html('');}
-            var NickName = $('#userAdd input[name=NickName]').val();
-            if (NickName == '' || NickName == undefined) {
-                $('#userAdd div[name=NickName]').html('请填写用户昵称');
-                return;
-            } else { $('#userAdd div[name=NickName]').html(''); }
-            var Password = $('#userAdd input[name=Password]').val();
-            if (Password == '' || Password == undefined) {
-                $('#userAdd div[name=Password]').html('请填写密码');
-                return;
-            } else { $('#userAdd div[name=Password]').html(''); }
-            var Email = $('#userAdd input[name=Email]').val();
-            var Phone = $('#userAdd input[name=Phone]').val();
-            var Qq = $('#userAdd input[name=Qq]').val();
-            var RoleId = $('#userAdd select[name=RoleId]').val();
-            if (RoleId == '' || RoleId == undefined) {
-                $('#userAdd div[name=RoleId]').html('请选择用户角色');
-                return;
-            } else { $('#userAdd div[name=RoleId]').html(''); }
-            Admin.loadDialog_show();
-            $.ajax({
-                url: "/Admin/Sys/UserAdd",
-                type: "post",
-                data: { UserName: UserName, NickName: NickName, Password: Password, Email: Email, Phone: Phone, Qq: Qq, RoleId: RoleId },
-                success: function (obj) {
-                    Admin.loadDialog_hide();
-                    if (obj.pass) {
+        $('#userAdd').validator({
+            msgWrapper:'div',
+            fields: {
+                'UserName': 'required;length[2~16]',
+                'NickName': 'required;length[2~16]',
+                'Password': 'required;length[6~16]',
+                'Email': 'required',
+                'Phone': 'required',
+                'Qq': 'required',
+                'RoleId': 'required'
+            },
+            valid: function (form) {
+                Admin.loadDialog_show();
+                var param = $(form).serialize();
+                $.ajax({
+                    url: "/Admin/Sys/UserAdd",
+                    type: "post",
+                    //data: { UserName: UserName, NickName: NickName, Password: Password, Email: Email, Phone: Phone, Qq: Qq, RoleId: RoleId },
+                    date:param,
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
                         layer.alert(obj.msg);
-                    } else {
-                        layer.alert(obj.msg);
+                        Admin.loadBackPage('main-content');
                     }
-                }
-            });
-        })
+                });
+            }
+        });
     })
 </script>
 

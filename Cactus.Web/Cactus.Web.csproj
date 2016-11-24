@@ -86,8 +86,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\CactusWebViewPage.cs" />
     <Compile Include="App_Start\IocConfig.cs" />
-    <Compile Include="App_Start\ThemeViewEngine.cs" />
+    <Compile Include="App_Start\ViewContentExt.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -97,12 +98,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Content Include="Content\Admin\css\admin.css" />
+    <Content Include="Content\Admin\img\file_upload.png" />
     <Content Include="Content\Admin\img\logo.png" />
-    <Content Include="Content\Blog\Default\css\blog.css" />
-    <Content Include="Content\Blog\Default\img\cat_teacher00.jpeg" />
-    <Content Include="Content\Blog\Default\img\cat_teacher01.png" />
-    <Content Include="Content\Blog\Default\img\qsbk_shit32px.png" />
-    <Content Include="Content\Blog\Default\js\public.js" />
+    <Content Include="Content\Blog\css\blog.css" />
+    <Content Include="Content\Blog\img\cat_teacher00.jpeg" />
+    <Content Include="Content\Blog\img\cat_teacher01.png" />
+    <Content Include="Content\Blog\img\qsbk_shit32px.png" />
+    <Content Include="Content\Blog\js\public.js" />
     <Content Include="Content\Css\error.css" />
     <Content Include="Content\Font-Awesome-4.5.0\css\font-awesome.css" />
     <Content Include="Content\Font-Awesome-4.5.0\css\font-awesome.min.css" />
@@ -128,6 +130,14 @@
     <Content Include="Content\Js\jquery-1.9.1.min.js" />
     <Content Include="Content\Js\jquery.tmpl.js" />
     <Content Include="Content\Js\utils.js" />
+    <Content Include="Content\nice-validator\images\loading.gif" />
+    <Content Include="Content\nice-validator\images\validator_default.png" />
+    <Content Include="Content\nice-validator\images\validator_simple.png" />
+    <Content Include="Content\nice-validator\jquery.validator.js" />
+    <Content Include="Content\nice-validator\local\en.js" />
+    <Content Include="Content\nice-validator\local\ja.js" />
+    <Content Include="Content\nice-validator\local\zh-CN.js" />
+    <Content Include="Content\nice-validator\local\zh-TW.js" />
     <Content Include="Content\PureUI\pureplus-min.css" />
     <Content Include="Content\PureUI\pureplus.css" />
     <Content Include="Content\Pure_Js\paginator.js" />
@@ -143,60 +153,8 @@
     <Content Include="Content\wangEditor-2.0.1\js\wangEditor.min.js" />
     <Content Include="favicon.png" />
     <Content Include="Global.asax" />
-    <Content Include="PureUI\buttons\example\button.html" />
-    <Content Include="PureUI\extend\extend.html" />
-    <Content Include="PureUI\extend\forms.html" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\css\font-awesome.css" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\css\font-awesome.min.css" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.svg" />
-    <Content Include="PureUI\forms\example\forms.html" />
-    <Content Include="PureUI\grids\example\responsive.html" />
-    <Content Include="PureUI\Img\350x200.png" />
-    <Content Include="PureUI\Img\bg1.jpg" />
-    <Content Include="PureUI\Img\bg2.jpg" />
-    <Content Include="PureUI\Img\test.jpg" />
-    <Content Include="PureUI\index.html" />
-    <Content Include="PureUI\layer-v2.3\example.html" />
-    <Content Include="PureUI\layer-v2.3\layer\layer.js" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\default\icon-ext.png" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\default\icon.png" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\default\loading-0.gif" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\default\loading-1.gif" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\default\loading-2.gif" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\layer.css" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\seaning\close.png" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\seaning\default.png" />
-    <Content Include="PureUI\layer-v2.3\layer\skin\seaning\style.css" />
-    <Content Include="PureUI\layer-v2.3\test\iframe.html" />
-    <Content Include="PureUI\layer-v2.3\更新日志.txt" />
-    <Content Include="PureUI\layout example\index.html" />
-    <Content Include="PureUI\layout example\example1.html" />
-    <Content Include="PureUI\layout example\example2.html" />
-    <Content Include="PureUI\layout example\example3.html" />
-    <Content Include="PureUI\menus\example\menus.html" />
-    <Content Include="PureUI\layout example\img\file-icons.png" />
-    <Content Include="PureUI\src\grids-responsive.css" />
-    <Content Include="PureUI\src\public.css" />
-    <Content Include="PureUI\src\pureplus-min.css" />
-    <Content Include="PureUI\src\pureplus.css" />
-    <Content Include="PureUI\store\pay.html" />
-    <Content Include="PureUI\store\css\base.css" />
-    <Content Include="PureUI\store\img\item.jpeg" />
-    <Content Include="PureUI\store\img\bj.jpeg" />
-    <Content Include="PureUI\store\img\VCode.gif" />
-    <Content Include="PureUI\store\cat.html" />
-    <Content Include="PureUI\store\user_form.html" />
-    <Content Include="PureUI\store\user_reg.html" />
-    <Content Include="PureUI\store\user_login.html" />
-    <Content Include="PureUI\store\user_index.html" />
-    <Content Include="PureUI\store\new_list.html" />
-    <Content Include="PureUI\store\list.html" />
-    <Content Include="PureUI\store\item.html" />
-    <Content Include="PureUI\store\info.html" />
-    <Content Include="PureUI\store\master.html" />
-    <Content Include="PureUI\store\index.html" />
-    <Content Include="PureUI\tables\example\tables.html" />
-    <Content Include="PureUI\说明.txt" />
+    <Content Include="html\test.html" />
+    <Content Include="html\test1.html" />
     <Content Include="Template\使用说明.txt" />
     <Content Include="Themes\使用说明.txt" />
     <Content Include="Web.config">
@@ -213,7 +171,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="File\" />
-    <Folder Include="PureUI\layer-v2.3\doc\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -225,7 +182,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\autofac.config" />
-    <Content Include="Configuration\PowerConfig.config" />
+    <Content Include="Configuration\PowerConfig.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configuration\SiteConfig.config" />
   </ItemGroup>
   <ItemGroup>
@@ -360,9 +319,6 @@
     <Content Include="Areas\Admin\Views\Blog\ColumnUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Blog\BlogAdd.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\Admin\Views\Blog\BlogUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -371,19 +327,13 @@
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Sys\SetPower.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\FileManage.cshtml" />
-    <Content Include="Areas\Admin\Views\Blog\StaticHtmlManage.cshtml" />
-    <Content Include="Areas\Admin\Views\Blog\StaticHtmlAdd.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\AloneHtmlAdd.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TemplateAdd.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TemplateUpdate.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TemplateManage.cshtml" />
-    <Content Include="Areas\Admin\Views\Blog\StaticHtmlUpdate.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\AloneHtmlUpdate.cshtml" />
     <Content Include="LICENSE" />
-    <Content Include="Areas\Admin\Views\Blog\StaticHtmlHelper.cshtml" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.eot" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.ttf" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.woff" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\fontawesome-webfont.woff2" />
-    <Content Include="PureUI\Font-Awesome-4.5.0\fonts\FontAwesome.otf" />
+    <Content Include="Areas\Admin\Views\Blog\AloneHtmlHelper.cshtml" />
     <Content Include="Areas\Admin\Views\Sys\LogManager.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TagManage.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TagAdd.cshtml" />
@@ -442,17 +392,22 @@
     <Content Include="Areas\Admin\Views\Blog\UIEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Blog\UISelect.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Configuration\Theme.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Blog\RenderManage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\BlogConfig.config" />
     <Content Include="Areas\Admin\Views\Blog\BlogConfig.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\AloneManage.cshtml" />
+    <Content Include="Areas\Admin\Views\Sys\SysPath.cshtml" />
+    <Content Include="Content\nice-validator\jquery.validator.styl" />
+    <Content Include="Content\nice-validator\local\_lang.tpl" />
+    <Content Include="Content\nice-validator\themes\base.styl" />
+    <Content Include="Content\nice-validator\themes\default.styl" />
+    <Content Include="Content\nice-validator\themes\simple.styl" />
+    <Content Include="Content\nice-validator\themes\yellow.styl" />
+    <Content Include="Areas\Admin\Views\Sys\PathAdd.cshtml" />
+    <Content Include="Areas\Admin\Views\Sys\PathUpdate.cshtml" />
+    <Content Include="Configuration\PathConfig.config" />
     <None Include="Properties\PublishProfiles\Linux.pubxml" />
     <Content Include="Themes\Default\Views\Shared\_StoreLayout.cshtml" />
     <Content Include="Themes\Default\Views\Store\Index.cshtml" />
@@ -466,6 +421,28 @@
     <Content Include="Themes\Default\Views\Store\User_Index.cshtml" />
     <Content Include="Themes\Default\Views\Store\User_Login.cshtml" />
     <Content Include="Themes\Default\Views\Store\User_Reg.cshtml" />
+    <Content Include="Views\Blog\Detail.cshtml" />
+    <Content Include="Views\Blog\Introduce.cshtml" />
+    <Content Include="Views\Blog\List.cshtml" />
+    <Content Include="Views\Blog\Search.cshtml" />
+    <Content Include="Views\Shared\_BlogLayout.cshtml" />
+    <Content Include="Views\Shared\_StoreLayout.cshtml" />
+    <Content Include="Views\Shared\404.cshtml" />
+    <Content Include="Views\Shared\500.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\SiteClose.cshtml" />
+    <Content Include="Views\Store\Cat.cshtml" />
+    <Content Include="Views\Store\Index.cshtml" />
+    <Content Include="Views\Store\Info.cshtml" />
+    <Content Include="Views\Store\Item.cshtml" />
+    <Content Include="Views\Store\List.cshtml" />
+    <Content Include="Views\Store\New_List.cshtml" />
+    <Content Include="Views\Store\Pay.cshtml" />
+    <Content Include="Views\Store\User_Form.cshtml" />
+    <Content Include="Views\Store\User_Index.cshtml" />
+    <Content Include="Views\Store\User_Login.cshtml" />
+    <Content Include="Views\Store\User_Reg.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>

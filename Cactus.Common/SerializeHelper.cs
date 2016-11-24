@@ -25,9 +25,9 @@ namespace Cactus.Common
                 var serializer = new XmlSerializer(obj.GetType());
                 serializer.Serialize(fs, obj);
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("文件XML序列化失败");
+                throw new Exception("文件XML序列化失败", ex);
             }
             finally
             {
@@ -45,6 +45,7 @@ namespace Cactus.Common
             FileStream fs = null;
             try
             {
+                if (!File.Exists(filename)) { return null; }
                 fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 var serializer = new XmlSerializer(type);
                 return serializer.Deserialize(fs);
@@ -52,6 +53,7 @@ namespace Cactus.Common
             catch
             {
                 throw new Exception("文件XML反序列化失败");
+                //return null;
             }
             finally
             {

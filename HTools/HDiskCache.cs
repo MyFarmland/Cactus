@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +25,7 @@ namespace HTools
         /// <summary>
         /// 巡逻一次的间隔（s）
         /// </summary>
-        private static int PatrolInterval = 10;
+        private static int PatrolInterval = 60;
         /// <summary>
         /// 是否监视缓存集合
         /// </summary>
@@ -75,6 +76,11 @@ namespace HTools
             formatter.Serialize(ms, obj);
             return ms.GetBuffer();
         }
+        private static string SerializeToJson(object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
+        }
+
         private static CacheObj Deserialization(byte[] bts)
         {
             IFormatter formatter = new BinaryFormatter();
@@ -82,9 +88,15 @@ namespace HTools
             {
                 return (CacheObj)formatter.Deserialize(new MemoryStream(bts));
             }
-            catch {
+            catch(Exception ex){
+                Debug.WriteLine("Message:" + ex.Message);
                 return null;
             }
+        }
+
+        private static CacheObj DeserializationByJson(string strJson)
+        {
+            return JsonConvert.DeserializeObject<CacheObj>(strJson);
         }
         /// <summary>
         /// 
@@ -120,6 +132,7 @@ namespace HTools
         /// <param name="obj"></param>
         private static void SurveillantTask(object obj) {
             while (true) {
+                Debug.WriteLine("监视序列化的文件："+DateTime.Now.ToString());
                 try
                 {
                     if (Directory.GetFiles(CachePath).Length > 0)
@@ -132,7 +145,7 @@ namespace HTools
                             CacheObj tempobj=new CacheObj();
                             string filepath = key;
                             if (File.Exists(filepath)){
-                                tempobj = Deserialization(File.ReadAllBytes(filepath));
+                                tempobj = DeserializationByJson(File.ReadAllText(filepath));
                                 if (DateTime.Now > tempobj.FailureTime)
                                 {
                                     try
@@ -149,11 +162,11 @@ namespace HTools
                     }
                 }
                 catch(Exception ex){
-                    Debug.WriteLine("Message:"+ex.Message);
+                    Debug.WriteLine("SurveillantTask Message:" + ex.Message);
                 }
-                if (PatrolInterval < 5)
+                if (PatrolInterval < 10)
                 {
-                    PatrolInterval = 5;//不要间隔太短
+                    PatrolInterval = 10;//不要间隔太短
                 }
                 Thread.Sleep(PatrolInterval * 1000);
             }
@@ -188,7 +201,7 @@ namespace HTools
             string path = Path.Combine(CachePath, key.Trim() + Extension);
             if (File.Exists(path))
             {
-                CacheObj obj=Deserialization(File.ReadAllBytes(path));
+                CacheObj obj = DeserializationByJson(File.ReadAllText(path));
                 if (IsOverdue(obj))
                 {
                     this.Remove(key);
@@ -239,7 +252,7 @@ namespace HTools
             {
                 try
                 {
-                    File.WriteAllBytes(path, Serialize(obj));
+                    File.WriteAllText(path, SerializeToJson(obj));
                     return true;
                 }
                 catch(Exception ex){
@@ -277,7 +290,7 @@ namespace HTools
                 string path = Path.Combine(CachePath, key.Trim() + Extension);
                 if (File.Exists(path))
                 {
-                    File.WriteAllBytes(path,Serialize(obj));
+                    File.WriteAllText(path,SerializeToJson(obj));
                     return true;
                 }
                 else { return false; }

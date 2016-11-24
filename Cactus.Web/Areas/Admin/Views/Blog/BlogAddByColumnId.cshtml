@@ -1,14 +1,14 @@
 ﻿@{
     Layout = null;
     var columnList = ViewData["ColumnList"] as List<Cactus.Model.CMS.Column>;
-    var user = ViewData["LoginUser"] as Cactus.Model.Sys.User;
+    var user = ViewData["_LoginUser"] as Cactus.Model.Sys.User;
 }
 
 <div class="tool-list">
-    <label>添加文章</label>
+    <label><i class="fa fa-file"></i>添加文章</label>
     <div class="pure-button-group">
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split">返回</a>
-        <a href="javascript:;" name="edit_mode" class="pure-button pure-button-primary pure-split">编辑模式</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split"><i class="fa fa-reply"></i>返回</a>
+        @*<a href="javascript:;" name="edit_mode" class="pure-button pure-button-primary pure-split">编辑模式</a>*@
     </div>
 </div>
 @if (columnList != null && columnList.Count > 0)
@@ -24,6 +24,12 @@
                     <label>标题</label>
                     <input name="Title" type="text" value="" placeholder="标题" />
                     <div class="pure-error pure-c-error" name="Title"></div>
+                </div>
+                <div class="pure-control-group">
+                    <label>SEO标题</label>
+                    <textarea rows="2" cols="20" name="SEO_Title" placeholder="SEO标题" style="resize: none;"></textarea>
+                    <button type="button" class="pure-button pure-button-primary" name="Titlebuild">自动生成</button>
+                    <div class="pure-error pure-c-error"></div>
                 </div>
                 <div class="pure-control-group">
                     <label>作者</label>
@@ -42,6 +48,13 @@
                             </option>
                         }
                     </select>
+                </div>
+                <div class="pure-control-group">
+                    <label>封面图片</label>
+                    <input name="ImgUrl" type="text" value="" placeholder="封面图片" style="width:240px;"/>
+                    <div class="file-img">
+                        <input class="file-img-input" type="file" name="BlogImg" />
+                    </div>
                 </div>
                 <div class="pure-control-group">
                     <label>是否显示</label>
@@ -69,7 +82,7 @@
                     <div id="tag_list" style="display: inline-block;vertical-align: middle;">
                     </div>
                     <div id="tagList" style="display:none;margin-left: 11em; margin-top:5px;">
-                        <table class="pure-table pure-table-bordered table-p" id="tagTable"></table>
+                        <table class="pure-table table-p" id="tagTable"></table>
                         <ul class="pure-paginator" id="table_paginator"></ul>
                     </div>
                 </div>
@@ -79,6 +92,23 @@
                         <div id="myeditor" style="height:400px;max-height:500px;"></div>
                     </div>
                     <div class="pure-error pure-c-error" name="ArticleContent"></div>
+                </div>
+                <div class="pure-control-group">
+                    <label>摘要</label>
+                    <textarea rows="4" cols="100" name="Digest" placeholder="摘要" style="resize: none;"></textarea>
+                    <button type="button" class="pure-button pure-button-primary" name="Digestbuild">自动生成</button>
+                    <div class="pure-error pure-c-error"></div>
+                </div>
+                <div class="pure-control-group">
+                    <label>SEO关键字</label>
+                    <textarea rows="4" cols="20" name="SEO_Keywords" placeholder="SEO关键字" style="resize: none;"></textarea>
+                    <div class="pure-error pure-c-error"></div>
+                </div>
+                <div class="pure-control-group">
+                    <label>SEO描述</label>
+                    <textarea rows="4" cols="100" name="SEO_DES" placeholder="SEO描述" style="resize: none;"></textarea>
+                    <button type="button" class="pure-button pure-button-primary" name="DESbuild">自动生成</button>
+                    <div class="pure-error pure-c-error"></div>
                 </div>
             </div>
         </div>
@@ -186,7 +216,7 @@
                                 { field: "TagName", title: "标签名" },
                                 {
                                     field: "Tag_Id", title: "操作", formatter: function (val, rec, row) {
-                                        var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="affix" data-value="' + val + '">贴上</a>';
+                                        var str = '<a href="javascript:;" class="pure-link pure-link-default" name="affix" data-value="' + val + '">贴上</a>';
                                         return str;
                                     }
                                 }]);
@@ -239,6 +269,8 @@
                 } else {
                     $('#blogAdd div[name=ColumnList]').html('');
                 }
+                var ImgUrl = $("#blogAdd input[name=ImgUrl]").val();
+
                 var IsShow = $("#blogAdd select[name=IsShow]").val();
 
                 var IsTop = $("#blogAdd select[name=IsTop]").val();
@@ -256,10 +288,28 @@
                 var Tags = tagNames;
                 var TagIds = $('#blogAdd input[name=tagList]').val();
 
+                var Digest = $('#blogAdd textarea[name=Digest]').val();
+                var SEO_Title = $('#blogAdd textarea[name=SEO_Title]').val();
+                var SEO_DES = $('#blogAdd textarea[name=SEO_DES]').val();
+                var SEO_Keywords = $('#blogAdd textarea[name=SEO_Keywords]').val();
                 $.ajax({
                     url: "/Admin/Blog/BlogAdd",
                     type: "post",
-                    data: { ColumnId: Column, Author: Author, ArticleContent: Content, IsTop: IsTop, IsShow: IsShow, Title: Title, Tags: Tags, TagIds: TagIds },
+                    data: {
+                        ColumnId: Column,
+                        Author: Author,
+                        ArticleContent: Content,
+                        IsTop: IsTop,
+                        IsShow: IsShow,
+                        Title: Title,
+                        Tags: Tags,
+                        TagIds: TagIds,
+                        ImgUrl: ImgUrl,
+                        Digest: Digest,
+                        SEO_Title: SEO_Title,
+                        SEO_DES: SEO_DES,
+                        SEO_Keywords: SEO_Keywords
+                    },
                     success: function (obj) {
                         if (obj.pass) {
                             Admin.loadBackPage('main-content');
@@ -278,6 +328,50 @@
                 } else {
                     $('#tagList').hide();
                 }
+            });
+
+
+            $('#blogAdd button[name=Titlebuild]').bind('click', function () {
+                var Title = $("#blogAdd input[name=Title]").val().replace(/^\s+|\s+$/g, "");
+                $('textarea[name=SEO_Title]').val(Title);
+            });
+            $('#blogAdd button[name=Digestbuild]').bind('click', function () {
+                var str = editor.$txt.text().replace(/^\s+|\s+$/g, "");
+                $('textarea[name=Digest]').val(str.length > 100 ? str.substring(0, 97) + "..." : str);
+            });
+            $('#blogAdd button[name=DESbuild]').bind('click', function () {
+                var str = editor.$txt.text().replace(/^\s+|\s+$/g, "");
+                $('textarea[name=SEO_DES]').val(str.length > 100 ? str.substring(0, 100) : str);
+            });
+
+            $('#blogAdd input[name=BlogImg]').bind('change', function () {
+                var file = $("#blogAdd input[name=BlogImg]").upload("getFileVal");
+                if (file == '' || file == undefined) {
+                    //$("div[name=BlogImg]").html("请选择文件");
+                    console.log("请选择文件");
+                    return;
+                }
+                Admin.loadDialog_show();
+                var $target = $(this);
+                $target.attr("disabled", "disabled");
+                $("#blogAdd input[name=BlogImg]").upload({
+                    url: '/Admin/Blog/UploadImg2',
+                    // 上传完成后, 返回json, text
+                    dataType: 'json',
+                    // 上传之后回调
+                    onComplate: function (data) {
+                        Admin.loadDialog_hide();
+                        $target.removeAttr("disabled");
+                        console.log(data);
+                        $("#blogAdd input[name=BlogImg]").upload("clean");
+                        if (data.pass) {
+                            $("input[name=ImgUrl]").val(data.append.url);
+                        } else {
+                            layer.alert(data.msg)
+                        }
+                    }
+                });
+                $("#blogAdd input[name=BlogImg]").upload("ajaxSubmit");
             });
         });
 

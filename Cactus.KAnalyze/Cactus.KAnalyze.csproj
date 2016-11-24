@@ -63,10 +63,12 @@
     <EmbeddedResource Include="filthy.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>filthy.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="zh_CNtoTW.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>zh_CNtoTW.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

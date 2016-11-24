@@ -1,18 +1,16 @@
 ﻿@{
     Layout = null;
-    var user=ViewData["LoginUser"] as Cactus.Model.Sys.User;
+    var user=ViewData["_LoginUser"] as Cactus.Model.Sys.User;
 }
 
 
 <div class="tool-list">
+    <label>修改头像</label>
     <div class="pure-button-group">
-        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/CenterUser');" class="pure-button pure-button-primary">返回</a>*@
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 <form class="pure-form  pure-form-aligned">
-    <fieldset>
-        <legend>修改头像</legend>
         <div class="pure-control-group">
             <label style="width: 5em;">用户头像</label>
             <img src="@(user.Avatar+"?_t=1111")" alt="头像" width="32px" height="32px" name="Face"/>
@@ -21,7 +19,6 @@
             <a href="javascript:;" name="face_clean" class="pure-link pure-link-default">清空</a>
             <div class="pure-error pure-c-error" name="AvatarFile"></div>
         </div>
-    </fieldset>
 </form>
 
 <script type="text/javascript">

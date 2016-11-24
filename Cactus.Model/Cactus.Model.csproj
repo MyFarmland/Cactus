@@ -44,6 +44,7 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CMS\Comment.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="CMS\Tag.cs" />
     <Compile Include="CMS\TagMap.cs" />
     <Compile Include="CMS\TempPage.cs" />
+    <Compile Include="Other\EnumsModel.cs" />
     <Compile Include="Other\ObjResultModel.cs" />
     <Compile Include="Other\ResultModel.cs" />
     <Compile Include="Other\RowResultModel.cs" />
@@ -64,10 +66,12 @@
     <Compile Include="Store\Customer.cs" />
     <Compile Include="Store\Staff.cs" />
     <Compile Include="Store\StoreInfo.cs" />
+    <Compile Include="Sys\Config\PathConfig.cs" />
+    <Compile Include="Sys\Config\PathModel.cs" />
     <Compile Include="Sys\Enums\MyPath.cs" />
     <Compile Include="Sys\Enums\Constant.cs" />
     <Compile Include="Other\PageTurnModel.cs" />
-    <Compile Include="Sys\PowerConfig.cs" />
+    <Compile Include="Sys\PowerAdmin.cs" />
     <Compile Include="CMS\RenderRouteConfig.cs" />
     <Compile Include="Sys\Role.cs" />
     <Compile Include="CMS\BlogConfig.cs" />

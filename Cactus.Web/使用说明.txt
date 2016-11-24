@@ -5,11 +5,24 @@ Cactus目前是一个权限管理的后台，也叫做MVCAdmin（以前的叫法）。
 登陆账户：702295399@qq.com
 登陆密码：123456(也可自行生产一个MD5覆盖)
 
+数据源选择（默认是DB文件夹下的cactus.db是sqlite的数据库，其他的mysql或者mssql需要自行扩展Sevices在配置autofac.config）
+
 qq讨论群：110826636
 特别说明:
 linux部署不需要Microsoft.Web.Infrastructure.dll（ms的有winapi耦合无法跨平台，mono有自己的实现）
 jexus配置的时候为了防止被看到txt信息，在站点配置里面加AspNet_Exts=txt，同理也可以是AspNet_Exts=txt,log,这样设置的目的是将请求交给aspnet处理
 
+svn地址：http://code.taobao.org/svn/Cactus/
+
+1.7 beta1版
+添加文件上传地址的配置
+新的验证插件
+--------------------------------------------
+1.6.*版
+更改界面
+更改权限模块
+去除不必要的模块
+--------------------------------------------
 1.6版 
 新的界面，升级了Pure的css，加了主题引擎，计划任务组件，完善了一下CMS，
 将原先的弹框换成了弹窗组件layer，菜单也加了图标美化

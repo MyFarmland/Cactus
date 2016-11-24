@@ -10,6 +10,7 @@ using Cactus.IService;
 using Autofac;
 using Autofac.Integration.Mvc;
 using System.Security.Principal;
+using Cactus.Model.Sys.Config;
 
 namespace Cactus.Controllers.Expand
 {
@@ -18,8 +19,10 @@ namespace Cactus.Controllers.Expand
     {
         public IRoleServer roleServer = IocHelper.AutofacResolveNamed<IRoleServer>("RoleServer");
         public IPowerConfigService powerConfigService = IocHelper.AutofacResolveNamed<IPowerConfigService>("PowerConfigService");
+        public IPathConfigService pathConfigService = IocHelper.AutofacResolveNamed<IPathConfigService>("PathConfigService");
 
-        protected PowerConfig Power = null;
+        protected PowerAdmin Power = null;
+        public PathConfig pathConfig = null;
 
         /// <summary>
         /// 获取已验证用户信息
@@ -53,22 +56,43 @@ namespace Cactus.Controllers.Expand
                 filterContext.Result = new RedirectResult("/AdminLogin");
             }
             HTools.CacheObj obj = base.cacheService.Get(Constant.CacheKey.PowerConfigCacheKey);
-            this.Power = (obj != null && obj.value != null) ? (obj.value as PowerConfig) : null;
-            //this.Power = CacheHelper.GetCache(Constant.CacheKey.PowerConfigCacheKey) as PowerConfig;
+            if (obj != null && obj.value != null)
+            {
+                if (obj.value is Newtonsoft.Json.Linq.JObject)
+                {
+                    PowerAdmin power = obj.value.ParseJSON<PowerAdmin>();
+                    this.Power = power;
+                }
+                else
+                {
+                    this.Power = (PowerAdmin)obj.value;
+                }
+            }
+            else { this.Power = null; }
+            
             if (this.Power == null)
             {
                 this.Power = powerConfigService.LoadConfig(Constant.PowerConfigPath);
-                //CacheHelper.SetCache(Constant.CacheKey.PowerConfigCacheKey, this.Power);
                 base.cacheService.Add(Constant.CacheKey.PowerConfigCacheKey,
-                    new HTools.CacheObj() { value = this.Power, AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1) });
+                    new HTools.CacheObj() { value = this.Power, AbsoluteExpiration = new TimeSpan(1, 0, 0, 0) });
+            }
+            if (this.pathConfig == null)
+            {
+                this.pathConfig = pathConfigService.LoadConfig(Constant.PathConfigPath);
+                base.cacheService.Add(Constant.CacheKey.PathConfigCacheKey,
+                    new HTools.CacheObj() { value = this.pathConfig, AbsoluteExpiration = new TimeSpan(1, 0, 0, 0) });
+            }
+            if (this.pathConfig != null)
+            {
+                ViewData["_PathConfig"] = this.pathConfig;
             }
             if (base.LoginUser != null)
             {
-                ViewData["LoginUser"] = base.LoginUser;
+                ViewData["_LoginUser"] = base.LoginUser;
             }
             if (this.Power != null)
             {
-                ViewData["Power"] = this.Power;
+                ViewData["_Power"] = this.Power;
             }
         }
 

@@ -16,7 +16,8 @@ namespace Cactus.Web
         {
             IocConfig.BuildMvcContainer();
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new ThemeViewEngine());//使用主题引擎
+            //ViewEngines.Engines.Add(new ThemeViewEngine());//使用主题引擎
+            ViewEngines.Engines.Add(new RazorViewEngine());
             AreaRegistration.RegisterAllAreas();
             HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Disabled);//全局禁用session
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

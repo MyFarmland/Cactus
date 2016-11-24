@@ -17,17 +17,17 @@ using System.Reflection;
 
 namespace Cactus.Controllers.Areas.Admin.Controllers
 {
-    [Exception]
-    [Group(GroupName = "个人管理", NoGroupId = "Root2016", IsShow = false)]
+    [Group(Title = "个人中心",Icon = "fa-file",IsShow=false)]
     public class RootController : PowerBaseController
     {
+        [Power(ModuleName = "myCenter",Title = "个人中心", actionEnum=EnumsModel.ActionEnum.Show)]
         public ActionResult Index()
         {
             ViewData["logFileCount"] = Directory.GetFiles(HIO.logDirPath).Count();
             return View();
         }
         //参数面板
-        [Power(IsSuper = false, IsShow = false, PowerId = "Root_A101", PowerName = "首页", PowerDes = "管理的首页")]
+        [Power(ModuleName = "myCenter",actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult ZPanel()
         {
             string OS = "";
@@ -67,19 +67,18 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Redirect("/AdminLogin/Index");
             }
         }
-        [Power(IsSuper = false, IsShow = false, PowerId = "Root_B101", PowerName = "个人中心", PowerDes = "用户的个人中心")]
         public ActionResult CenterUser()
         {
             return View("CenterUser");
         }
         [HttpGet]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Root_B102", PowerName = "修改个人密码", PowerDes = "用户的个人密码修改")]
+        [Power(ModuleName = "myCenter", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult CenterAlterPwd()
         {
             return View();
         }
         [HttpPost]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Root_B102", PowerName = "修改个人密码", PowerDes = "用户的个人密码修改")]
+        [Power(ModuleName = "myCenter", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult CenterAlterPwd(string pwded, string pwding)
         {
             pwded = pwded.Trim();
@@ -101,7 +100,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
                 //去除缓存
                 string token = CookieHelper.GetCookieValue("Admin");
-                //CacheHelper.RemoveCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
                 base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
                 return Json(new ResultModel { msg = "操作成功", pass = true });
             }
@@ -110,7 +108,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 return Json(new { msg = "旧密码错误", pass = false });
             }
         }
-        [Power(IsSuper = false, IsShow = false, PowerId = "Root_B103", PowerName = "修改个人头像", PowerDes = "用户的个人头像修改")]
+        [Power(ModuleName = "myCenter",  actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult CenterAlterFace()
         {
             if (Request.HttpMethod == "GET")
@@ -130,17 +128,17 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     var avatarExt = Path.GetExtension(avatarName);
                     //保存原图
                     var savePath = Path.Combine(MyPath.TempPath, avatarName);
-                    if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split(','), MyPath.fileSize))
+                    if (WebHelper.saveUploadFile(avatarFile, savePath, Config.ImgExtensions.Split('*'), this.pathConfig.dic["avatar"].FileSize))
                     {
-                        if (!System.IO.Directory.Exists(MyPath.AvatarPath))
+                        if (!System.IO.Directory.Exists(this.pathConfig.dic["avatar"].DirPath))
                         {
-                            System.IO.Directory.CreateDirectory(MyPath.AvatarPath);
+                            System.IO.Directory.CreateDirectory(this.pathConfig.dic["avatar"].DirPath);
                         }
                         //缩略图路径
-                        var thumbPath = Path.Combine(MyPath.AvatarPath, "Avatar_" + LoginUser.User_Id + avatarExt);
+                        var thumbPath = Path.Combine(this.pathConfig.dic["avatar"].DirPath, "Avatar_" + LoginUser.User_Id + avatarExt);
                         //生成头像缩略图
                         ImageHelper.MakeThumbnailImage(savePath, thumbPath, 48, 48, "HW");
-                        LoginUser.Avatar = MyPath.Web_AvatarPath + "/" + "Avatar_" + LoginUser.User_Id + avatarExt;
+                        LoginUser.Avatar = this.pathConfig.dic["avatar"].WebPath + "/" + "Avatar_" + LoginUser.User_Id + avatarExt;
                         System.IO.File.Delete(savePath);
                         Model.Sys.User u = this.userServer.Find(LoginUser.User_Id);
                         if (base.Config.DefaultAvatar != u.Avatar)
@@ -161,7 +159,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     }
                     else
                     {
-                        return Json(new ResultModel { msg = "上传文件错误,注意文件大小" + MyPath.fileSize + "kb以内或文件类型为" + Config.ImgExtensions, pass = false });
+                        return Json(new ResultModel { msg = "上传文件错误,注意文件大小" + this.pathConfig.dic["avatar"].FileSize + "kb以内或文件类型为" + Config.ImgExtensions, pass = false });
                     }
                 }
                 else
@@ -171,13 +169,13 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }
         }
         [HttpGet]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Root_B104", PowerName = "修改个人资料", PowerDes = "用户的个人头像修改")]
+        [Power(ModuleName = "myCenter",  actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult CenterAlterInfo()
         {
             return View();
         }
         [HttpPost]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Root_B104", PowerName = "修改个人资料", PowerDes = "用户的个人头像修改")]
+        [Power(ModuleName = "myCenter",  actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult CenterAlterInfo(User u)
         {
             try

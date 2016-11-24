@@ -61,16 +61,46 @@ namespace Cactus.Model.CMS
 		/// </summary>
 		/// <value>The author.</value>
 		public string Author{ get; set; }
+        /// <summary>
+        /// 摘要
+        /// </summary>
+        public string Digest { get; set; }
+        /// <summary>
+        /// SEO标题
+        /// </summary>
+        public string SEO_Title { get; set; }
+        /// <summary>
+        /// SEO关键词
+        /// </summary>
+        public string SEO_Keywords { get; set; }
+        /// <summary>
+        /// SEO描述
+        /// </summary>
+        public string SEO_DES { get; set; }
+        /// <summary>
+        /// 封面
+        /// </summary>
+        public string ImgUrl { get; set; }
 		/// <summary>
 		/// 是否置顶
 		/// </summary>
-		/// <value><c>true</c> if this instance is top; otherwise, <c>false</c>.</value>
 		public bool IsTop{ get; set; }
 		/// <summary>
 		/// 是否显示
 		/// </summary>
-		/// <value><c>true</c> if this instance is show; otherwise, <c>false</c>.</value>
 		public bool IsShow{ get; set; }
+        /// <summary>
+        /// 来源
+        /// </summary>
+        public string Source{get;set;}
+        /// <summary>
+        /// 来源地址
+        /// </summary>
+        public string SourceLink{get;set;}
+        /// <summary>
+        /// 赞成数
+        /// </summary>
+        public int Like { get; set; }
 	}
 }
 

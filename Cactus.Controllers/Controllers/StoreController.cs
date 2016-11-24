@@ -14,7 +14,6 @@ using System.Web.Mvc;
 
 namespace Cactus.Controllers.Controllers
 {
-    [Exception]
     public class StoreController : BaseController
     {
         public ActionResult Index()

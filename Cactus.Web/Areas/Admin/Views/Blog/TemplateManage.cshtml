@@ -5,12 +5,11 @@
 <div class="tool-list">
     <div class="pure-button-group">
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TemplateAdd');" class="pure-button pure-button-primary pure-split">添加模板</a>
-        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/StaticHtmlManage');" class="pure-button pure-button-primary pure-split">返回</a>*@
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 
-<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table pure-table-bordered table-p" id="temp"></table>
+<table width="100%" class="pure-table table-p" id="temp"></table>
 <ul class="pure-paginator" id="table_paginator"></ul>
 <script type="text/javascript">
     function onTable(index) {
@@ -35,9 +34,9 @@
                         { field: "LastTime", title: "最后编辑时间" },
                         {
                             field: "TempPage_Id", title: "操作", formatter: function (val, rec, row) {
-                                var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
-                                        '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>' +
-                                        '<a href="javascript:;" class="pure-link pure-link-purple" name="render" data-value="' + val + '">生成模板文件</a>';
+                                var str = '<a href="javascript:;" class="pure-link pure-link-default" name="upd" data-value="' + val + '">编辑</a>' +
+                                        '<a href="javascript:;" class="pure-link pure-link-default" name="del" data-value="' + val + '">删除</a>' +
+                                        '<a href="javascript:;" class="pure-link pure-link-default" name="render" data-value="' + val + '">生成模板文件</a>';
 
                                 return str;
                             }

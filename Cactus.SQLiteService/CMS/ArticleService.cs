@@ -55,8 +55,8 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                int i = conn.Execute("INSERT INTO cms_article(ColumnId,Tags,Tagids,ArticleContent,Title,CreateTime,LastTime,Browse,Author,IsTop,IsShow)" +
-                    "VALUES(@ColumnId,@Tags,@TagIds,@ArticleContent,@Title,@CreateTime,@LastTime,@Browse,@Author,@IsTop,@IsShow);", entity);
+                int i = conn.Execute("INSERT INTO cms_article(ColumnId,Tags,Tagids,ArticleContent,Title,CreateTime,LastTime,Browse,Author,ImgUrl,Digest,SEO_Title,SEO_Keywords,SEO_DES,IsTop,IsShow,Source,SourceLink,Like)" +
+                    "VALUES(@ColumnId,@Tags,@TagIds,@ArticleContent,@Title,@CreateTime,@LastTime,@Browse,@Author,@ImgUrl,@Digest,@SEO_Title,@SEO_Keywords,@SEO_DES,@IsTop,@IsShow,@Source,@SourceLink,@Like);", entity);
                 if (i > 0) { return true; } else { return false; }
             }
         }
@@ -64,8 +64,8 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                int i = conn.Query<int>("INSERT INTO cms_article(ColumnId,Tags,Tagids,ArticleContent,Title,CreateTime,LastTime,Browse,Author,IsTop,IsShow)" +
-                    "VALUES(@ColumnId,@Tags,@TagIds,@ArticleContent,@Title,@CreateTime,@LastTime,@Browse,@Author,@IsTop,@IsShow);select last_insert_rowid() newid;", entity).SingleOrDefault();
+                int i = conn.Query<int>("INSERT INTO cms_article(ColumnId,Tags,Tagids,ArticleContent,Title,CreateTime,LastTime,Browse,Author,ImgUrl,Digest,SEO_Title,SEO_Keywords,SEO_DES,IsTop,IsShow,Source,SourceLink,Like)" +
+                    "VALUES(@ColumnId,@Tags,@TagIds,@ArticleContent,@Title,@CreateTime,@LastTime,@Browse,@Author,@ImgUrl,@Digest,@SEO_Title,@SEO_Keywords,@SEO_DES,@IsTop,@IsShow,@Source,@SourceLink,@Like);select last_insert_rowid() newid;", entity).SingleOrDefault();
                 return i;
             }
         }
@@ -79,7 +79,7 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                conn.Execute("UPDATE cms_article SET ColumnId=@ColumnId,Tags=@Tags,Tagids=@TagIds,ArticleContent=@ArticleContent,Title=@Title,CreateTime=@CreateTime,LastTime=@LastTime,Browse=@Browse,Author=@Author,IsTop=@IsTop,IsShow=@IsShow WHERE Article_Id =@Article_Id", entity);
+                conn.Execute("UPDATE cms_article SET ColumnId=@ColumnId,Tags=@Tags,Tagids=@TagIds,ArticleContent=@ArticleContent,Title=@Title,CreateTime=@CreateTime,LastTime=@LastTime,Browse=@Browse,Author=@Author,ImgUrl=@ImgUrl,Digest=@Digest,SEO_Title=@SEO_Title,SEO_Keywords=@SEO_Keywords,SEO_DES=@SEO_DES,IsTop=@IsTop,IsShow=@IsShow,Source=@Source,SourceLink=@SourceLink,Like=@Like WHERE Article_Id =@Article_Id", entity);
             }
         }
 
@@ -161,6 +161,16 @@ namespace Cactus.SQLiteService.CMS
                         article.Column = column;
                     return article;
                 }, new { id = id }, null, "Column_Id", null, null).SingleOrDefault();
+            }
+        }
+
+
+        public bool IsLike(int Id)
+        {
+            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            {
+                int i=conn.Execute("UPDATE cms_article SET Like=Like+1 where Article_Id=@Id", new { Id = Id });
+                if (i > 0) { return true; } else { return false; }
             }
         }
     }

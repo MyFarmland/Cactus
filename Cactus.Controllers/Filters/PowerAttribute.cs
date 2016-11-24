@@ -20,25 +20,21 @@ namespace Cactus.Controllers.Filters
     {
         public PowerAttribute() { }
         /// <summary>
-        /// 权限标示名
+        /// 模块名称
         /// </summary>
-        public string PowerId { get; set; }
+        public string ModuleName { get; set; }
         /// <summary>
-        /// 功能名称
+        /// 权限操作枚举
         /// </summary>
-        public string PowerName { get; set; }
+        public EnumsModel.ActionEnum actionEnum { get; set; }
         /// <summary>
-        /// 功能描述
-        /// </summary>
-        public string PowerDes { get; set; }
-        /// <summary>
-        /// 是否显示（用于管理列表菜单）
+        /// 是否显示（用于管理列表菜单入口）
         /// </summary>
         public bool IsShow { get; set; }
         /// <summary>
-        /// 是否超级管理员应用
+        /// 对外暴露的名称（IsShow为true时有效）
         /// </summary>
-        public bool IsSuper { get; set; }
+        public string Title { get; set; }
         /// <summary>
         /// 图标
         /// </summary>
@@ -46,49 +42,43 @@ namespace Cactus.Controllers.Filters
 
         protected User LoginUser = null;
 
-        protected PowerConfig Power = null;
+        protected PowerAdmin Power = null;
 
-        //public IPowerConfigService powerConfigService = AutofacDependencyResolver.Current.ApplicationContainer.Resolve<IPowerConfigService>();
         public IPowerConfigService powerConfigService = IocHelper.AutofacResolveNamed<IPowerConfigService>("PowerConfigService");
         public ICacheService cacheService = IocHelper.AutofacResolveNamed<ICacheService>("CacheService");
         
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            #region 权限判断
             var token = CookieHelper.GetCookieValue("Admin");
-            //this.LoginUser = CacheHelper.GetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token) as User;
+            string _GroupName = filterContext.Controller.ControllerContext.RouteData.Values["controller"].ToString();
             HTools.CacheObj obj = cacheService.Get(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
-            this.LoginUser = (obj != null && obj.value != null) ? (obj.value as User) : null;
+            this.LoginUser = (obj != null && obj.value != null) ? (obj.value.ParseJSON<User>()) : null;
             bool b = false;
-            if (this.IsSuper == false)
+            if (!this.LoginUser.IsSuperUser)
             {
-                //非超级管理员专属操作
-
-                //权限id集合
                 string[] acts = LoginUser.Role.ActionIds.Split(',');
-
-                //this.Power = CacheHelper.GetCache(Constant.CacheKey.PowerConfigCacheKey) as PowerConfig;
                 obj = cacheService.Get(Constant.CacheKey.PowerConfigCacheKey);
-                this.Power = (obj != null && obj.value != null) ? (obj.value as PowerConfig) : null;
+                this.Power = (obj != null && obj.value != null) ? (obj.value as PowerAdmin) : null;
                 if (this.Power == null)
                 {
                     this.Power = powerConfigService.LoadConfig(Constant.PowerConfigPath);
-                    //CacheHelper.SetCache(Constant.CacheKey.PowerConfigCacheKey, this.Power);
-                    cacheService.Add(Constant.CacheKey.PowerConfigCacheKey, new CacheObj() { value = this.Power, AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1) });
+                    cacheService.Add(Constant.CacheKey.PowerConfigCacheKey, new CacheObj() { value = this.Power, AbsoluteExpiration = new TimeSpan(1, 0, 0, 0) });
                 }
                 try
                 {
                     if (this.Power != null)
                     {
-                        //Power.PowerGroupList.Where(p=>p.PowerList.FirstOrDefault(t => t.Id == PowerId)==null);
-                        foreach (var li in this.Power.PowerGroupList)
+                        var list = this.Power.list;
+                        foreach (var li in list)
                         {
-                            var p=li.PowerList.FirstOrDefault(t => t.NoPowerId == PowerId);
+                            var p = li.module.FirstOrDefault(t => t.Name == ModuleName);
                             if (p != null)
                             {
-                                if (acts.Contains(p.NoPowerId))
+                                string action_type = _GroupName + "|" + p.Name + "|" + actionEnum.ToString();//格式 模块名|操作
+                                if (acts.Contains(action_type))
                                 {
-                                    //存在权限
-                                    b = true;
+                                    b = true;//存在权限
                                     break;
                                 }
                             }
@@ -100,11 +90,10 @@ namespace Cactus.Controllers.Filters
                     b = false;
                 }
             }
-            //超级管理员都可以使用
-            if (this.LoginUser.IsSuperUser)
-            {
+            else {
                 b = true;
             }
+            #endregion
 
             #region 无权限执行
             if (b == false)
@@ -136,7 +125,7 @@ namespace Cactus.Controllers.Filters
         }
         public void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            //throw new NotImplementedException();
+
         }
     }
 }

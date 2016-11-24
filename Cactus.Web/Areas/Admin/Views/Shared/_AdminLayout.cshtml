@@ -1,8 +1,8 @@
 ﻿@using Cactus.Model;
 @{
-    var loginUser = ViewData["LoginUser"] as Cactus.Model.Sys.User;
-    var Power =ViewData["Power"] as Cactus.Model.Sys.PowerConfig;
-    var site = ViewData["SiteConfig"] as Cactus.Model.Sys.SiteConfig;
+    var loginUser = ViewData["_LoginUser"] as Cactus.Model.Sys.User;
+    var Power =ViewData["_Power"] as Cactus.Model.Sys.PowerAdmin;
+    var site = ViewData["_SiteConfig"] as Cactus.Model.Sys.SiteConfig;
     var _dirhost = site.SiteStaticDir;
     var version = 2;
 }
@@ -30,63 +30,85 @@
                         <div class="logo-img"></div>
                         <div class="logo-font">@site.SiteName-后台管理</div>
                     </span>
-                    <ul class="pure-menu-list">
-                        @{ var m_power =Power.PowerGroupList; }
-                        @for (int i = 0; i < m_power.Count(); i++)
-                        { 
-                        
-                        <li class="pure-menu-item">
-                            @if (m_power[i].IsShow)
-                            {
+                <ul class="pure-menu-list">
+                    @{var m_power =Power.list;}
+                    @for (int i = 0; i < m_power.Count(); i++){
+                            <li class="pure-menu-item">
+                                @if (m_power[i].IsShow)
                                 {
-                                    var powerlist = m_power[i].PowerList.Where(t => t.IsShow == true).ToList();
-                                    string[] ac_arr = loginUser.Role.ActionIds.Split(',');
-                                    List<Cactus.Model.Sys.Power> power_li = new List<Cactus.Model.Sys.Power>();
-                                    if (loginUser.IsSuperUser)
+                                    var powerlist = m_power[i].module.Where(t => t.IsShow == true).ToList();
+                                    if (powerlist.Count > 0)
                                     {
-                                        power_li = powerlist;
-                                    }
-                                    else
-                                    {
-                                        for (int j = 0; j < ac_arr.Length; j++)
+                                        if (loginUser.IsSuperUser)//是否超级管理员
                                         {
-                                            var _p_l = powerlist.Where(_ => _.NoPowerId == ac_arr[j]).ToList();
-                                            if (_p_l.Count != 0)
+                                                <text>
+                                                    <a href="javascript:;" class="pure-menu-link pure-menu-main">
+                                                        <i class="fa @m_power[i].Icon"></i>
+                                                        <span>@m_power[i].Title</span>
+                                                        <span style=" float:right;"><i class="fa fa-chevron-right"></i></span>
+                                                    </a>
+                                                </text>
+                                            var count = powerlist.Count();
+                                            if (count > 0)
                                             {
-                                                power_li.Add(_p_l[0]);
+                                                    <ul class="pure-menu-list pure-menu-child">
+                                                        @for (int j = 0; j < powerlist.Count; j++)
+                                                        {
+                                                            <li class="pure-menu-item">
+                                                                <a href="javascript:;" class="pure-menu-link" url-target="@(powerlist[j].ParamStr)">
+                                                                    <span class=""><i class="fa @(powerlist[j].Icon)"></i> @(powerlist[j].Title)</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            Cactus.Model.Sys.PowerGroup group = new Cactus.Model.Sys.PowerGroup();
+                                            group.Icon = m_power[i].Icon;
+                                            group.IsShow = m_power[i].IsShow;
+                                            group.Name = m_power[i].Name;
+                                            group.Title = m_power[i].Title;
+                                            group.module=new List<Cactus.Model.Sys.PowerModule>();
+                                            var user_actions = loginUser.Role.ActionIds.Split(',');
+                                            foreach (var module in powerlist)
+                                            {
+                                                string[] actions = module.Action_Type.Split(',');
+                                                string action_token = m_power[i].Name + "|" + module.Name + "|" + Cactus.Model.Other.EnumsModel.ActionEnum.Show.ToString();
+                                                if (user_actions.Contains(action_token))
+                                                {
+                                                    group.module.Add(module);
+                                                }
+                                            }
+                                            if (group.module.Count > 0)
+                                            {
+                                                    <text>
+                                                        <a href="javascript:;" class="pure-menu-link pure-menu-main">
+                                                            <i class="fa @(group.Icon)"></i>
+                                                            <span>@(group.Title)</span>
+                                                            <span style=" float:right;"><i class="fa fa-chevron-right"></i></span>
+                                                        </a>
+
+                                                        <ul class="pure-menu-list pure-menu-child">
+                                                            @for (int j = 0; j < group.module.Count; j++)
+                                                            {
+                                                                <li class="pure-menu-item">
+                                                                    <a href="javascript:;" class="pure-menu-link" url-target="@(group.module[j].ParamStr)">
+                                                                        <span class=""><i class="fa @(group.module[j].Icon)"></i> @(group.module[j].Title)</span>
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </text>
                                             }
                                         }
                                     }
-                                    bool _b = power_li.Where(_t => _t.IsShow == true).Count() > 0;//判断是否有显示的
-                                    if (_b)
-                                    {
-                                        <text>
-                                            <a href="javascript:;" class="pure-menu-link pure-menu-main">
-                                                <i class="fa @m_power[i].Icon"></i>
-                                                <span>@m_power[i].GroupName</span>
-                                                <span style=" float:right;"><i class="fa fa-chevron-right"></i></span>
-                                            </a>
-                                        </text>
-                                        var count = power_li.Count();
-                                        if (count > 0)
-                                        {
-                                            <ul class="pure-menu-list pure-menu-child">
-                                                @for (int j = 0; j < count; j++)
-                                                {
-                                                <li class="pure-menu-item">
-                                                    <a href="javascript:;" class="pure-menu-link" url-target="@(power_li[j].ParamStr)">
-                                                        <span class=""><i class="fa @power_li[j].Icon"></i> @(power_li[j].PowerName)</span>
-                                                    </a>
-                                                </li>
-                                                }
-                                            </ul>
-                                        }
-                                    }
                                 }
+                                </li>
                             }
-                        </li>
-                        }
-                    </ul>
+                        </ul>
                 </div>
                 <!--end-->
             </div>
@@ -99,7 +121,7 @@
                             <li class="pure-menu-item">
                                 <img src="@loginUser.Avatar" width="48px" height="48px" style="border-radius:24px;border:1px solid #fff;">
                             </li>
-                            <li class="pure-menu-item pure-menu-disabled">登录用户：@loginUser.NickName</li>
+                            <li class="pure-menu-item pure-menu-disabled">登录用户：@(loginUser.NickName+"("+loginUser.Role.RoleName+")")</li>
                             <li class="pure-menu-item">
                                 <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/ZPanel');" class="pure-menu-link"><span><i class="fa fa-home"></i> 首页</span></a>
                             </li>
@@ -138,11 +160,14 @@
     <script src="@(_dirhost)/Content/Js/utils.js?_v=@version"></script>
     <script src="@(_dirhost)/Content/Js/jquery.upload2.js?_v=@version"></script>
     <script src="@(_dirhost)/Content/Js/json2.js"></script>
+    <script src="@(_dirhost)/Content/nice-validator/jquery.validator.js"></script>
+    <script src="@(_dirhost)/Content/nice-validator/local/zh-CN.js"></script>
     <script src="@(_dirhost)/Content/Pure_Js/paginator.js?_v=@version"></script>
     <script src="@(_dirhost)/Content/Admin/js/admin_public.js?_v=@version"></script>
     <script src="@(_dirhost)/Content/wangEditor-2.0.1/js/wangEditor.min.js?_v=@version"></script>
     <script src="@(_dirhost)/Content/lightcase/lightcase.js?_v=@version"></script>
     <script src="@(_dirhost)/Content/layer-v2.3/layer.js?_v=@version"></script>
+
     <script type="text/javascript">
     console.info('   _     _     _     _     \n'
 + ' /\' \\  /\' \\  /\' \\  /\' \\    \n'
@@ -168,13 +193,17 @@
                     $(this).find('.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-right');
                 }
             });
-            var msgHtml = '<h4><a href="javascript:;" class="pure-menu-link" url-target="/Admin/Sys/LogManager">有日志<span style="color:red;"> @(logFileCount) </span>条</a></h4>';
+            var msgHtml = '<h4><a href="javascript:;" class="pure-menu-link" onclick="layer.closeAll();Admin.loadContent_Jq(\'main-content\', \'/Admin/Sys/LogManager\');">有日志<span style="color:red;"> @(logFileCount) </span>条</a></h4>';
             $('#comment-top').on('click', function () {
                 layer.open({
                     type: 1,
                     area: ['600px', '360px'],
                     shadeClose: true, //点击遮罩关闭
-                    content: '<div style="padding:10px;">' + msgHtml + '</div>'
+                    content: '<div style="padding:10px;">' + msgHtml + '</div>',
+                    btn: ['关闭'],
+                    btn1: function () {
+                        layer.closeAll();
+                    }
                 });
             });
         })

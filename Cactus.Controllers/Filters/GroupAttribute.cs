@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Cactus.Controllers.Filters
 {
+    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public class GroupAttribute : Attribute
     {
         public GroupAttribute() { }
-        public string NoGroupId { get; set; }
-        public string GroupName { get; set; }
+        public string Name { get; set; }
+        public string Title { get; set; }
         public bool IsShow { get; set; }
-
+        public string Des { get; set; }
         public string Icon { get; set; }
+
     }
 }

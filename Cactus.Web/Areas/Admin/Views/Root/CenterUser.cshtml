@@ -1,65 +1,67 @@
 ﻿@{
     Layout = null;
-    var user = ViewData["LoginUser"] as Cactus.Model.Sys.User;
+    var user = ViewData["_LoginUser"] as Cactus.Model.Sys.User;
 }
 
 
 <div class="tool-list">
+    <label>用户中心</label>
     <div class="pure-button-group">
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/CenterAlterPwd');" class="pure-button pure-button-primary pure-split">修改密码</a>
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/CenterAlterFace');" class="pure-button pure-button-primary pure-split">修改头像</a>
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Root/CenterAlterInfo');" class="pure-button pure-button-primary pure-split">更改资料</a>
     </div>
 </div>
-<table class="pure-table pure-table-bordered">
+<table  class="pure-table">
     <tbody>
         <tr>
             <td>用户名</td>
-            <td>@user.Name
-            </td>
-        </tr>
-        <tr>
-            <td>昵称</td>
-            <td>@user.NickName</td>
-        </tr>
-        <tr>
-            <td>头像</td>
             <td>
-                <img src="@user.Avatar" width="48px" height="48px" />
-            </td>
-        </tr>
-        <tr>
-            <td>角色</td>
-            <td>@user.Role.RoleName</td>
-        </tr>
-        <tr>
-            <td>邮箱</td>
-            <td>@user.Email</td>
-        </tr>
-        <tr>
-            <td>最近登录IP</td>
-            <td>@user.LastLoginIp</td>
-        </tr>
-        <tr>
-            <td>最近登录时间</td>
-            <td>@user.LastLoginTime</td>
-        </tr>
-        <tr>
-            <td>注册时间</td>
-            <td>@user.AddTime</td>
-        </tr>
-        <tr>
-            <td>手机号码</td>
-            <td>@user.Phone</td>
-        </tr>
-        <tr>
-            <td>QQ号</td>
-            <td>@user.Qq</td>
-        </tr>
-        <tr>
-            <td>是否超级管理员</td>
-            <td>@(user.IsSuperUser?"是":"否")</td>
-        </tr>
-    </tbody>
+                @user.Name
+        </td>
+    </tr>
+    <tr>
+        <td>昵称</td>
+        <td>@user.NickName</td>
+    </tr>
+    <tr>
+        <td>头像</td>
+        <td>
+            <img src="@user.Avatar" width="48px" height="48px" />
+        </td>
+    </tr>
+    <tr>
+        <td>角色</td>
+        <td>@user.Role.RoleName</td>
+    </tr>
+    <tr>
+        <td>邮箱</td>
+        <td>@user.Email</td>
+    </tr>
+    <tr>
+        <td>最近登录IP</td>
+        <td>@user.LastLoginIp</td>
+    </tr>
+    <tr>
+        <td>最近登录时间</td>
+        <td>@user.LastLoginTime</td>
+    </tr>
+    <tr>
+        <td>注册时间</td>
+        <td>@user.AddTime</td>
+    </tr>
+    <tr>
+        <td>手机号码</td>
+        <td>@user.Phone</td>
+    </tr>
+    <tr>
+        <td>QQ号</td>
+        <td>@user.Qq</td>
+    </tr>
+    <tr>
+        <td>是否超级管理员</td>
+        <td>@(user.IsSuperUser ? "是" : "否")</td>
+    </tr>
+</tbody>
 </table>
 

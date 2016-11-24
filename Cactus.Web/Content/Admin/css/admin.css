@@ -65,8 +65,29 @@
     padding: 2px;
 }
 
+.file-img {
+    height: 32px;
+    background: url(../img/file_upload.png);
+    position: relative;
+    width: 32px;
+    display: inline-block;
+    top: 10px;
+}
+
+.file-img-input {
+    height: 32px;
+    width: 32px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+}
+
+
 #main-content {
-    padding: 68px 5px 40px 5px;
+    padding: 68px 10px 40px 10px;
     width: 100%;
     box-sizing: border-box;
     display: block; 
@@ -223,7 +244,7 @@ a.pure-link{
 }
 .pure-link {
   margin: 0.2em;
-  padding: 0.6em 1em;
+  padding: 0.4em 0.8em;
   color: #fff;
   background: #777;
   font-size: 80%;
@@ -242,7 +263,7 @@ filter:alpha(opacity=100);
 }
 
 .pure-link-purple {
-    background: #7706a7;
+    background: #7706a7; 
 }
 
 .pure-link-red {
@@ -353,6 +374,15 @@ color: rgb(66, 184, 221); /* this is a light blue */
 }
 .tool-list {
     padding: 5px 0 5px;
+}
+.tool-list >label{
+    font-size:14px;
+    padding-bottom:5px;
+    padding-top:5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    display: block;
+    border-bottom:1px solid #eee;
 }
 .page-footer {
     padding: 10px 0;

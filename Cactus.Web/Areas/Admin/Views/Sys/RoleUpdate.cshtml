@@ -2,20 +2,18 @@
     Layout = null;
 
     var role = ViewData["Role"] as Cactus.Model.Sys.Role;
-    var power = ViewData["Power"] as Cactus.Model.Sys.PowerConfig;
-    string[] ids = role.ActionIds.Split(',');
+    var power = ViewData["_Power"] as Cactus.Model.Sys.PowerAdmin;
+    string[] actions = role.ActionIds.Split(',');
 }
 
 <div class="tool-list">
+    <label>修改角色</label>
     <div class="pure-button-group">
-        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Sys/RoleList');" class="pure-button pure-button-primary">返回</a>*@
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 <form class="pure-form  pure-form-aligned" id="roleUpd">
     <input type="hidden" name="Role_Id" value="@role.Role_Id" />
-    <fieldset>
-        <legend>修改角色</legend>
         <div class="pure-control-group">
             <label>角色名</label>
             <input  name="RoleName" type="text" value="@role.RoleName" placeholder="角色名" />
@@ -27,38 +25,48 @@
             <div class="pure-controls">
                 <div class="pure-tab">
                     <ul class="pure-tab-head">
-                        @foreach (var group in power.PowerGroupList)
+                        @foreach (var group in power.list)
                         {
                             <text>
-                                <li><a class="pure-tab-button " href="javascript:;">@group.GroupName</a></li>
+                                <li><a class="pure-tab-button " href="javascript:;">@group.Title</a></li>
                             </text>
                         }
                     </ul>
-                    @foreach (var group in power.PowerGroupList)
+                    @foreach (var group in power.list)
                     {
                         <div class="pure-tab-content">
-                            @{
-                        var plist = group.PowerList.Where(t => t.NoGroupId == group.NoGroupId).ToList();
-                            }
-                            @if (plist.Count > 0)
+                            @if (group.module.Count > 0)
                             {
-                                <table class="pure-table pure-table-bordered">
+                                <table class="pure-table">
                                     <thead>
                                         <tr>
-                                            <th>功能名</th>
-                                            <th>功能介绍</th>
-                                            <th>状态（用于树级菜单）</th>
-                                            <th><input name="checkAll" type="checkbox" title="全选" /></th>
+                                            <th>模块名</th>
+                                            <th>模块调用名</th>
+                                            <th>状态（用于导航菜单）</th>
+                                            <th>权限分配</th>
+                                            <th><input name="Allcheck" type="checkbox" title="全选" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var item in plist)
+                                        @foreach (var item in group.module)
                                         {
                                             <tr>
-                                                <td>@(item.PowerName)</td>
-                                                <td>@item.PowerDes</td>
+                                                <td>@(item.Title)</td>
+                                                <td>@item.Name</td>
                                                 <td>@(item.IsShow ? "(显示)" : "(隐藏)")</td>
-                                                <td><input name="ActionId" type="checkbox" @(ids.Contains(item.NoPowerId) ? "checked" : "") value="@item.NoPowerId" /></td>
+                                                <td>
+                                                    @foreach (var action in item.Action_Type.Split(','))
+                                                    {
+                                                        <label style="width: initial;">
+                                                            @(Cactus.Model.Other.EnumsModel.ActionType()[action])
+                                                            @{
+                                                                string action_str = group.Name + "|" + item.Name + "|" + action;
+                                                            }
+                                                            <input name="ActionType" type="checkbox" @(actions.Contains(action_str) ? "checked" : "") value="@(action_str)" />
+                                                        </label>
+                                                    }
+                                                </td>
+                                                <td><input name="checkAll" type="checkbox" /></td>
                                             </tr>
                                         }
                                     </tbody>
@@ -73,8 +81,6 @@
             <div class="pure-controls">
                 <button type="button" class="pure-button pure-button-primary" name="roleupd">修改</button>
             </div>
-
-</fieldset>
 </form>
 
 <script type="text/javascript">
@@ -88,20 +94,22 @@
                 $('div[name=RoleName]').html('');
             }
             var ids = "";
-            $('input[name=ActionId]:checked').each(function () {
+            $('input[name=ActionType]:checked').each(function () {
                 if (ids.length > 0) {
                     ids += ',' + $(this).val();
                 } else {
                     ids += $(this).val();
                 }
             });
+            console.log(ids);
             $.ajax({
                 url: "/Admin/Sys/RoleUpdate",
                 type: "post",
                 data: { RoleName: val, ActionIds: ids, Id: Id },
                 success: function (obj) {
                     if (obj.pass) {
-                        Admin.loadContent_Jq('main-content', '/Admin/Sys/RoleList');
+                        Admin.loadBackPage('main-content');
+                        //Admin.loadContent_Jq('main-content', '/Admin/Sys/RoleList');
                     } else {
                         layer.alert(obj.msg)
                     }
@@ -109,6 +117,13 @@
             });
         });
         $('input[name=checkAll]').bind('click', function () {
+            if ($(this).prop("checked") == true) {
+                $(this).parent().parent().find("input[type='checkbox']").prop("checked", true);
+            } else {
+                $(this).parent().parent().find("input[type='checkbox']").prop("checked", false);
+            }
+        });
+        $('input[name=Allcheck]').bind('click', function () {
             if ($(this).prop("checked") == true) {
                 $(this).parent().parent().parent().parent().find("input[type='checkbox']").prop("checked", true);
             } else {

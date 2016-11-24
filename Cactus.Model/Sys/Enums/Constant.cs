@@ -27,6 +27,10 @@ namespace Cactus.Model.Sys.Enums
         /// </summary>
         public static string ThemeConfigPath = HttpContext.Current.Server.MapPath("/Configuration/Theme.config");
         /// <summary>
+        /// 主题配置文件路径
+        /// </summary>
+        public static string PathConfigPath = HttpContext.Current.Server.MapPath("/Configuration/PathConfig.config");
+        /// <summary>
         /// 站点缓存键集合
         /// </summary>
 
@@ -52,6 +56,10 @@ namespace Cactus.Model.Sys.Enums
             /// 会员信息缓存key
             /// </summary>
             public static string LoginMemberInfoCacheKey = "CACHE_LOGIN_MEMBER";
+            /// <summary>
+            /// 路径配置缓存key
+            /// </summary>
+            public static string PathConfigCacheKey = "CACHE_PATH_CONFIG";
 
             public static Dictionary<string, string> List = new Dictionary<string, string>();
             static CacheKey() {
@@ -59,6 +67,8 @@ namespace Cactus.Model.Sys.Enums
                 List.Add(PowerConfigCacheKey, "权限信息缓存");
                 List.Add(LoginAdminInfoCacheKey, "管理员信息缓存");
                 List.Add(LoginMemberInfoCacheKey, "会员信息缓存");
+                List.Add(BlogConfigCacheKey, "博客信息缓存");
+                List.Add(PathConfigCacheKey, "路径配置缓存");
             }
         }
     }

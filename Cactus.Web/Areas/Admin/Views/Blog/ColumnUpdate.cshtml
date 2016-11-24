@@ -3,9 +3,9 @@
     var column = ViewData["Column"] as Cactus.Model.CMS.Column;
 }
 <div class="tool-list">
+    <label>编辑栏目</label>
     <div class="pure-button-group">
-        @*<a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/ColumnManage');" class="pure-button pure-button-primary">返回</a>*@
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 
@@ -13,56 +13,45 @@
     <input type="hidden" name="Column_Id" value="@column.Column_Id" />
     <input type="hidden" name="Lv" value="@column.Lv" />
     <input type="hidden" name="Pid" value="@column.Pid" />
-    <fieldset>
-        <legend>编辑栏目</legend>
         <div class="pure-control-group">
             <label>栏目名</label>
             <input name="ColumnName" type="text" value="@column.ColumnName" placeholder="栏目名" />
-            <div class="pure-error pure-c-error" name="ColumnName"></div>
+            <div class="pure-error pure-c-error msg-box" for="ColumnName"></div>
         </div>
         <div class="pure-control-group">
             <label>排序编号</label>
             <input name="Sort" type="text" value="@column.Sort" placeholder="排序编号,越小越前面" />
-            <div class="pure-error pure-c-error" name="Sort"></div>
+            <div class="pure-error pure-c-error msg-box" name="Sort"></div>
         </div>
         
         <div class="pure-controls">
             <button type="button" class="pure-button pure-button-primary" name="columnupdate">保存</button>
         </div>
-    </fieldset>
 </form>
 
 <script type="text/javascript">
     $(function () {
-        $("#columnUpdate button[name=columnupdate]").bind('click', function () {
-            var Column_Id = $("#columnUpdate input[name=Column_Id]").val();
-            var Lv = $("#columnUpdate input[name=Lv]").val();
-            var Pid = $("#columnUpdate input[name=Pid]").val();
-            var ColumnName = $("#columnUpdate input[name=ColumnName]").val();
-            if (ColumnName == '' || ColumnName == undefined) {
-                $('#columnUpdate div[name=ColumnName]').html('请填写类目名'); return;
-            } else {
-                $('#columnUpdate div[name=ColumnName]').html('');
-            }
-            var Sort = $("#columnUpdate input[name=Sort]").val();
-            if (Sort == '' || Sort == undefined) {
-                $('#columnUpdate div[name=Sort]').html('请填写排序编号'); return;
-            } else {
-                $('#columnUpdate div[name=Sort]').html('');
-            }
-            $.ajax({
-                url: "/Admin/Blog/ColumnUpdate",
-                type: "post",
-                data: { Column_Id: Column_Id, ColumnName: ColumnName, Sort: Sort,Lv:Lv,Pid:Pid },
-                success: function (obj) {
-                    if (obj.pass) {
-                        Admin.loadBackPage('main-content');
-                    } else {
+        $('#columnUpdate').validator({
+            msgWrapper: 'div',
+            fields: {
+                'ColumnName': 'required',
+                'Sort': 'required;digits'
+            },
+            valid: function (form) {
+                Admin.loadDialog_show();
+                var param = $(form).serialize();
+                $.ajax({
+                    url: "/Admin/Blog/ColumnUpdate",
+                    type: "post",
+                    data: param,
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
                         layer.alert(obj.msg)
+                        Admin.loadBackPage('main-content');
                     }
-                }
-            });
-        })
+                });
+            }
+        });
     });
 </script>
 

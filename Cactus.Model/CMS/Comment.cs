@@ -37,5 +37,13 @@ namespace Cactus.Model.CMS
         /// 邮箱
         /// </summary>
         public string Email { get; set; }
+        /// <summary>
+        /// 圈圈
+        /// </summary>
+        public int VoteFavour { get; set; }
+        /// <summary>
+        /// 叉叉
+        /// </summary>
+        public int VoteOppose { get; set; }
     }
 }

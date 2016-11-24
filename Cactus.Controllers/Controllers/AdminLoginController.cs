@@ -15,8 +15,6 @@ using Cactus.Model.Other;
 
 namespace Cactus.Controllers.Controllers
 {
-
-    [Exception]
     public class AdminLoginController : AdminBaseController
     {
 
@@ -53,12 +51,11 @@ namespace Cactus.Controllers.Controllers
                     u.LastLoginIp = WebHelper.GetClientIPAddress();
                     userServer.Update(u);
                     //加入缓存
-                    //CacheHelper.SetCache(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + sid, u);
                     base.cacheService.Add(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + sid,
                         new HTools.CacheObj()
                         {
                             value = u,
-                            AbsoluteExpiration = new DateTimeOffset(DateTime.Now).AddDays(1)
+                            AbsoluteExpiration = new TimeSpan(1, 0, 0, 0)
                         });
                     //清除验证码code
                     CookieHelper.ClearCookie("code");

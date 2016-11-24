@@ -18,8 +18,8 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                int i = conn.Execute("INSERT INTO cms_comment(ArticleId,Content,CreateTime,Nickname,Email)" +
-                    "VALUES(@ArticleId,@Content,@CreateTime,@Nickname,@Email)", entity);
+                int i = conn.Execute("INSERT INTO cms_comment(ArticleId,Content,CreateTime,Nickname,Email,VoteFavour,VoteOppose)" +
+                    "VALUES(@ArticleId,@Content,@CreateTime,@Nickname,@Email,@VoteFavour,@VoteOppose)", entity);
                 if (i > 0) { return true; } else { return false; }
             }
         }
@@ -33,7 +33,7 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                conn.Execute("UPDATE cms_comment SET ArticleId=@ArticleId,Content=@Content,CreateTime=@CreateTime,Nickname=@Nickname,Email=@Email WHERE Comment_Id =@Comment_Id", entity);
+                conn.Execute("UPDATE cms_comment SET ArticleId=@ArticleId,Content=@Content,CreateTime=@CreateTime,Nickname=@Nickname,Email=@Email,VoteFavour=@VoteFavour,VoteOppose=@VoteOppose WHERE Comment_Id =@Comment_Id", entity);
             }
         }
 
@@ -92,6 +92,24 @@ namespace Cactus.SQLiteService.CMS
                         comment.Article = article;
                     return comment;
                 }, new { id = id }, null, "Article_Id", null, null).SingleOrDefault();
+            }
+        }
+
+        public bool isVoteFavour(int Id)
+        {
+            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            {
+                int i = conn.Execute("UPDATE cms_comment SET VoteFavour=VoteFavour+1 where Comment_Id=@Id", new { Id = Id });
+                if (i > 0) { return true; } else { return false; }
+            }
+        }
+
+        public bool isVoteOppose(int Id)
+        {
+            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            {
+                int i = conn.Execute("UPDATE cms_comment SET VoteOppose=VoteOppose+1 where Comment_Id=@Id", new { Id = Id });
+                if (i > 0) { return true; } else { return false; }
             }
         }
     }

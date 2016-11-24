@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+    var pathModel=ViewData["PathModel"] as Cactus.Model.Sys.Config.PathModel; 
+}
+
+<div class="tool-list">
+    <label>更新路径</label>
+    <div class="pure-button-group">
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
+    </div>
+</div>
+
+<form class="pure-form  pure-form-aligned" id="pathUpdate">
+    <div class="pure-control-group">
+        <label>名称</label>
+        <input name="Name" type="hidden" value="@pathModel.Name" />
+        <input type="text" placeholder="名称" value="@pathModel.Name" disabled />
+        <div class="pure-error pure-c-error msg-box" for="Name"></div>
+    </div>
+    <div class="pure-control-group">
+        <label>服务器目录地址</label>
+        <input name="DirPath" type="text" placeholder="目录地址" value="@pathModel.DirPath" style="width:300px;" /><span>目录名以分号分割，例如abc;def</span>
+        <div class="pure-error pure-c-error msg-box" for="DirPath"></div>
+    </div>
+    <div class="pure-control-group">
+        <label>web访问地址</label>
+        <input name="WebPath" type="text" placeholder="访问地址" value="@pathModel.WebPath" style="width:300px;" /><span>目录名以分号分割，例如abc;def</span>
+        <div class="pure-error pure-c-error msg-box" for="WebPath"></div>
+    </div>
+    <div class="pure-control-group">
+        <label>描述</label>
+        <textarea rows="5" cols="20" name="Des" placeholder="描述" style="resize: none;">@pathModel.Des</textarea>
+        <div class="pure-error pure-c-error msg-box" for="Des"></div>
+    </div>
+    <div class="pure-control-group">
+        <label>文件大小限制（kb）</label>
+        <input name="FileSize" type="text" placeholder="文件大小" value="@pathModel.FileSize" />
+        <div class="pure-error pure-c-error msg-box" for="FileSize"></div>
+    </div>
+    <div class="pure-controls">
+        <button class="pure-button pure-button-primary" type="submit">提交</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        Admin.tabInit(0);
+        $('#pathUpdate').validator({
+            msgWrapper: 'div',
+            fields: {
+                'Name': 'required',
+                'DirPath': 'required',
+                'WebPath': 'required',
+                'FileSize': 'required;digits',
+            },
+            valid: function (form) {
+                Admin.loadDialog_show();
+                var param = $(form).serialize();
+                $.ajax({
+                    url: "/Admin/Sys/PathUpdate",
+                    type: "post",
+                    data: param,
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
+                        layer.alert(obj.msg);
+                        Admin.loadBackPage('main-content');
+                    }
+                });
+            }
+        });
+    });
+</script>

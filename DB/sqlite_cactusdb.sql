@@ -9,7 +9,7 @@ Target Server Type    : SQLite
 Target Server Version : 30706
 File Encoding         : 65001
 
-Date: 2016-09-28 23:53:59
+Date: 2016-11-23 10:19:48
 */
 
 PRAGMA foreign_keys = OFF;
@@ -29,26 +29,34 @@ CREATE TABLE "cms_article" (
 "LastTime"  DATETIME NOT NULL,
 "Browse"  INTEGER NOT NULL,
 "Author"  TEXT,
+"ImgUrl"  TEXT,
+"Digest"  TEXT,
+"SEO_Title"  TEXT,
+"SEO_Keywords"  TEXT,
+"SEO_DES"  TEXT,
 "IsTop"  INT NOT NULL,
-"IsShow"  INTEGER NOT NULL
+"IsShow"  INTEGER NOT NULL,
+"Source"  TEXT,
+"SourceLink"  TEXT,
+"Like"  INTEGER DEFAULT 0
 );
 
 -- ----------------------------
 -- Records of cms_article
 -- ----------------------------
-INSERT INTO "main"."cms_article" VALUES (1, 1, null, null, 'ArticleContent&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题', '2016-03-13 15:44:19.8146641', '2016-03-13 15:44:19.8146641', 0, '测试作者', 0, 1);
-INSERT INTO "main"."cms_article" VALUES (2, 4, null, null, '&lt;p&gt;&lt;b&gt;求大神&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题1111', '2016-03-13 15:45:19.8146641', '2016-03-13 15:45:19.8146641', 0, '测试作者2222', 0, 1);
-INSERT INTO "main"."cms_article" VALUES (3, 1, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题2', '2016-03-13 15:51:44.414662', '2016-03-13 15:51:44.414662', 0, '测试作者2', 0, 1);
-INSERT INTO "main"."cms_article" VALUES (4, 2, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题3', '2016-03-13 15:52:09.6811072', '2016-03-13 15:52:09.6811072', 0, '测试作者3', 0, 1);
-INSERT INTO "main"."cms_article" VALUES (5, 1, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题4', '2016-03-13 15:53:29.8266912', '2016-03-13 15:53:29.8266912', 0, '测试作者4', 0, 1);
-INSERT INTO "main"."cms_article" VALUES (7, 2, null, null, '&lt;p&gt;&lt;i&gt;测试内容&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题6', '2016-03-13 15:54:18.1514552', '2016-03-13 15:54:18.1514552', 0, '测试作者6', 0, 1);
-INSERT INTO "main"."cms_article" VALUES (8, 1, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题7', '2016-03-13 15:54:38.3436102', '2016-03-13 15:54:38.3436102', 0, '测试作者7', 1, 1);
+INSERT INTO "main"."cms_article" VALUES (1, 1, null, null, 'ArticleContent&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题', '2016-03-13 15:44:19.8146641', '2016-03-13 15:44:19.8146641', 0, '测试作者', null, null, null, null, null, 0, 1, null, null, 5);
+INSERT INTO "main"."cms_article" VALUES (2, 4, null, null, '&lt;p&gt;&lt;b&gt;求大神&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题1111', '2016-03-13 15:45:19.8146641', '2016-03-13 15:45:19.8146641', 0, '测试作者2222', null, null, null, null, null, 0, 1, null, null, 0);
+INSERT INTO "main"."cms_article" VALUES (3, 1, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题2', '2016-03-13 15:51:44.414662', '2016-03-13 15:51:44.414662', 0, '测试作者2', null, null, null, null, null, 0, 1, null, null, 0);
+INSERT INTO "main"."cms_article" VALUES (4, 2, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题3', '2016-03-13 15:52:09.6811072', '2016-03-13 15:52:09.6811072', 0, '测试作者3', null, null, null, null, null, 0, 1, null, null, 0);
+INSERT INTO "main"."cms_article" VALUES (5, 1, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题4', '2016-03-13 15:53:29.8266912', '2016-03-13 15:53:29.8266912', 0, '测试作者4', null, null, null, null, null, 0, 1, null, null, 0);
+INSERT INTO "main"."cms_article" VALUES (7, 2, null, null, '&lt;p&gt;&lt;i&gt;测试内容&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题6', '2016-03-13 15:54:18.1514552', '2016-03-13 15:54:18.1514552', 0, '测试作者6', null, null, null, null, null, 0, 1, null, null, 0);
+INSERT INTO "main"."cms_article" VALUES (8, 1, null, null, '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题7', '2016-03-13 15:54:38.3436102', '2016-03-13 15:54:38.3436102', 0, '测试作者7', null, null, null, null, null, 1, 1, null, null, 0);
 INSERT INTO "main"."cms_article" VALUES (9, 2, null, null, '
                         &lt;p&gt;测试内容&lt;img src="/Upload/UploadFile/1457864405.jpeg" style="letter-spacing: 0.01em; word-spacing: normal; max-width: 100%;"&gt;&lt;/p&gt;
-                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题8', '0001-01-01 00:00:00', '2016-03-13 18:20:07.5398916', 0, '测试作者8', 0, 0);
+                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题8', '0001-01-01 00:00:00', '2016-03-13 18:20:07.5398916', 0, '测试作者8', null, null, null, null, null, 0, 0, null, null, 0);
 INSERT INTO "main"."cms_article" VALUES (10, 3, null, null, '
                         &lt;p&gt;测试内容&lt;img src="/Upload/UploadFile/1457864442.jpeg" style="letter-spacing: 0.01em; word-spacing: normal; max-width: 100%;"&gt;&lt;/p&gt;
-                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题9', '0001-01-01 00:00:00', '2016-03-13 18:20:50.661358', 0, '测试作者9', 1, 1);
+                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题9', '0001-01-01 00:00:00', '2016-03-13 18:20:50.661358', 0, '测试作者9', null, null, null, null, null, 1, 1, null, null, 0);
 INSERT INTO "main"."cms_article" VALUES (11, 1, '1,3,9', 'Test,test,test6', '
                         
                         
@@ -76,12 +84,37 @@ INSERT INTO "main"."cms_article" VALUES (11, 1, '1,3,9', 'Test,test,test6', '
                     
                     
                     
-                    ', '测试标题10', '2016-03-13 15:55:52.4018461', '2016-07-16 00:07:55.2175522', 0, '测试作者10', 0, 1);
+                    ', '测试标题10', '2016-03-13 15:55:52.4018461', '2016-07-16 00:07:55.2175522', 0, '测试作者10', null, null, null, null, null, 0, 1, null, null, 0);
 INSERT INTO "main"."cms_article" VALUES (15, 1, '3,4,11', 'test,test1,Test8', '
+                        
+                        
+                        
+                        
+                        
                         
                         &lt;p&gt;测试标题11&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;
                     
-                    ', '测试标题11', '2016-07-15 23:51:24.9899144', '2016-07-16 00:07:36.9315063', 0, '漫漫洒洒', 0, 1);
+                    
+                    
+                    
+                    
+                    
+                    ', '测试标题11', '2016-07-15 23:51:24.9899144', '2016-10-23 17:25:51.5789861', 0, '漫漫洒洒', '/Upload/Cover/20161023/20161023163815.jpg', '测试标题11', '测试标题11', null, '测试标题11', 0, 1, null, null, 0);
+INSERT INTO "main"."cms_article" VALUES (18, 4, null, null, '&lt;p&gt;测试标题2222&lt;span style="line-height: 1.8; word-spacing: normal;"&gt;测试标题2222&lt;/span&gt;&lt;span style="line-height: 1.8; word-spacing: normal;"&gt;测试标题2222&lt;/span&gt;&lt;span style="line-height: 1.8; word-spacing: normal;"&gt;测试标题2222&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题2222', '2016-10-23 17:28:27.670914', '2016-10-23 17:28:27.670914', 0, '漫漫洒洒', null, '测试标题2222测试标题2222测试标题2222测试标题2222', '测试标题2222', null, '测试标题2222测试标题2222测试标题2222测试标题2222', 0, 1, null, null, 0);
+
+-- ----------------------------
+-- Table structure for "main"."cms_articlemap"
+-- ----------------------------
+DROP TABLE "main"."cms_articlemap";
+CREATE TABLE "cms_articlemap" (
+"Ip"  TEXT NOT NULL,
+"CreateTs"  INTEGER NOT NULL,
+"ArticleId"  INTEGER NOT NULL
+);
+
+-- ----------------------------
+-- Records of cms_articlemap
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for "main"."cms_column"
@@ -119,13 +152,29 @@ CREATE TABLE "cms_comment" (
 "Content"  TEXT NOT NULL,
 "CreateTime"  DATETIME NOT NULL,
 "Nickname"  TEXT NOT NULL,
-"Email"  TEXT NOT NULL
+"Email"  TEXT NOT NULL,
+"VoteFavour"  INTEGER DEFAULT 0,
+"VoteOppose"  INTEGER DEFAULT 0
 );
 
 -- ----------------------------
 -- Records of cms_comment
 -- ----------------------------
-INSERT INTO "main"."cms_comment" VALUES (6, 11, 3333, '2016-07-25 23:52:36.349923', 2222, '123@qq.com');
+INSERT INTO "main"."cms_comment" VALUES (6, 11, 3333, '2016-07-25 23:52:36.349923', 2222, '123@qq.com', null, null);
+
+-- ----------------------------
+-- Table structure for "main"."cms_commentmap"
+-- ----------------------------
+DROP TABLE "main"."cms_commentmap";
+CREATE TABLE "cms_commentmap" (
+"Ip"  TEXT NOT NULL,
+"CreateTs"  INTEGER NOT NULL,
+"CommentId"  INTEGER NOT NULL
+);
+
+-- ----------------------------
+-- Records of cms_commentmap
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for "main"."cms_staticpage"
@@ -144,8 +193,8 @@ CREATE TABLE "cms_staticpage" (
 -- ----------------------------
 -- Records of cms_staticpage
 -- ----------------------------
-INSERT INTO "main"."cms_staticpage" VALUES (2, '/html/test.html', 'test', 3, '[{"key":"title","value":"标题","label":"标题","tiplabel":"标题","type":"1"},{"key":"content","value":"内容<p>1111</p>","label":"内容","type":"2"}]', '2016-05-29 23:31:43.661482', '2016-05-29 23:50:33.464836');
-INSERT INTO "main"."cms_staticpage" VALUES (3, '/html/test1.html', 'test1', 2, '[{"key":"title","value":"标题","label":"标题","tiplabel":"标题","type":"1"},{"key":"siteDescr","value":"描述","label":"描述","tiplabel":"描述","type":"1"},{"key":"siteKeywords","value":"关键字","label":"关键字","tiplabel":"关键字","type":"1"},{"key":"content","value":"内容<p><br></p>","label":"内容","type":"2"}]', '2016-07-30 22:35:16.3925746', '2016-07-30 22:35:16.3925746');
+INSERT INTO "main"."cms_staticpage" VALUES (2, '/html/pages/test.html', 'test', 3, '[{"key":"title","value":"标题","label":"标题","tiplabel":"标题","type":"1"},{"key":"content","value":"内容<p>1111</p>","label":"内容","type":"2"}]', '2016-05-29 23:31:43.661482', '2016-05-29 23:50:33.464836');
+INSERT INTO "main"."cms_staticpage" VALUES (3, '/html/pages/test1.html', 'test1', 2, '[{"key":"title","value":"标题","label":"标题","tiplabel":"标题","type":"1"},{"key":"siteDescr","value":"描述","label":"描述","tiplabel":"描述","type":"1"},{"key":"siteKeywords","value":"关键字","label":"关键字","tiplabel":"关键字","type":"1"},{"key":"content","value":"内容<p><br></p>","label":"内容","type":"2"}]', '2016-07-30 22:35:16.3925746', '2016-07-30 22:35:16.3925746');
 
 -- ----------------------------
 -- Table structure for "main"."cms_tag"
@@ -276,16 +325,16 @@ CREATE TABLE sqlite_sequence(name,seq);
 -- ----------------------------
 -- Records of sqlite_sequence
 -- ----------------------------
-INSERT INTO "main"."sqlite_sequence" VALUES ('sys_role', 4);
+INSERT INTO "main"."sqlite_sequence" VALUES ('sys_role', 5);
 INSERT INTO "main"."sqlite_sequence" VALUES ('sys_user', 3190);
 INSERT INTO "main"."sqlite_sequence" VALUES ('cms_temppage', 3);
-INSERT INTO "main"."sqlite_sequence" VALUES ('cms_comment', 6);
-INSERT INTO "main"."sqlite_sequence" VALUES ('cms_article', 17);
 INSERT INTO "main"."sqlite_sequence" VALUES ('cms_tag', 14);
 INSERT INTO "main"."sqlite_sequence" VALUES ('cms_staticpage', 3);
 INSERT INTO "main"."sqlite_sequence" VALUES ('store_staff', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('store_customer', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('cms_column', 35);
+INSERT INTO "main"."sqlite_sequence" VALUES ('cms_comment', 6);
+INSERT INTO "main"."sqlite_sequence" VALUES ('cms_article', 18);
 
 -- ----------------------------
 -- Table structure for "main"."store_category"
@@ -443,8 +492,8 @@ CREATE TABLE "sys_role" (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO "main"."sys_role" VALUES (1, '超级管理员组', 'Blog_A101,Blog_A102,Blog_A103,Blog_A104,Blog_A105,Blog_A106,Blog_A107,Blog_A108,Blog_A109,Blog_A110,Blog_B101,Blog_C101,Blog_C102,Blog_C103,Blog_C104,Blog_C105,Blog_D101,Blog_D102,Blog_D103,Blog_D104,Blog_D105,Blog_D106,Blog_D107,Blog_D108,Blog_D109,Blog_D110,Blog_E101,Blog_E102,Blog_E103,Blog_E104,Blog_F101,Blog_F102,Root_A101,Root_B101,Root_B102,Root_B103,Root_B104,Store_A101,Sys_A101,Sys_B101,Sys_B102,Sys_B103,Sys_B104,Sys_B105,Sys_C101,Sys_C102,Sys_C103,Sys_C104,Sys_D101,Sys_D102,Sys_D103,Sys_D104,Sys_D105,Sys_D106,Sys_E101,Sys_E102,Sys_E103,Sys_E104');
-INSERT INTO "main"."sys_role" VALUES (3, '测试管理员', null);
+INSERT INTO "main"."sys_role" VALUES (1, '超级管理员', null);
+INSERT INTO "main"."sys_role" VALUES (3, '测试管理员', 'Blog|blogManage|Show,Blog|blogManage|Edit,Blog|blogManage|Delete,Blog|blogManage|Upload,Blog|columnManage|Show,Blog|columnManage|Add,Blog|columnManage|Edit,Blog|columnManage|Delete,Blog|fileManage|Show,Blog|fileManage|Delete,Blog|fileManage|Edit,Blog|fileManage|Add,Blog|fileManage|Upload,Blog|staticHtmlManage|Show,Blog|staticHtmlManage|Add,Blog|staticHtmlManage|Edit,Blog|staticHtmlManage|Delete,Blog|staticHtmlManage|Build,Blog|templateManage|Show,Blog|templateManage|Add,Blog|templateManage|Edit,Blog|templateManage|Delete,Blog|templateManage|Build,Blog|tagManage|Show,Blog|tagManage|Edit,Blog|tagManage|Add,Blog|commentManage|Show,Blog|commentManage|Delete,Blog|UIManage|Show,Blog|UIManage|Edit,Blog|UIManage|Select,Blog|configManage|Show,Blog|configManage|Edit,Root|myCenter|Show,Root|myCenter|Edit');
 
 -- ----------------------------
 -- Table structure for "main"."sys_user"
@@ -469,5 +518,17 @@ CREATE TABLE "sys_user" (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO "main"."sys_user" VALUES (1, 1, '702295399@qq.com', 'cebfd1559b68d67688884d7a3d3e8c', '漫漫洒洒', '/Upload/Avatar/Avatar_1.jpg', '702295399@qq.com', 1888888889, 702295399, '2016-02-07 09:44:53.2348994', '2016-09-28 23:28:13.7097036', '127.0.0.1', 1);
-INSERT INTO "main"."sys_user" VALUES (3190, 3, '测试账户', 'cebfd1559b68d67688884d7a3d3e8c', '测试小二', '/Upload/Avatar/Avatar_3190.jpg', '7022953991@qq.com', 1234567891, 1234567891, '2016-02-19 10:26:13.8261764', '2016-06-04 20:24:10.6925901', '127.0.0.1', 0);
+INSERT INTO "main"."sys_user" VALUES (1, 1, '702295399@qq.com', 'cebfd1559b68d67688884d7a3d3e8c', '漫漫洒洒', '/Upload/Avatar/Avatar_1.jpg', '702295399@qq.com', 1888888889, 702295399, '2016-02-07 09:44:53.2348994', '2016-11-22 09:11:06.3607803', '127.0.0.1', 1);
+INSERT INTO "main"."sys_user" VALUES (3190, 3, '测试账户', 'cebfd1559b68d67688884d7a3d3e8c', '测试小二', '/Upload/Avatar/Avatar_3190.jpg', '7022953991@qq.com', 1234567891, 1234567891, '2016-02-19 10:26:13.8261764', '2016-10-13 09:04:00.5456769', '127.0.0.1', 0);
+
+-- ----------------------------
+-- Indexes structure for table cms_articlemap
+-- ----------------------------
+CREATE INDEX "main"."sel_index_a"
+ON "cms_articlemap" ("Ip" ASC, "ArticleId" ASC, "CreateTs" ASC);
+
+-- ----------------------------
+-- Indexes structure for table cms_commentmap
+-- ----------------------------
+CREATE INDEX "main"."sel_index"
+ON "cms_commentmap" ("Ip" ASC, "CommentId" ASC, "CreateTs" ASC);

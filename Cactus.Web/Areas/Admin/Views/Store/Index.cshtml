@@ -5,7 +5,7 @@
 <div class="pure-g">
     <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Store/StoreAdd');" class="pure-link pure-link-default">添加店铺</a>
 </div>
-<table class="pure-table pure-table-bordered table-p" id="store"></table>
+<table width="100%" class="pure-table table-p" id="store"></table>
 <ul class="pure-paginator" id="table_paginator"></ul>
 <script type="text/javascript">
     $(function () {
@@ -32,12 +32,12 @@
                             { field: "LastTime", title: "最后编辑时间" },
                             {
                                 field: "Store_Id", title: "操作", formatter: function (val, rec, row) {
-                                    var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
-                                            '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>';
+                                    var str = '<a href="javascript:;" class="pure-link pure-link-default" name="upd" data-value="' + val + '">编辑</a>' +
+                                            '<a href="javascript:;" class="pure-link pure-link-default" name="del" data-value="' + val + '">删除</a>';
                                     if (row.StoreSwitch) {
-                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="switch" data-value="' + val + '">关店</a>';
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-default" name="switch" data-value="' + val + '">关店</a>';
                                     } else {
-                                        str = str + '<a href="javascript:;" class="pure-link pure-link-purple" name="switch" data-value="' + val + '">开店</a>';
+                                        str = str + '<a href="javascript:;" class="pure-link pure-link-default" name="switch" data-value="' + val + '">开店</a>';
                                     }
                                     return str;
                                 }

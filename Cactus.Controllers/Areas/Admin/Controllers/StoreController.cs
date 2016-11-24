@@ -12,19 +12,17 @@ using System.Web.Mvc;
 
 namespace Cactus.Controllers.Areas.Admin.Controllers
 {
-    [Exception]
-    [Group(GroupName = "商店管理", NoGroupId = "Store2016", IsShow = true, Icon = "fa-shopping-cart")]
+    [Group(Title = "商店管理", Icon = "fa-file", IsShow = true)]
     public class StoreController : PowerBaseController
     {
         public IStoreInfoService storeInfoService = IocHelper.AutofacResolveNamed<IStoreInfoService>("Store.StoreInfoService");
-        
 
-        [Power(IsSuper = false, IsShow = true, PowerId = "Store_A101", Icon = "fa-home", PowerName = "店铺管理", PowerDes = "店铺管理")]
+        [Power(ModuleName = "storeManage", IsShow = true,Title="店铺管理", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult Index()
         {
             return View();
         }
-        [Power(IsSuper = false, IsShow = false, PowerId = "Store_A101", Icon = "fa-home", PowerName = "店铺管理", PowerDes = "店铺管理")]
+        [Power(ModuleName = "storeManage", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult StoreList(int page)
         {
             PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
@@ -42,31 +40,31 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             return Json(new RowResultModel { rows = list, pagination = pageturn, pass = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Store_A102", PowerName = "添加店铺", PowerDes = "添加店铺")]
+        [Power(ModuleName = "storeManage", actionEnum = EnumsModel.ActionEnum.Add)]
         public ActionResult StoreAdd() { 
             return View();
         }
         [HttpPost]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Store_A102", PowerName = "添加店铺", PowerDes = "添加店铺")]
+        [Power(ModuleName = "storeManage", actionEnum = EnumsModel.ActionEnum.Add)]
         public ActionResult StoreAdd(StoreInfo store)
         {
             return View();
         }
         [HttpGet]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Store_A103", PowerName = "修改店铺", PowerDes = "修改店铺")]
+        [Power(ModuleName = "storeManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult StoreUpdate(int storeId) 
         {
             return View();
         }
 
         [HttpPost]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Store_A103", PowerName = "修改店铺", PowerDes = "修改店铺")]
+        [Power(ModuleName = "storeManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult StoreUpdate(StoreInfo store)
         {
             return View();
         }
         [HttpPost]
-        [Power(IsSuper = false, IsShow = false, PowerId = "Store_A104", PowerName = "店铺开关", PowerDes = "店铺开关")]
+        [Power(ModuleName = "storeManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult StoreSwitch(bool isSwitch) {
             return View();
         }

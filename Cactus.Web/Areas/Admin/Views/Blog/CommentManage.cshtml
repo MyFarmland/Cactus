@@ -2,7 +2,7 @@
     Layout = null;
 }
 
-<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table pure-table-bordered table-p" id="comment"></table>
+<table width="100%" class="pure-table table-p" id="comment"></table>
 <ul class="pure-paginator" id="table_paginator"></ul>
 <script type="text/javascript">
     function onTable(index) {
@@ -22,7 +22,7 @@
                         { field: "Title", title: "文章标题" },
                         {
                             field: "Comment_Id", title: "操作", formatter: function (val, rec, row) {
-                                var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>';
+                                var str = '<a href="javascript:;" class="pure-link pure-link-default" name="del" data-value="' + val + '">删除</a>';
 
                             return str;
                         } }]);

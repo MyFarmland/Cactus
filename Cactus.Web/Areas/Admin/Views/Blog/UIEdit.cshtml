@@ -5,51 +5,48 @@
     var dir = ViewData["dir"] as string;
 }
 <div class="tool-list">
+    <label>视图编辑</label>
     <div class="pure-button-group">
-        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary">返回</a>
+        <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>
 <form class="pure-form  pure-form-aligned" id="EditUI">
-    <fieldset>
-        <legend>视图编辑</legend>
+    <input type="hidden" name="dir" value="@(dir)" />
         <div class="pure-control-group">
             <label>视图名</label>
-            <input name="ViewName" type="text" value="@fileName" disabled style="color:black;" />
+            <input name="filename" type="text" value="@fileName" disabled style="color:black;" />
         </div>
         <div class="pure-control-group">
             <label>视图内容</label>
-            <textarea name="ViewContent" placeholder="模板内容" style="width: 600px;height: 450px;overflow: auto;" rows="2" cols="20">@(System.IO.File.ReadAllText(filePath))</textarea>
-            <div class="pure-error pure-c-error" name="ViewContent"></div>
+            <textarea name="Content" placeholder="模板内容" style="width: 900px;height: 550px;overflow: auto;" rows="2" cols="20">@(System.IO.File.ReadAllText(filePath))</textarea>
+            <div class="pure-error pure-c-error msg-box" for="Content"></div>
         </div>
 
         <div class="pure-controls">
-            <button type="button" class="pure-button pure-button-primary" name="ViewUpdate">更新</button>
+            <button type="submit" class="pure-button pure-button-primary">更新</button>
         </div>
-    </fieldset>
 </form>
 <script type="text/javascript">
     $(function () {
-        var dir='@(dir)';
-        $("#EditUI button[name=ViewUpdate]").bind('click', function () {
-            var ViewName = $("#EditUI input[name=ViewName]").val();
-            var ViewContent = $("#EditUI textarea[name=ViewContent]").val();
-            if (ViewContent == '' || ViewContent == undefined) {
-                $('#EditUI div[name=ViewContent]').html('请填写模板内容'); return;
-            } else {
-                $('#EditUI div[name=ViewContent]').html('');
-            }
-            $.ajax({
-                url: "/Admin/Blog/UISave",
-                type: "post",
-                data: { dir:dir,filename: ViewName, Content: ViewContent },
-                success: function (obj) {
-                    if (obj.pass) {
-                        Admin.loadBackPage('main-content');
-                    } else {
+        $('#EditUI').validator({
+            msgWrapper: 'div',
+            fields: {
+                'Content': 'required'
+            },
+            valid: function (form) {
+                Admin.loadDialog_show();
+                var param = $(form).serialize();
+                $.ajax({
+                    url: "/Admin/Blog/UISave",
+                    type: "post",
+                    data: param,
+                    success: function (obj) {
+                        Admin.loadDialog_hide();
                         layer.alert(obj.msg)
+                        Admin.loadBackPage('main-content');
                     }
-                }
-            });
-        })
+                });
+            }
+        });
     });
 </script>

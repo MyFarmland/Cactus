@@ -1,9 +1,10 @@
 ﻿@{
     Layout = null;
-    var power =ViewData["Power"] as Cactus.Model.Sys.PowerConfig;
+    var power =ViewData["_Power"] as Cactus.Model.Sys.PowerAdmin;
 }
 
 <div class="tool-list">
+    <label>全站权限</label>
     <div class="pure-button-group">
         <a href="javascript:;" name="SetPower" class="pure-button pure-button-primary">初始化所有权限</a>
     </div>
@@ -11,22 +12,25 @@
 <div id="power_list">
     @{
         var html="";
-        foreach (var p in power.PowerGroupList)
+        foreach (var p in power.list)
         {
             html += "&nbsp;&nbsp;&nbsp;&nbsp;";
-            html += "模块：" + p.GroupName+(p.IsShow ? "(显示)" : "(隐藏)");
+            html += "模块：" + p.Title+(p.IsShow ? "(显示)" : "(隐藏)");
+            html += ("<br/>");
+            html += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            html += "模块调用名：" + p.Name + (p.IsShow ? "(显示)" : "(隐藏)");
             html += "<br/>";
-            foreach (var pp in p.PowerList) {
+            foreach (var pp in p.module) {
                 html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
-                html += (pp.NoPowerId);
+                html += (pp.Name);
                 html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
-                html += (pp.PowerName);
+                html += (pp.Title);
                 html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
                 html += (pp.IsShow == true ? "显示" : "隐藏");
                 html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
                 html += (pp.ParamStr);
                 html += ("&nbsp;&nbsp;&nbsp;&nbsp;");
-                html += (pp.PowerDes);
+                html += (pp.Action_Type);
                 html += ("<br/>");
             }
         }
@@ -47,23 +51,25 @@
                 data: param,
                 success: function (obj) {
                     if (obj.pass) {
-                        for (var i = 0; i < obj.append.PowerGroupList.length; i++) {
-                            $('#power_list').append(obj.append.PowerGroupList[i].NoGroupId);
+                        for (var i = 0; i < obj.append.list.length; i++) {
+                            $('#power_list').append(obj.append.list[i].NoGroupId);
                             $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
-                            $('#power_list').append("模块：" + obj.append.PowerGroupList[i].GroupName + (obj.append.PowerGroupList[i].IsShow ? "(显示)" : "(隐藏)"));
+                            $('#power_list').append("模块：" + obj.append.list[i].Title + (obj.append.list[i].IsShow ? "(显示)" : "(隐藏)"));
                             $('#power_list').append("<br/>");
-                            var p_list = obj.append.PowerGroupList[i].PowerList;
+                            $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                            $('#power_list').append("模块调用名：" + obj.append.list[i].Name);
+                            $('#power_list').append("<br/>");
+                            var p_list = obj.append.list[i].module;
                             for (var j = 0; j < p_list.length; j++) {
                                 $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
-                                $('#power_list').append(p_list[j].NoPowerId);
                                 $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
-                                $('#power_list').append(p_list[j].PowerName);
+                                $('#power_list').append(p_list[j].Name);
                                 $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
                                 $('#power_list').append(p_list[j].IsShow==true?"显示":"隐藏");
                                 $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
                                 $('#power_list').append(p_list[j].ParamStr);
                                 $('#power_list').append("&nbsp;&nbsp;&nbsp;&nbsp;");
-                                $('#power_list').append(p_list[j].PowerDes);
+                                $('#power_list').append(p_list[j].ActionType);
                                 $('#power_list').append("<br/>");
                             }
                         }

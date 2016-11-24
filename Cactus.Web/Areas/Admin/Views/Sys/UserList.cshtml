@@ -9,7 +9,7 @@
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Sys/UserAdd');" class="pure-button pure-button-primary">添加管理员</a>
     </div>
 </div>
-<table width="90%" border="0" cellspacing="0" cellpadding="0" class="pure-table pure-table-bordered table-p" id="user"></table>
+<table width="100%" class="pure-table table-p" id="user"></table>
 <ul class="pure-paginator" id="table_paginator">
 </ul>
 <script type="text/javascript">
@@ -29,11 +29,11 @@
                         { field: "AddTime" ,title:"注册时间"},
                         { field: "LastLoginTime",title:"最后登录时间" },
                         { field: "User_Id",title:"操作",formatter:function(val, rec, row){
-                            var str = '<a href="javascript:;" class="pure-link pure-link-purple" name="upd" data-value="' + val + '">编辑</a>' +
-                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="del" data-value="' + val + '">删除</a>' +
-                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="info" data-value="' + val + '">查看</a>' +
-                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="pwd" data-value="' + val + '">重置密码</a>' +
-                                    '<a href="javascript:;" class="pure-link pure-link-purple" name="face" data-value="' + val + '">修改头像</a>';
+                            var str = '<a href="javascript:;" class="pure-link pure-link-default" name="upd" data-value="' + val + '">编辑</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-default" name="del" data-value="' + val + '">删除</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-default" name="info" data-value="' + val + '">查看</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-default" name="pwd" data-value="' + val + '">重置密码</a>' +
+                                    '<a href="javascript:;" class="pure-link pure-link-default" name="face" data-value="' + val + '">修改头像</a>';
                             return str;
                         }
                         }]);

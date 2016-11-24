@@ -1,19 +1,15 @@
 ﻿@{
     Layout = null;
-    var theme = ViewData["Theme"] as string;
     FileInfo[] blogFiles = ViewData["blogFiles"] as FileInfo[];
     FileInfo[] sharedFiles = ViewData["sharedFiles"] as FileInfo[];
+    FileInfo[] blogCssFiles = ViewData["blogCssFiles"] as FileInfo[];
+    FileInfo[] blogJsFiles = ViewData["blogJsFiles"] as FileInfo[];
 }
 <div class="tool-list">
-    <label>当前主题：</label>
-    <label style="font-weight:bold;">@(theme)</label>
-    <div class="pure-button-group">
-        <a href="javascript:;" class="pure-button pure-button-primary pure-split" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UISelect');">选择其他主题</a>
-        @*<a href="javascript:;" class="pure-button pure-button-primary pure-split" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/RenderManage');">生成静态管理</a>*@
-    </div>
+    <label>当前View相关元素</label>
 </div>
 
-<table width="90%" class="pure-table pure-table-horizontal table-p">
+<table width="100%"  class="pure-table pure-table-horizontal table-p">
     <thead>
         <tr>
             <th>视图名称</th>
@@ -22,23 +18,43 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="2">Blog视图</td>
+            <td colspan="2">Blog主视图</td>
         </tr>
         @for (int i = 0; i < blogFiles.Length; i++)
         {
             <tr>
                 <td><i class="fa fa-file-o"></i><a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Blog&filename=@(blogFiles[i].Name)');"> @blogFiles[i].Name </a></td>
-                <td><a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Blog&filename=@(blogFiles[i].Name)');">编辑视图</a></td>
+                <td><a href="javascript:;" class="pure-link pure-link-default" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Blog&filename=@(blogFiles[i].Name)');">编辑视图</a></td>
             </tr>
         }
         <tr>
-            <td colspan="2">辅视图</td>
+            <td colspan="2">辅助子视图</td>
         </tr>
         @for (int i = 0; i < sharedFiles.Length; i++)
         {
             <tr>
                 <td><i class="fa fa-file-o"></i><a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Shared&filename=@(sharedFiles[i].Name)');"> @sharedFiles[i].Name </a></td>
-                <td><a href="javascript:;" class="pure-link pure-link-purple" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Shared&filename=@(sharedFiles[i].Name)');">编辑视图</a></td>
+                <td><a href="javascript:;" class="pure-link pure-link-default" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Shared&filename=@(sharedFiles[i].Name)');">编辑视图</a></td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2">脚本</td>
+        </tr>
+        @for (int i = 0; i < blogJsFiles.Length; i++)
+        {
+            <tr>
+                <td><i class="fa fa-file-o"></i><a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Js&filename=@(blogJsFiles[i].Name)');"> @blogJsFiles[i].Name </a></td>
+                <td><a href="javascript:;" class="pure-link pure-link-default" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Js&filename=@(blogJsFiles[i].Name)');">编辑视图</a></td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2">样式表</td>
+        </tr>
+        @for (int i = 0; i < blogCssFiles.Length; i++)
+        {
+            <tr>
+                <td><i class="fa fa-file-o"></i><a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Css&filename=@(blogCssFiles[i].Name)');"> @blogCssFiles[i].Name </a></td>
+                <td><a href="javascript:;" class="pure-link pure-link-default" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/UIEdit?dir=Css&filename=@(blogCssFiles[i].Name)');">编辑视图</a></td>
             </tr>
         }
     </tbody>
