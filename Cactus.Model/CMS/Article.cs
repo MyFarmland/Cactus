@@ -100,7 +100,7 @@ namespace Cactus.Model.CMS
         /// <summary>
         /// 赞成数
         /// </summary>
-        public int Like { get; set; }
+        public int Praise { get; set; }
 	}
 }
 

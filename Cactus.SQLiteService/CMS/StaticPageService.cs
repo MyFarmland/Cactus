@@ -41,7 +41,7 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                conn.Execute("UPDATE cms_staticpage SET PageName=@PageName,PageParameter=@PageParameter,CreateTime=@CreateTime,LastTime=@LastTime,TempPageId =@TempPageId WHERE Page_Id =@Page_Id", entity);
+                conn.Execute("UPDATE cms_staticpage SET PageName=@PageName,PagePath=@PagePath,PageParameter=@PageParameter,CreateTime=@CreateTime,LastTime=@LastTime,TempPageId =@TempPageId WHERE Page_Id =@Page_Id", entity);
             }
         }
 

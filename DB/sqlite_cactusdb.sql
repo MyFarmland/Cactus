@@ -38,7 +38,7 @@ CREATE TABLE "cms_article" (
 "IsShow"  INTEGER NOT NULL,
 "Source"  TEXT,
 "SourceLink"  TEXT,
-"Like"  INTEGER DEFAULT 0
+"Praise"  INTEGER DEFAULT 0
 );
 
 -- ----------------------------

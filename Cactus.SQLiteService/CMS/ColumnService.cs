@@ -88,10 +88,6 @@ namespace Cactus.SQLiteService.CMS
         }
         public List<Model.CMS.Column> FindByPid(int pid)
         {
-            //using (IDbConnection conn = SqlString.GetMySqlConnection())
-            //{
-            //    return conn.Query<Model.CMS.Column>("select a.* from cms_column as a WHERE a.Pid = @pid", new { pid = pid }).ToList();
-            //}
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
                 List<Model.CMS.Column> list = conn.Query<Model.CMS.Column>("SELECT * from cms_column as c order by c.Sort asc").ToList();

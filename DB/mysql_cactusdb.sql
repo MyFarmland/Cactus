@@ -39,7 +39,7 @@ CREATE TABLE `cms_article` (
   `IsShow` int(1) NOT NULL,
   `Source` varchar(100) default NULL,
   `SourceLink` varchar(200) default NULL,
-  `Like` int(11) default NULL,
+  `Praise` int(11) default NULL,
   PRIMARY KEY  (`Article_Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 

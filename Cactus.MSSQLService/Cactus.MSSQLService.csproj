@@ -48,8 +48,10 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CMS\ArticleMapService.cs" />
     <Compile Include="CMS\ArticleService.cs" />
     <Compile Include="CMS\ColumnService.cs" />
+    <Compile Include="CMS\CommentMapService.cs" />
     <Compile Include="CMS\CommentService.cs" />
     <Compile Include="CMS\StaticPageService.cs" />
     <Compile Include="CMS\TagService.cs" />

@@ -44,7 +44,7 @@ namespace Cactus.MySQLService.CMS
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                conn.Execute("UPDATE cms_column SET Sort=@Sort,ColumnName=@ColumnName WHERE Column_Id =@Column_Id", entity);
+                conn.Execute("UPDATE cms_column SET Sort=@Sort,ColumnName=@ColumnName,Pid=@Pid,Lv=@Lv WHERE Column_Id =@Column_Id", entity);
             }
         }
 
@@ -52,16 +52,13 @@ namespace Cactus.MySQLService.CMS
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                conn.Execute(string.Format("DELETE FROM cms_column WHERE Column_Id in ({0})", ids));
+                conn.Execute(string.Format("DELETE FROM cms_column WHERE Pid in ({0});DELETE FROM cms_column WHERE Column_Id in ({0})", ids));
             }
         }
 
         public System.Collections.Generic.List<Model.CMS.Column> GetAll()
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
-            {
-                return conn.Query<Model.CMS.Column>("select * from cms_column").ToList();
-            }
+            return FindByPid(0);
         }
 
         public System.Collections.Generic.List<Model.CMS.Column> ToPagedList(int pageIndex, int pageSize, string keySelector, out int count)
@@ -93,9 +90,41 @@ namespace Cactus.MySQLService.CMS
         }
 
         public List<Model.CMS.Column> FindByPid(int pid) {
+            //using (IDbConnection conn = SqlString.GetMySqlConnection())
+            //{
+            //    return conn.Query<Model.CMS.Column>("select a.* from cms_column as a WHERE a.Pid = @pid", new { pid =pid}).ToList();
+            //}
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                return conn.Query<Model.CMS.Column>("select a.* from cms_column as a WHERE a.Pid = @pid", new { pid =pid}).ToList();
+                List<Model.CMS.Column> list = conn.Query<Model.CMS.Column>("SELECT * from cms_column as c order by c.Sort asc").ToList();
+
+                List<Model.CMS.Column> templist = new List<Model.CMS.Column>();
+                Action<int> ac = null;
+                int pos = 0;
+                ac = (int _pid) =>
+                {
+                    List<Model.CMS.Column> tlist = new List<Model.CMS.Column>();
+                    pos++;
+                    foreach (var column in list)
+                    {
+                        if (column.Pid == _pid)
+                        {
+                            tlist.Add(column);
+                        }
+                    }
+                    if (tlist.Count == 0)
+                    { return; }
+                    else
+                    {
+                        foreach (var column in tlist)
+                        {
+                            templist.Add(column);
+                            ac(column.Column_Id);
+                        }
+                    }
+                };
+                ac(pid);
+                return templist;
             }
         }
     }

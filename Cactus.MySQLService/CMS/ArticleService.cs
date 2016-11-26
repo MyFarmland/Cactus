@@ -60,14 +60,19 @@ namespace Cactus.MySQLService.CMS
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                int i = conn.Execute("INSERT INTO cms_article(ColumnId,Tags,ArticleContent,Title,CreateTime,LastTime,Browse,Author,IsTop,IsShow)" +
-                    "VALUES(@ColumnId,@Tags,@ArticleContent,@Title,@CreateTime,@LastTime,@Browse,@Author,@IsTop,@IsShow)", entity);
+                int i = conn.Execute("INSERT INTO cms_article(ColumnId,Tags,ArticleContent,Title,CreateTime,LastTime,Browse,Author,ImgUrl,Digest,SEO_Title,SEO_Keywords,SEO_DES,IsTop,IsShow,Source,SourceLink,Praise)" +
+                    "VALUES(@ColumnId,@Tags,@ArticleContent,@Title,@CreateTime,@LastTime,@Browse,@Author,@ImgUrl,@Digest,@SEO_Title,@SEO_Keywords,@SEO_DES,@IsTop,@IsShow,@Source,@SourceLink,@Praise)", entity);
                 if (i > 0) { return true; } else { return false; }
             }
         }
         public int InsertForInt(Model.CMS.Article entity)
         {
-            return 0;
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Query<int>("INSERT INTO cms_article(ColumnId,Tags,Tagids,ArticleContent,Title,CreateTime,LastTime,Browse,Author,ImgUrl,Digest,SEO_Title,SEO_Keywords,SEO_DES,IsTop,IsShow,Source,SourceLink,Praise)" +
+                    "VALUES(@ColumnId,@Tags,@TagIds,@ArticleContent,@Title,@CreateTime,@LastTime,@Browse,@Author,@ImgUrl,@Digest,@SEO_Title,@SEO_Keywords,@SEO_DES,@IsTop,@IsShow,@Source,@SourceLink,@Praise);select last_insert_rowid() newid;", entity).SingleOrDefault();
+                return i;
+            }
         }
         public bool InsertBatch(System.Collections.Generic.List<Model.CMS.Article> datas)
         {
@@ -78,7 +83,7 @@ namespace Cactus.MySQLService.CMS
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                conn.Execute("UPDATE cms_article SET ColumnId=@ColumnId,Tags=@Tags,ArticleContent=@ArticleContent,Title=@Title,CreateTime=@CreateTime,LastTime=@LastTime,Browse=@Browse,Author=@Author,IsTop=@IsTop,IsShow=@IsShow WHERE Article_Id =@Article_Id", entity);
+                conn.Execute("UPDATE cms_article SET ColumnId=@ColumnId,Tags=@Tags,Tagids=@TagIds,ArticleContent=@ArticleContent,Title=@Title,CreateTime=@CreateTime,LastTime=@LastTime,Browse=@Browse,Author=@Author,ImgUrl=@ImgUrl,Digest=@Digest,SEO_Title=@SEO_Title,SEO_Keywords=@SEO_Keywords,SEO_DES=@SEO_DES,IsTop=@IsTop,IsShow=@IsShow,Source=@Source,SourceLink=@SourceLink,Praise=@Praise WHERE Article_Id =@Article_Id", entity);
             }
         }
 
@@ -126,26 +131,6 @@ namespace Cactus.MySQLService.CMS
         }
         public System.Collections.Generic.List<Model.CMS.Article> ToPagedList(int pageIndex, int pageSize, string keySelector, out int count)
         {
-            /*
-                * firstIndex:起始索引
-                * pageSize:每页显示的数量
-                * orderColumn:排序的字段名
-                * sql:可以是简单的单表查询语句，也可以是复杂的多表联合查询语句
-            */
-            //using (IDbConnection conn = SqlString.GetMySqlConnection())
-            //{
-            //    string sql = "select a.*,b.* from cms_article as a left join cms_column as b on a.ColumnId=b.Column_Id";
-            //    string sql01 = "select count(*) from cms_article";
-            //    count = conn.Query<int>(sql01).SingleOrDefault();
-            //    //string query = "select top " + pageSize + " o.* from (select row_number() over(order by " + keySelector + ") as rownumber,* from(" + sql + ") as oo) as o where rownumber>" + (pageIndex-1) * pageSize;
-            //    string query = "SELECT * from (" + sql + ")as c  ORDER BY " + keySelector + " LIMIT " + (pageIndex - 1) * pageSize + "," + pageSize;
-            //    return conn.Query<Model.CMS.Article, Model.CMS.Column, Model.CMS.Article>(query, (article, column) =>
-            //    {
-            //        if (column != null)
-            //            article.Column = column;
-            //        return article;
-            //    }, null, null, "Column_Id", null, null).ToList();
-            //}
             return this.ToPagedList(pageIndex, pageSize, "", keySelector, out count);
         }
 
@@ -183,9 +168,13 @@ namespace Cactus.MySQLService.CMS
         }
 
 
-        public bool IsLike(int Id)
+        public bool IsPraise(int Id)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Execute("UPDATE cms_article as a SET a.Praise=a.Praise+1 where Article_Id=@Id", new { Id = Id });
+                if (i > 0) { return true; } else { return false; }
+            }
         }
     }
 }

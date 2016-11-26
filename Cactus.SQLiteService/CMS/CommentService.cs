@@ -63,7 +63,6 @@ namespace Cactus.SQLiteService.CMS
         {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
-                //sqlite使用||链接字符串
                 string sql01 = "select count(Comment_Id) from cms_comment";
                 count = conn.Query<int>(sql01).SingleOrDefault();
                 Model.CMS.Article articleTemp = new Model.CMS.Article();

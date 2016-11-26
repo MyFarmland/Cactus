@@ -1,6 +1,8 @@
 # Cactus
 Cactus CMS 
 
+![主图][http://images2015.cnblogs.com/blog/470046/201609/470046-20160927233553188-322872768.png]
+
 ##作者博客
 http://www.cnblogs.com/RainbowInTheSky
 代码已经迁移到github：https://github.com/CactusCms/Cactus

@@ -81,7 +81,11 @@ namespace Cactus.MySQLService.CMS
 
         public bool IsUseTempName(string tempName, int ignoreId)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Query<int>("SELECT c.TempPage_Id FROM cms_temppage as c WHERE c.TempName=@tempName and c.TempPage_Id not in (@ignoreId) LIMIT 0,1", new { tempName = tempName, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
         }
     }
 }

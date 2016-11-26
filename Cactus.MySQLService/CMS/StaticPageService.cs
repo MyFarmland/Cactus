@@ -19,8 +19,8 @@ namespace Cactus.MySQLService.CMS
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                int i = conn.Execute("INSERT INTO cms_staticpage(PageName,PageParameter,CreateTime,LastTime,TempPageId)" +
-                    "VALUES(@PageName,@PageParameter,@CreateTime,@LastTime,@TempPageId)", entity);
+                int i = conn.Execute("INSERT INTO cms_staticpage(PageName,PagePath,PageParameter,CreateTime,LastTime,TempPageId)" +
+                    "VALUES(@PageName,@PagePath,@PageParameter,@CreateTime,@LastTime,@TempPageId)", entity);
                 if (i > 0) { return true; } else { return false; }
             }
         }
@@ -34,13 +34,13 @@ namespace Cactus.MySQLService.CMS
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                conn.Execute("UPDATE cms_staticpage SET PageName=@PageName,PageParameter=@PageParameter,CreateTime=@CreateTime,LastTime=@LastTime,TempPageId =@TempPageId WHERE Page_Id =@Page_Id", entity);
+                conn.Execute("UPDATE cms_staticpage SET PageName=@PageName,PagePath=@PagePath,PageParameter=@PageParameter,CreateTime=@CreateTime,LastTime=@LastTime,TempPageId =@TempPageId WHERE Page_Id =@Page_Id", entity);
             }
         }
 
         public void UpdatePath(int id, string path)
         {
-            using (IDbConnection conn = SqlString.GetSQLiteConnection())
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
                 conn.Execute("UPDATE cms_staticpage SET PagePath=@path WHERE Page_Id =@id", new { id = id, path = path });
             }
@@ -101,7 +101,11 @@ namespace Cactus.MySQLService.CMS
 
         public bool IsUsePageName(string pageName, int ignoreId)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Query<int>("SELECT c.Page_Id FROM cms_staticpage as c WHERE c.PageName=@PageName and c.Page_Id not in (@ignoreId) LIMIT 0,1", new { PageName = pageName, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
         }
     }
 }

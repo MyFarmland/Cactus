@@ -6,17 +6,18 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-namespace Cactus.MSSQLService.CMS
+
+namespace Cactus.MySQLService.CMS
 {
     public class CommentService : ICommentService
     {
         public CommentService()
-		{
-		}
+        {
+        }
 
         public bool Insert(Model.CMS.Comment entity)
         {
-            using (IDbConnection conn = SqlString.GetSqlConnection())
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
                 int i = conn.Execute("INSERT INTO cms_comment(ArticleId,Content,CreateTime,Nickname,Email,VoteFavour,VoteOppose)" +
                     "VALUES(@ArticleId,@Content,@CreateTime,@Nickname,@Email,@VoteFavour,@VoteOppose)", entity);
@@ -31,15 +32,15 @@ namespace Cactus.MSSQLService.CMS
 
         public void Update(Model.CMS.Comment entity)
         {
-            using (IDbConnection conn = SqlString.GetSqlConnection())
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                conn.Execute("UPDATE cms_comment SET ArticleId=@ArticleId,Content=@Content,CreateTime=@CreateTime,Nickname=@Nickname,Email=@Email,VoteFavour=@VoteFavour,VoteOppose=@VoteOppose WHERE Comment_Id =@Comment_Id", entity);
+                conn.Execute("UPDATE cms_comment SET ArticleId=@ArticleId,Content=@Content,CreateTime=@CreateTime,Nickname=@Nickname,Email=@Email,VoteFavour=@VoteFavour,VoteOppose=@VoteOppose  WHERE Comment_Id =@Comment_Id", entity);
             }
         }
 
         public void Delete(string ids)
         {
-            using (IDbConnection conn = SqlString.GetSqlConnection())
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
                 conn.Execute(string.Format("DELETE FROM cms_comment WHERE Comment_Id in ({0})", ids));
             }
@@ -47,44 +48,46 @@ namespace Cactus.MSSQLService.CMS
 
         public List<Model.CMS.Comment> GetAll()
         {
-            using (IDbConnection conn = SqlString.GetSqlConnection())
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
                 return conn.Query<Model.CMS.Comment, Model.CMS.Article, Model.CMS.Comment>("select a.*,b.* from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id ",
                     (comment, article) =>
-                {
-                    if (comment != null)
-                        comment.Article = article;
-                    return comment;
-                }, null, null, "Article_Id", null, null).ToList();
+                    {
+                        if (comment != null)
+                            comment.Article = article;
+                        return comment;
+                    }, null, null, "Article_Id", null, null).ToList();
             }
         }
 
         public List<Model.CMS.Comment> ToPagedList(int pageIndex, int pageSize, string keySelector, out int count)
         {
-            using (IDbConnection conn = SqlString.GetSqlConnection())
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
+                //sqlite使用||链接字符串
                 string sql01 = "select count(Comment_Id) from cms_comment";
                 count = conn.Query<int>(sql01).SingleOrDefault();
                 Model.CMS.Article articleTemp = new Model.CMS.Article();
-                string sql = "select[Article_Id],[ColumnId],[Tagids],[Tags],[ArticleContent],[Title],b.[CreateTime],[LastTime],[Browse],[Author],[IsTop],[IsShow],[Comment_Id],[ArticleId],[Content],[Nickname],[Email] from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id";
-                string query = "select top " + pageSize + " o.* from (select row_number() over(order by " + keySelector + ") as rownumber,* from(" + sql + ") as oo ) as o where rownumber>" + (pageIndex - 1) * pageSize;
+                string sql = "select a.*,b.* from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id";
+                string query = "SELECT * from (" + sql + ")as c ORDER BY CreateTime " +
+                    " LIMIT " + (pageIndex - 1) * pageSize + "," + pageSize;
 
                 return conn.Query<Model.CMS.Comment, Model.CMS.Article, Model.CMS.Comment>(query,
                     (comment, article) =>
-                {
-                    if (comment != null)
-                        comment.Article = article;
-                    return comment;
-                }, null, null, "Article_Id", null, null).ToList();
+                    {
+                        if (comment != null)
+                            comment.Article = article;
+                        return comment;
+                    }, null, null, "Article_Id", null, null).ToList();
             }
         }
 
         public Model.CMS.Comment Find(int id)
         {
-            using (IDbConnection conn = SqlString.GetSqlConnection())
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
                 string query = "select a.*,b.* from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id WHERE a.Comment_Id = @id";
-                return conn.Query<Model.CMS.Comment, Model.CMS.Article, Model.CMS.Comment>(query, (comment,article) =>
+                return conn.Query<Model.CMS.Comment, Model.CMS.Article, Model.CMS.Comment>(query, (comment, article) =>
                 {
                     if (comment != null)
                         comment.Article = article;
@@ -93,14 +96,22 @@ namespace Cactus.MSSQLService.CMS
             }
         }
 
-        public bool isVoteFavour(int id)
+        public bool isVoteFavour(int Id)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Execute("UPDATE cms_comment SET VoteFavour=VoteFavour+1 where Comment_Id=@Id", new { Id = Id });
+                if (i > 0) { return true; } else { return false; }
+            }
         }
 
-        public bool isVoteOppose(int id)
+        public bool isVoteOppose(int Id)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Execute("UPDATE cms_comment SET VoteOppose=VoteOppose+1 where Comment_Id=@Id", new { Id = Id });
+                if (i > 0) { return true; } else { return false; }
+            }
         }
     }
 }

@@ -12,8 +12,6 @@ namespace Cactus.MySQLService
 {
     public class RoleServer : IRoleServer
     {
-        //IDbConnection conn = new SqlConnection(SqlString.MSSQLString);
-
         public bool Insert(Model.Sys.Role entity)
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
@@ -82,7 +80,11 @@ namespace Cactus.MySQLService
 
         public bool IsUseName(string rolename, int ignoreId)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Query<int>("SELECT c.Role_Id FROM sys_role as c WHERE c.RoleName=@rolename and c.Role_Id not in (@ignoreId) LIMIT 0,1", new { rolename = rolename, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
         }
     }
 }

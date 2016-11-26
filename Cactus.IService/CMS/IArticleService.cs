@@ -54,7 +54,7 @@ namespace Cactus.IService.CMS
         /// <returns></returns>
         List<Cactus.Model.CMS.Article> ToSearchList(int pageIndex, int pageSize, string searchTitle, int sort, out int count);
 
-        bool IsLike(int Id);
+        bool IsPraise(int Id);
 	}
 }
 
