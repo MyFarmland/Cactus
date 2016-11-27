@@ -37,6 +37,12 @@
                     <div class="pure-error pure-c-error" name="Author"></div>
                 </div>
                 <div class="pure-control-group">
+                    <label>来源</label>
+                    <input name="Source" type="text" value="" placeholder="来源"  />
+                    <input name="SourceLink" type="text" value="" placeholder="地址" />
+                    <div class="pure-error pure-c-error" name="Source"></div>
+                </div>
+                <div class="pure-control-group">
                     <label>类目</label>
                     <select name="ColumnList">
                         @foreach (var col in columnList)
@@ -95,18 +101,18 @@
                 </div>
                 <div class="pure-control-group">
                     <label>摘要</label>
-                    <textarea rows="4" cols="100" name="Digest" placeholder="摘要" style="resize: none;"></textarea>
+                    <textarea rows="4" cols="50" name="Digest" placeholder="摘要" style="resize: none;"></textarea>
                     <button type="button" class="pure-button pure-button-primary" name="Digestbuild">自动生成</button>
                     <div class="pure-error pure-c-error"></div>
                 </div>
                 <div class="pure-control-group">
                     <label>SEO关键字</label>
-                    <textarea rows="4" cols="20" name="SEO_Keywords" placeholder="SEO关键字" style="resize: none;"></textarea>
+                    <textarea rows="2" cols="50" name="SEO_Keywords" placeholder="SEO关键字" style="resize: none;"></textarea>
                     <div class="pure-error pure-c-error"></div>
                 </div>
                 <div class="pure-control-group">
                     <label>SEO描述</label>
-                    <textarea rows="4" cols="100" name="SEO_DES" placeholder="SEO描述" style="resize: none;"></textarea>
+                    <textarea rows="4" cols="50" name="SEO_DES" placeholder="SEO描述" style="resize: none;"></textarea>
                     <button type="button" class="pure-button pure-button-primary" name="DESbuild">自动生成</button>
                     <div class="pure-error pure-c-error"></div>
                 </div>
@@ -292,6 +298,8 @@
                 var SEO_Title = $('#blogAdd textarea[name=SEO_Title]').val();
                 var SEO_DES = $('#blogAdd textarea[name=SEO_DES]').val();
                 var SEO_Keywords = $('#blogAdd textarea[name=SEO_Keywords]').val();
+                var Source = $('#blogAdd textarea[name=Source]').val();
+                var SourceLink = $('#blogAdd textarea[name=SourceLink]').val();
                 $.ajax({
                     url: "/Admin/Blog/BlogAdd",
                     type: "post",
@@ -308,7 +316,9 @@
                         Digest: Digest,
                         SEO_Title: SEO_Title,
                         SEO_DES: SEO_DES,
-                        SEO_Keywords: SEO_Keywords
+                        SEO_Keywords: SEO_Keywords,
+                        Source: Source,
+                        SourceLink: SourceLink
                     },
                     success: function (obj) {
                         if (obj.pass) {

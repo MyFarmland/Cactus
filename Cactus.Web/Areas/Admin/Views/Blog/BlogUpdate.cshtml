@@ -37,7 +37,12 @@
                 <input name="Author" type="text" value="@blog.Author" placeholder="作者" disabled />
                 <div class="pure-error pure-c-error" name="Author"></div>
             </div>
-
+            <div class="pure-control-group">
+                <label>来源</label>
+                <input name="Source" type="text" value="@blog.Source" placeholder="来源" />
+                <input name="SourceLink" type="text" value="@blog.SourceLink" placeholder="地址" />
+                <div class="pure-error pure-c-error" name="Source"></div>
+            </div>
             <div class="pure-control-group">
                 <label>类目</label>
                 <select name="ColumnList">
@@ -53,6 +58,10 @@
             </div>
             <div class="pure-control-group">
                 <label>封面图片</label>
+                @if (!string.IsNullOrEmpty(blog.ImgUrl))
+                {
+                <img  src="@(blog.ImgUrl)" height="100px" width="100px"/>
+                }
                 <input name="ImgUrl" type="text" value="@(blog.ImgUrl)" placeholder="封面图片" style="width:240px;" />
                 <div class="file-img">
                     <input class="file-img-input" type="file" name="BlogImg" />
@@ -111,18 +120,18 @@
             </div>
             <div class="pure-control-group">
                 <label>摘要</label>
-                <textarea rows="4" cols="100" name="Digest" placeholder="摘要" style="resize: none;">@blog.Digest</textarea>
+                <textarea rows="4" cols="50" name="Digest" placeholder="摘要" style="resize: none;">@blog.Digest</textarea>
                 <button type="button" class="pure-button pure-button-primary" name="Digestbuild">自动生成</button>
                 <div class="pure-error pure-c-error"></div>
             </div>
             <div class="pure-control-group">
                 <label>SEO关键字</label>
-                <textarea rows="4" cols="20" name="SEO_Keywords" placeholder="SEO关键字" style="resize: none;">@blog.SEO_Keywords</textarea>
+                <textarea rows="2" cols="50" name="SEO_Keywords" placeholder="SEO关键字" style="resize: none;">@blog.SEO_Keywords</textarea>
                 <div class="pure-error pure-c-error"></div>
             </div>
             <div class="pure-control-group">
                 <label>SEO描述</label>
-                <textarea rows="4" cols="100" name="SEO_DES" placeholder="SEO描述" style="resize: none;">@blog.SEO_DES</textarea>
+                <textarea rows="4" cols="50" name="SEO_DES" placeholder="SEO描述" style="resize: none;">@blog.SEO_DES</textarea>
                 <button type="button" class="pure-button pure-button-primary" name="DESbuild">自动生成</button>
                 <div class="pure-error pure-c-error"></div>
             </div>
@@ -314,6 +323,8 @@
             var SEO_Title = $('#blogUpdate textarea[name=SEO_Title]').val();
             var SEO_DES = $('#blogUpdate textarea[name=SEO_DES]').val();
             var SEO_Keywords = $('#blogUpdate textarea[name=SEO_Keywords]').val();
+            var Source = $('#blogUpdate textarea[name=Source]').val();
+            var SourceLink = $('#blogUpdate textarea[name=SourceLink]').val();
             $.ajax({
                 url: "/Admin/Blog/BlogUpdate",
                 type: "post",
@@ -331,7 +342,9 @@
                     Digest: Digest,
                     SEO_Title: SEO_Title,
                     SEO_DES: SEO_DES,
-                    SEO_Keywords: SEO_Keywords
+                    SEO_Keywords: SEO_Keywords,
+                    Source: Source,
+                    SourceLink: SourceLink
                 },
                 success: function (obj) {
                     if (obj.pass) {

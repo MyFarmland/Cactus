@@ -53,13 +53,37 @@ namespace Cactus.Controllers.Filters
             var token = CookieHelper.GetCookieValue("Admin");
             string _GroupName = filterContext.Controller.ControllerContext.RouteData.Values["controller"].ToString();
             HTools.CacheObj obj = cacheService.Get(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
-            this.LoginUser = (obj != null && obj.value != null) ? (obj.value.ParseJSON<User>()) : null;
+            if (obj != null && obj.value != null)
+            {
+                if (obj.value is Newtonsoft.Json.Linq.JObject)
+                {
+                    User user = obj.value.ParseJSON<User>();
+                    this.LoginUser = user;
+                }
+                else
+                {
+                    this.LoginUser = (User)obj.value;
+                }
+            }
+            else { this.LoginUser = null; }
             bool b = false;
             if (!this.LoginUser.IsSuperUser)
             {
                 string[] acts = LoginUser.Role.ActionIds.Split(',');
                 obj = cacheService.Get(Constant.CacheKey.PowerConfigCacheKey);
-                this.Power = (obj != null && obj.value != null) ? (obj.value as PowerAdmin) : null;
+                if (obj != null && obj.value != null)
+                {
+                    if (obj.value is Newtonsoft.Json.Linq.JObject)
+                    {
+                        PowerAdmin powerAdmin = obj.value.ParseJSON<PowerAdmin>();
+                        this.Power = powerAdmin;
+                    }
+                    else
+                    {
+                        this.Power = (PowerAdmin)obj.value;
+                    }
+                }
+                else { this.Power = null; }
                 if (this.Power == null)
                 {
                     this.Power = powerConfigService.LoadConfig(Constant.PowerConfigPath);

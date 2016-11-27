@@ -145,7 +145,6 @@
     <Content Include="Content\Store\img\bj.jpeg" />
     <Content Include="Content\Store\img\item.jpeg" />
     <Content Include="Content\Store\img\VCode.gif" />
-    <Content Include="Content\Theme\Default.png" />
     <Content Include="Content\wangEditor-2.0.1\css\fonts\icomoon.svg" />
     <Content Include="Content\wangEditor-2.0.1\css\wangEditor.css" />
     <Content Include="Content\wangEditor-2.0.1\css\wangEditor.min.css" />
@@ -166,7 +165,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="使用说明.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -332,7 +330,6 @@
     <Content Include="Areas\Admin\Views\Blog\TemplateUpdate.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TemplateManage.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\AloneHtmlUpdate.cshtml" />
-    <Content Include="LICENSE" />
     <Content Include="Areas\Admin\Views\Blog\AloneHtmlHelper.cshtml" />
     <Content Include="Areas\Admin\Views\Sys\LogManager.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TagManage.cshtml" />
@@ -390,9 +387,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Blog\UIEdit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\Theme.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\BlogConfig.config" />

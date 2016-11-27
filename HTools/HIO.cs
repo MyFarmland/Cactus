@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -43,7 +44,7 @@ namespace Cactus.Common
         /// <summary>
         /// 应用根目录
         /// </summary>
-        public static string AppRootPath = AppDomain.CurrentDomain.BaseDirectory;// Environment.CurrentDirectory
+        public static string AppRootPath = AppDomain.CurrentDomain.BaseDirectory;
         /// <summary>
         /// 日志目录
         /// </summary>
@@ -51,19 +52,40 @@ namespace Cactus.Common
         /// <summary>
         /// 日志目录全路径
         /// </summary>
-        public static string logDirPath = AppRootPath + Path.DirectorySeparatorChar + logDir;
+        public static string logDirPath = System.IO.Path.Combine(HIO.AppRootPath,HIO.logDir) ;
         /// <summary>
         /// 错误记录
         /// </summary>
         /// <param name="ex"></param>
         public static void WriteLog(Exception ex)
         {
-            WriteLog("Data:" + ex.Data + Environment.NewLine
-                + " InnerException:" + ex.InnerException + Environment.NewLine
-                + " Message:" + ex.Message + Environment.NewLine
-                + " Source:" + ex.Source + Environment.NewLine
-                + " StackTrace:" + ex.StackTrace + Environment.NewLine
-                + " TargetSite:" + ex.TargetSite);
+            WriteLog(null,ex);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ex"></param>
+        public static void WriteLog(string info,Exception ex) {
+            List<string> list = new List<string>();
+            if (!string.IsNullOrEmpty(info))
+            {
+                list.Add("Info:" + info);
+            }
+            if (ex != null)
+            {
+                list.Add("Data:" + ex.Data);
+                list.Add("InnerException:" + ex.InnerException);
+                list.Add("Message:" + ex.Message);
+                list.Add("Source:" + ex.Source);
+                list.Add("StackTrace:" + ex.StackTrace);
+                list.Add("TargetSite:" + ex.TargetSite);
+                list.Add("Source:" + ex.Data);
+            }
+            if (list.Count > 0)
+            {
+                WriteLog(string.Join(Environment.NewLine, list));
+            }
         }
         /// <summary>
         /// 写log
@@ -132,12 +154,30 @@ namespace Cactus.Common
         /// <param name="ex"></param>
         public static void AsyncWriteLog(Exception ex)
         {
-            AsyncWriteLog("Data:" + ex.Data + Environment.NewLine
-                + " InnerException:" + ex.InnerException + Environment.NewLine
-                + " Message:" + ex.Message + Environment.NewLine
-                + " Source:" + ex.Source + Environment.NewLine
-                + " StackTrace:" + ex.StackTrace + Environment.NewLine
-                + " TargetSite:" + ex.TargetSite, Encoding.UTF8, logDirPath);
+            AsyncWriteLog(null, ex);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ex"></param>
+        public static void AsyncWriteLog(string info,Exception ex) {
+            List<string> list=new List<string>();
+            if(!string.IsNullOrEmpty(info)){
+                list.Add("Info:"+info);
+            }
+            if(ex!=null){
+                list.Add("Data:" + ex.Data);
+                list.Add("InnerException:" + ex.InnerException);
+                list.Add("Message:" + ex.Message);
+                list.Add("Source:" + ex.Source);
+                list.Add("StackTrace:" + ex.StackTrace);
+                list.Add("TargetSite:" + ex.TargetSite);
+                list.Add("Source:" + ex.Data);
+            }
+            if(list.Count>0){
+                AsyncWriteLog(string.Join(Environment.NewLine, list),Encoding.UTF8, logDirPath);
+            }
         }
         /// <summary>
         /// 异步写log

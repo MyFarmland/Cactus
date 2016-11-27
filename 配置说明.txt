@@ -1,0 +1,8 @@
+web.config加Cactus.Web下的Configuration文件内有站点所有相关配置
+AppSettings.config是常规appSettings
+autofac.config是ioc组件的配置，数据源服务在此配置(需要手工修改)
+BlogConfig.config是博客的常规信息，可以不用手工修改
+PathConfig.config是站内常规文件存储的配置,可以不用手工修改
+Plan.config是计划任务组件的配置(需要手工修改)
+PowerConfig.config是整站权限的数据存储,可以不用手工修改（可自动生成）
+SiteConfig.config是整站的配置,可以不用手工修改

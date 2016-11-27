@@ -25,10 +25,6 @@ namespace Cactus.Model.Sys.Enums
         /// <summary>
         /// 主题配置文件路径
         /// </summary>
-        public static string ThemeConfigPath = HttpContext.Current.Server.MapPath("/Configuration/Theme.config");
-        /// <summary>
-        /// 主题配置文件路径
-        /// </summary>
         public static string PathConfigPath = HttpContext.Current.Server.MapPath("/Configuration/PathConfig.config");
         /// <summary>
         /// 站点缓存键集合

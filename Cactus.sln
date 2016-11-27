@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cactus.Services", "Cactus.Services", "{4933AD32-E621-4C1F-B4C7-DA582246B6D2}"
-	ProjectSection(SolutionItems) = preProject
-		说明.txt = 说明.txt
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cactus.Controllers", "Cactus.Controllers\Cactus.Controllers.csproj", "{4DD2CA28-DB22-44EE-8780-3835ABCCE44C}"
 EndProject
@@ -35,6 +32,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cactus.BaseService", "Cactus.BaseService\Cactus.BaseService.csproj", "{61EEE871-388E-4C17-91F6-B55E25C9EF1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTools", "HTools\HTools.csproj", "{5A4F0FB3-8F84-4F06-9583-0E34848A8E5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C00ACD7E-88DE-498C-B89F-BFC7C3889E1B}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+		贡献者.txt = 贡献者.txt
+		配置说明.txt = 配置说明.txt
+		项目说明.txt = 项目说明.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
