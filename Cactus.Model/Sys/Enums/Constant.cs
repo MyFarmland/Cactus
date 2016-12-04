@@ -37,10 +37,6 @@ namespace Cactus.Model.Sys.Enums
             /// </summary>
             public static string SiteConfigCacheKey = "CACHE_SITE_CONFIG";
             /// <summary>
-            /// Blog信息缓存key
-            /// </summary>
-            public static string BlogConfigCacheKey = "CACHE_BLOG_CONFIG";
-            /// <summary>
             /// 权限信息缓存key
             /// </summary>
             public static string PowerConfigCacheKey = "CACHE_POWER_CONFIG";
@@ -63,7 +59,6 @@ namespace Cactus.Model.Sys.Enums
                 List.Add(PowerConfigCacheKey, "权限信息缓存");
                 List.Add(LoginAdminInfoCacheKey, "管理员信息缓存");
                 List.Add(LoginMemberInfoCacheKey, "会员信息缓存");
-                List.Add(BlogConfigCacheKey, "博客信息缓存");
                 List.Add(PathConfigCacheKey, "路径配置缓存");
             }
         }

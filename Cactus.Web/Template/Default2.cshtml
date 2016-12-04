@@ -1,5 +1,5 @@
 ﻿@{
-     Layout = "~/Themes/Default/Views/Shared/_BlogLayout.cshtml";
+     Layout = "~/Views/Shared/_BlogLayout.cshtml";
     var obj = ViewData["Data"] as Newtonsoft.Json.Linq.JObject;
 }
 <form class="pure-form pure-search pure-g" action="@Url.Action("Search", "Blog")" method="get">

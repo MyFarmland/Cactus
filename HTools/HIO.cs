@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
@@ -199,11 +198,14 @@ namespace Cactus.Common
             AsyncWriteLog(datagram, datagram.Length, FileDirPath, (obj) =>
             {
                 AsyncResult ar = obj as AsyncResult;
-                FileStream stream = ar.AsyncState as FileStream;
-                if (stream != null)
+                if (ar != null)
                 {
-                    stream.Close();
-                    stream.Dispose();
+                    FileStream stream = ar.AsyncState as FileStream;
+                    if (stream != null)
+                    {
+                        stream.Close();
+                        stream.Dispose();
+                    }
                 }
             });
         }

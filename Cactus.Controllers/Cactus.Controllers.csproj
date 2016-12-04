@@ -79,7 +79,6 @@
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Expand\BlogBaseController.cs" />
     <Compile Include="Expand\BaseController.cs" />
     <Compile Include="Expand\PowerBaseController.cs" />
     <Compile Include="Expand\AdminBaseController.cs" />

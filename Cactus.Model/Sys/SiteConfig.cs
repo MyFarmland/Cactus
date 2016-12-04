@@ -125,6 +125,32 @@ namespace Cactus.Model.Sys
             set { _sitestaticdir = value; }
         }
 
+        private string _htmldir = "html";
+        /// <summary>
+        /// 静态页存放的基目录
+        /// </summary>
+        public string HtmlDir
+        {
+            get { return _htmldir; }
+            set { _htmldir = value; }
+        }
+
+        private string _extension = ".html";
+        /// <summary>
+        /// 静态页后缀
+        /// </summary>
+        public string PageExtension
+        {
+            get { return _extension; }
+            set { _extension = value; }
+        }
+
+        private string _pageDir = "pages";
+        public string PageDir
+        {
+            get { return _pageDir; }
+            set { _pageDir = value; }
+        }
         #endregion
 
         #region 图片上传设置

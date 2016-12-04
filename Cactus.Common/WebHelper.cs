@@ -182,10 +182,16 @@ namespace Cactus.Common
             }
             if (_b)
             {
-                var avatarName = file.FileName;
-                var avatarExt = Path.GetExtension(avatarName);
-                var b = Extensions.Contains(avatarExt);
-                if (!String.IsNullOrEmpty(avatarExt) && Extensions.Length>0&& Extensions.Contains(avatarExt))
+                if (Extensions != null) {
+                    var avatarName = file.FileName;
+                    var avatarExt = Path.GetExtension(avatarName);
+                    if (!String.IsNullOrEmpty(avatarExt) && Extensions.Length > 0 && Extensions.Contains(avatarExt))
+                    {
+                        _b = true;
+                    }
+                    else { _b = false; }
+                }
+                if (_b)
                 {
                     try
                     {

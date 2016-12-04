@@ -155,7 +155,6 @@
     <Content Include="html\test.html" />
     <Content Include="html\test1.html" />
     <Content Include="Template\使用说明.txt" />
-    <Content Include="Themes\使用说明.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -335,17 +334,6 @@
     <Content Include="Areas\Admin\Views\Blog\TagManage.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TagAdd.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\TagUpdate.cshtml" />
-    <Content Include="Themes\Default\Views\_ViewStart.cshtml" />
-    <Content Include="Themes\Default\Views\Blog\Detail.cshtml" />
-    <Content Include="Themes\Default\Views\Blog\Introduce.cshtml" />
-    <Content Include="Themes\Default\Views\Blog\List.cshtml" />
-    <Content Include="Themes\Default\Views\Blog\Search.cshtml" />
-    <Content Include="Themes\Default\Views\Shared\_BlogLayout.cshtml" />
-    <Content Include="Themes\Default\Views\Shared\404.cshtml" />
-    <Content Include="Themes\Default\Views\Shared\500.cshtml" />
-    <Content Include="Themes\Default\Views\Shared\Error.cshtml" />
-    <Content Include="Themes\Default\Views\Shared\SiteClose.cshtml" />
-    <Content Include="Themes\Default\Views\Web.config" />
     <Content Include="Template\Default.cshtml" />
     <Content Include="Template\Default2.cshtml" />
   </ItemGroup>
@@ -389,8 +377,6 @@
     <Content Include="Areas\Admin\Views\Blog\UIEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Configuration\BlogConfig.config" />
-    <Content Include="Areas\Admin\Views\Blog\BlogConfig.cshtml" />
     <Content Include="Areas\Admin\Views\Blog\AloneManage.cshtml" />
     <Content Include="Areas\Admin\Views\Sys\SysPath.cshtml" />
     <Content Include="Content\nice-validator\jquery.validator.styl" />
@@ -403,18 +389,6 @@
     <Content Include="Areas\Admin\Views\Sys\PathUpdate.cshtml" />
     <Content Include="Configuration\PathConfig.config" />
     <None Include="Properties\PublishProfiles\Linux.pubxml" />
-    <Content Include="Themes\Default\Views\Shared\_StoreLayout.cshtml" />
-    <Content Include="Themes\Default\Views\Store\Index.cshtml" />
-    <Content Include="Themes\Default\Views\Store\Info.cshtml" />
-    <Content Include="Themes\Default\Views\Store\Cat.cshtml" />
-    <Content Include="Themes\Default\Views\Store\Item.cshtml" />
-    <Content Include="Themes\Default\Views\Store\List.cshtml" />
-    <Content Include="Themes\Default\Views\Store\New_List.cshtml" />
-    <Content Include="Themes\Default\Views\Store\Pay.cshtml" />
-    <Content Include="Themes\Default\Views\Store\User_Form.cshtml" />
-    <Content Include="Themes\Default\Views\Store\User_Index.cshtml" />
-    <Content Include="Themes\Default\Views\Store\User_Login.cshtml" />
-    <Content Include="Themes\Default\Views\Store\User_Reg.cshtml" />
     <Content Include="Views\Blog\Detail.cshtml" />
     <Content Include="Views\Blog\Introduce.cshtml" />
     <Content Include="Views\Blog\List.cshtml" />

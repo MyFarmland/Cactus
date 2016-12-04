@@ -6,10 +6,6 @@
 <div class="tool-list">
     <div class="pure-button-group">
         <a href="javascript:;" name="CacheAll" class="pure-button pure-button-primary pure-split">重置全部缓存</a>
-        <a href="javascript:;" name="CacheAllFile" class="pure-button pure-button-primary pure-split">重置全部文件缓存</a>
-        <a href="javascript:;" name="CacheAllMemory" class="pure-button pure-button-primary pure-split">重置全部内容缓存</a>
-        <a href="javascript:;" name="CacheAllRunTime" class="pure-button pure-button-primary pure-split">重置全部运行时缓存</a>
-        <a href="javascript:;" name="CacheAllYesterday" class="pure-button pure-button-primary pure-split">重置过去一天前的缓存</a>
     </div>
 </div>
 <table width="100%" class="pure-table table-p" id="table_cache">
@@ -44,77 +40,6 @@
             $.ajax({
                 type: "GET",
                 url: "/Admin/Sys/CacheClear",
-                dataType: "json",
-                success: function (obj) {
-                    Admin.loadDialog_hide();
-                    layer.alert(obj.msg);
-                },
-                error: function (e, s, t) {
-                    layer.alert('网络错误');
-                    Admin.loadDialog_hide();
-                }
-            });
-        });
-        $('a[name=CacheAllFile]').bind('click', function () {
-            var $target = $(this);
-            Admin.loadDialog_show();
-            $.ajax({
-                type: "GET",
-                url: "/Admin/Sys/CacheClearType",
-                data: { type: 2 },
-                dataType: "json",
-                success: function (obj) {
-                    Admin.loadDialog_hide();
-                    layer.alert(obj.msg);
-                },
-                error: function (e, s, t) {
-                    layer.alert('网络错误');
-                    Admin.loadDialog_hide();
-                }
-            });
-        });
-        $('a[name=CacheAllMemory]').bind('click', function () {
-            var $target = $(this);
-            Admin.loadDialog_show();
-            $.ajax({
-                type: "GET",
-                url: "/Admin/Sys/CacheClearType",
-                dataType: "json",
-                data: { type: 1 },
-                success: function (obj) {
-                    Admin.loadDialog_hide();
-                    layer.alert(obj.msg);
-                },
-                error: function (e, s, t) {
-                    layer.alert('网络错误');
-                    Admin.loadDialog_hide();
-                }
-            });
-        });
-        $('a[name=CacheAllRunTime]').bind('click', function () {
-            var $target = $(this);
-            Admin.loadDialog_show();
-            $.ajax({
-                type: "GET",
-                url: "/Admin/Sys/CacheClearType",
-                dataType: "json",
-                data: { type: 3 },
-                success: function (obj) {
-                    Admin.loadDialog_hide();
-                    layer.alert(obj.msg);
-                },
-                error: function (e, s, t) {
-                    layer.alert('网络错误');
-                    Admin.loadDialog_hide();
-                }
-            });
-        });
-        $('a[name=CacheAllYesterday]').bind('click', function () {
-            var $target = $(this);
-            Admin.loadDialog_show();
-            $.ajax({
-                type: "GET",
-                url: "/Admin/Sys/CacheClearYesterday",
                 dataType: "json",
                 success: function (obj) {
                     Admin.loadDialog_hide();

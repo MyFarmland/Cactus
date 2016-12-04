@@ -7,3 +7,4 @@ packages/*
 .vs/*
 .svn/*
 *.dll
+*.suo

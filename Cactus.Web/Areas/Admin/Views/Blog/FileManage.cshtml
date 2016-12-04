@@ -3,7 +3,9 @@
 }
 <div class="tool-list">
     <div class="pure-button-group">
-        <a href="javascript:;" name="createCurrentDir" class="pure-button pure-button-primary pure-split">创建文件夹</a>
+@if (this.ViewContext.IsPower("fileManage", EnumsModel.ActionEnum.Upload)) { 
+        <a href="javascript:;" name="createCurrentDir" class="pure-button pure-button-primary pure-split">添加文件夹</a>
+}
         <a href="javascript:;" name="flushCurrentDir" class="pure-button pure-button-primary pure-split">刷新当前目录</a>
     </div>
 </div>
@@ -11,7 +13,10 @@
     <div class="pure-u-1-1">
         <label style="width: 5em;">上传文件</label>
         <input name="uploadFile" type="file" />
+@if (this.ViewContext.IsPower("fileManage", EnumsModel.ActionEnum.Upload))
+{ 
         <a href="javascript:;" name="uploadFile_submit" class="pure-link pure-link-default">上传</a>
+}
         <a href="javascript:;" name="uploadFile_clean" class="pure-link pure-link-default">清空</a>
         <div class="pure-error pure-c-error" name="uploadFile"></div>
     </div>
@@ -271,7 +276,5 @@
                 }
             });
         }
-
     })
-
 </script>

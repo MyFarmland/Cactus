@@ -1,21 +1,13 @@
-﻿using Autofac;
-using Autofac.Integration.Mvc;
-using Cactus.Common;
+﻿using Cactus.Common;
 using Cactus.IService;
 using Cactus.Model.Sys;
 using Cactus.Model.Sys.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace Cactus.Controllers.Expand
 {
     //后段管理使用
-    public class AdminBaseController : BlogBaseController
+    public class AdminBaseController : BaseController
     {
         public IUserServer userServer = IocHelper.AutofacResolveNamed<IUserServer>("UserServer");
         /// <summary>

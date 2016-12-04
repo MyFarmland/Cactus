@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using Cactus.Common;
-using Cactus.Model.Sys;
-using Cactus.Model.Sys.Enums;
+﻿using Cactus.Common;
 using Cactus.Controllers.Expand;
 using Cactus.Controllers.Filters;
 using Cactus.Model.Other;
-using System.Reflection;
+using Cactus.Model.Sys;
 using Cactus.Model.Sys.Config;
+using Cactus.Model.Sys.Enums;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Cactus.Controllers.Areas.Admin.Controllers
 {
@@ -220,6 +217,11 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     }
                 }
                 SerializeHelper.Serialize(_powerConf, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration", "PowerConfig.config"));
+
+                if (Constant.CacheKey.List[Cactus.Model.Sys.Enums.Constant.CacheKey.PowerConfigCacheKey].Count() > 0)
+                {
+                    base.cacheService.Remove(Cactus.Model.Sys.Enums.Constant.CacheKey.PowerConfigCacheKey);
+                }
                 return Json(new ResultModel
                 {
                     pass = true,
@@ -607,10 +609,16 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 this.Config.SiteStatus = site.SiteStatus;
                 this.Config.SiteStaticDir = site.SiteStaticDir;
                 this.Config.ImgExtensions = site.ImgExtensions;
+                this.Config.HtmlDir = site.HtmlDir;
+                this.Config.PageDir = site.PageDir;
+                this.Config.PageExtension = site.PageExtension;
                 string s = HttpContext.Request.Form["SiteStatus"].ToString();
                 this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
 
-                base.cacheService.Remove(Constant.CacheKey.SiteConfigCacheKey);
+                if (Constant.CacheKey.List[Cactus.Model.Sys.Enums.Constant.CacheKey.SiteConfigCacheKey].Count() > 0)
+                {
+                    base.cacheService.Remove(Cactus.Model.Sys.Enums.Constant.CacheKey.SiteConfigCacheKey);
+                }
                 return Json(new ResultModel
                 {
                     pass = true,
@@ -652,9 +660,9 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     System.IO.File.Delete(savePath);
                     this.Config.DefaultAvatar = this.pathConfig.dic["sys"].WebPath + "/DefaultAvatar" + avatarExt;
                     this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
-                    if (Constant.CacheKey.List[Constant.CacheKey.SiteConfigCacheKey].Count() > 0)
+                    if (Constant.CacheKey.List[Cactus.Model.Sys.Enums.Constant.CacheKey.SiteConfigCacheKey].Count() > 0)
                     {
-                        HttpRuntime.Cache.Remove(Constant.CacheKey.SiteConfigCacheKey);
+                        base.cacheService.Remove(Cactus.Model.Sys.Enums.Constant.CacheKey.SiteConfigCacheKey);
                     }
                     return Json(new ResultModel { pass = true, append = new { url = this.Config.DefaultAvatar } });
                 }
@@ -684,6 +692,10 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 {
                     this.Config.SiteLogo = this.pathConfig.dic["sys"].WebPath + "/SiteLogo" + avatarExt;
                     this.siteConfigService.SaveConfig(this.Config, Model.Sys.Enums.Constant.SiteConfigPath);
+                    if (Constant.CacheKey.List[Cactus.Model.Sys.Enums.Constant.CacheKey.SiteConfigCacheKey].Count() > 0)
+                    {
+                        base.cacheService.Remove(Cactus.Model.Sys.Enums.Constant.CacheKey.SiteConfigCacheKey);
+                    }
                     return Json(new ResultModel { msg = "上传成功", pass = true, append = new { url = this.Config.SiteLogo } });
                 }
                 else
@@ -705,7 +717,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             return View();
         }
-        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Edit)]
+        [Power(ModuleName = "pathManage", IsShow = false, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Edit)]
         [HttpGet]
         public ActionResult PathUpdate(string name) {
             PathModel p = new PathModel();
@@ -720,7 +732,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }
             return Content("不存在");
         }
-        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Edit)]
+        [Power(ModuleName = "pathManage", IsShow = false, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Edit)]
         [HttpPost]
         public ActionResult PathUpdate(PathModel pm) {
             PathModel p = new PathModel();
@@ -730,6 +742,10 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 pm.WebPath = pm.WebPath.Replace(";", pathConfig.WebSeparatorChar);
                 this.pathConfig.dic[pm.Name] = pm;
                 this.pathConfigService.SaveConfig(this.pathConfig, Constant.PathConfigPath);
+                if (Constant.CacheKey.List[Cactus.Model.Sys.Enums.Constant.CacheKey.PathConfigCacheKey].Count() > 0)
+                {
+                    base.cacheService.Remove(Cactus.Model.Sys.Enums.Constant.CacheKey.PathConfigCacheKey);
+                }
                 return Json(new ResultModel
                 {
                     pass = true,
@@ -746,7 +762,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }
         
         }
-        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Add)]
+        [Power(ModuleName = "pathManage", IsShow = false, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Add)]
         [HttpPost]
         public ActionResult PathAdd(PathModel pm) {
             PathModel p = new PathModel();
@@ -774,16 +790,20 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Add)]
+        [Power(ModuleName = "pathManage", IsShow = false, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Add)]
         [HttpGet]
         public ActionResult PathAdd() { return View(); }
-        [Power(ModuleName = "pathManage", IsShow = true, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Delete)]
+        [Power(ModuleName = "pathManage", IsShow = false, Title = "文件地址", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult PathDelete(string name) {
             PathModel p = new PathModel();
             if (this.pathConfig.dic.TryGetValue(name, out p))
             {
                 this.pathConfig.dic.Remove(name);
                 this.pathConfigService.SaveConfig(this.pathConfig, Constant.PathConfigPath);
+                if (Constant.CacheKey.List[Cactus.Model.Sys.Enums.Constant.CacheKey.PathConfigCacheKey].Count() > 0)
+                {
+                    base.cacheService.Remove(Cactus.Model.Sys.Enums.Constant.CacheKey.PathConfigCacheKey);
+                }
                 return Json(new ResultModel
                 {
                     pass = true,
@@ -807,20 +827,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "cacheManage", actionEnum = EnumsModel.ActionEnum.Delete)]
         public ActionResult CacheClear()
         {
-            //清理全局缓存
-            List<string> keys = new List<string>();
-            //检索应用程序缓存计数器
-            IDictionaryEnumerator enumerator = HttpRuntime.Cache.GetEnumerator();
-            //得到所有的键值
-            while (enumerator.MoveNext())
-            {
-                keys.Add(enumerator.Key.ToString());
-            }
-            // 删除对应缓存
-            for (int i = 0; i < keys.Count; i++)
-            {
-                HttpRuntime.Cache.Remove(keys[i]);
-            }
             base.cacheService.RemoveAll();
             return Json(new ResultModel
             {
@@ -859,57 +865,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                     msg = e.Message
                 }, JsonRequestBehavior.AllowGet);
             }
-        }
-        [Power(ModuleName = "cacheManage", actionEnum = EnumsModel.ActionEnum.Delete)]
-        public ActionResult CacheClearType(int type) {
-            try
-            {
-                if (type == 3)
-                {
-                    //清理全局缓存
-                    List<string> keys = new List<string>();
-                    //检索应用程序缓存计数器
-                    IDictionaryEnumerator enumerator = HttpRuntime.Cache.GetEnumerator();
-                    //得到所有的键值
-                    while (enumerator.MoveNext())
-                    {
-                        keys.Add(enumerator.Key.ToString());
-                    }
-                    // 删除对应缓存
-                    for (int i = 0; i < keys.Count; i++)
-                    {
-                        HttpRuntime.Cache.Remove(keys[i]);
-                    }
-                }
-                else if (type < 3)
-                {
-                    //CacheHelper.RemoveAllCache(type);
-                    base.cacheService.RemoveAll();
-                }
-                return Json(new ResultModel
-                {
-                    pass = true,
-                    msg = "清理成功"
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                return Json(new ResultModel
-                {
-                    pass = false,
-                    msg = e.Message
-                }, JsonRequestBehavior.AllowGet);
-            }
-        }
-        [Power(ModuleName = "cacheManage", actionEnum = EnumsModel.ActionEnum.Delete)]
-        public ActionResult CacheClearYesterday()
-        {
-            base.cacheService.RemoveAll();
-            return Json(new ResultModel
-            {
-                pass = true,
-                msg = "清理成功"
-            }, JsonRequestBehavior.AllowGet);
         }
         #endregion
 

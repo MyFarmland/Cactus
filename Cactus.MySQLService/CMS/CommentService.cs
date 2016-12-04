@@ -64,12 +64,12 @@ namespace Cactus.MySQLService.CMS
         {
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
-                //sqlite使用||链接字符串
+                //mysql 出现Duplicate column name 的时候可以取别名，然后model映射的是取别名,Comment的CreateTime别名有_CreateTime的别名
                 string sql01 = "select count(Comment_Id) from cms_comment";
                 count = conn.Query<int>(sql01).SingleOrDefault();
                 Model.CMS.Article articleTemp = new Model.CMS.Article();
-                string sql = "select a.*,b.* from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id";
-                string query = "SELECT * from (" + sql + ")as c ORDER BY CreateTime " +
+                string sql = "select a.Comment_Id,a.ArticleId,a.Content ,a.CreateTime as _CreateTime,a.Email,a.Nickname,a.VoteFavour,a.VoteOppose,b.* from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id";
+                string query = "SELECT * from (" + sql + ")as c ORDER BY _CreateTime " +
                     " LIMIT " + (pageIndex - 1) * pageSize + "," + pageSize;
 
                 return conn.Query<Model.CMS.Comment, Model.CMS.Article, Model.CMS.Comment>(query,

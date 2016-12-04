@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using Dapper.Common;
 using Cactus.Common;
 
@@ -74,7 +72,7 @@ namespace Cactus.MySQLService
             using (IDbConnection conn = SqlString.GetMySqlConnection())
             {
                 string query = "select a.* from sys_role as a WHERE a.Role_Id = @id";
-                return conn.Query<Model.Sys.Role>(query).SingleOrDefault();
+                return conn.Query<Model.Sys.Role>(query, new { id = id }).SingleOrDefault();
             }
         }
 

@@ -4,7 +4,10 @@
 
 <div class="tool-list">
     <div class="pure-button-group">
-        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TagAdd');" class="pure-button pure-button-primary">添加标签</a>
+@if (this.ViewContext.IsPower("tagManage", EnumsModel.ActionEnum.Add))
+{
+    <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TagAdd');" class="pure-button pure-button-primary">添加标签</a>
+}
     </div>
 </div>
 <table width="100%" class="pure-table table-p" id="tag"></table>

@@ -72,7 +72,22 @@
                     </label>
                 </label>
             </div>
+            <div class="pure-control-group">
+                <label>html存放基目录</label>
+                <input name="HtmlDir" type="text" placeholder="html存放基目录" value="@config.HtmlDir" />
+                <div class="pure-error pure-c-error msg-box" for="HtmlDir"></div>
             </div>
+            <div class="pure-control-group">
+                <label>单页存放目录</label>
+                <input name="PageDir" type="text" placeholder="文章存放目录" value="@config.PageDir" />
+                <div class="pure-error pure-c-error msg-box" for="PageDir"></div>
+            </div>
+            <div class="pure-control-group">
+                <label>页面后缀</label>
+                <input name="PageExtension" type="text" placeholder="页面后缀" value="@config.PageExtension" />
+                <div class="pure-error pure-c-error msg-box" for="PageExtension"></div>
+            </div>
+        </div>
     </div>
     <div class="page-footer">
         <button type="submit" class="pure-button pure-button-primary">保存</button>

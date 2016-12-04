@@ -5,9 +5,14 @@
 <div class="tool-list">
     <label>静态单页</label>
     <div class="pure-button-group">
-        @*<a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary "><i class="fa fa-reply"></i>返回</a>*@
-        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/AloneHtmlAdd');" class="pure-button pure-button-primary pure-split">添加单面</a>
+        @if (this.ViewContext.IsPower("aloneManage", EnumsModel.ActionEnum.Add))
+        {
+            <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/AloneHtmlAdd');" class="pure-button pure-button-primary pure-split">添加单面</a>
+        }
+        @if (this.ViewContext.IsPower("templateManage", EnumsModel.ActionEnum.Show))
+        {
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TemplateManage');" class="pure-button pure-button-primary pure-split">单页模板管理</a>
+        }
     </div>
 </div>
 <p>*主要管理添加一些单个的特殊页面</p>

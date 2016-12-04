@@ -16,7 +16,7 @@
         margin-bottom: 10px;
     }
 </style>
-<form class="pure-form pure-search pure-g" action="@Url.Action("Search", "Blog")" method="get">
+<form class="pure-form pure-search" action="@Url.Action("Search", "Blog")" method="get">
     <input type="text" name="k" placeholder="输入你的关键字">
     <button type="submit" class="pure-button pure-button-primary">搜索</button>
 </form>
@@ -41,13 +41,16 @@
                 开源、适合学习MVC的开发者，Cactus可部署到win的IIS、或者linux的jexus
             </p>
             <p class="t2" style="text-align:center;">
-                目前采用MVC4+Autofac+Dapper制作而成，集成一个Blog和权限系统（QQ交流群:110826636）
+                采用MVC4+Autofac+Dapper制作而成，目前集成一个Blog和权限系统（QQ交流群:110826636）
             </p>
             <p class="t2" style="text-align:center;">
-                数据库提供多种数据库类型（目前是以sqlite为基础，其他数据库可快速另行扩展）
+                数据库提供多种数据库类型（目前默认是以sqlite）
+            </p>
+            <p class="t2" style="text-align:center;">
+                项目地址：<a href="https://github.com/MyFarmland/Cactus">github Cactus</a> | <a href="http://code.taobao.org/p/Cactus/src/">taocode Cactus</a>
             </p>
             <p style="max-width: 200px;margin:0 auto;">
-                <a class="pure-button pure-button-primary" id="downloadfile" style="width: 200px;text-align: center;padding: 15px 0px;" href="#">下载Cactus1.6</a>
+                <a class="pure-button pure-button-primary" id="downloadfile" style="width: 200px;text-align: center;padding: 15px 0px;" href="#">下载Cactus</a>
             </p>
         </div>
     </section>
@@ -55,9 +58,8 @@
 @section JavaScript {     
 <script type="text/javascript">
     $(function () {
-        $('#downloadfile').attr('href', "https://pan.baidu.com/s/1dF8xpJz");
+        $('#downloadfile').attr('href', "https://github.com/MyFarmland/Cactus");
     })
 </script>
-    
-     }
+}
 

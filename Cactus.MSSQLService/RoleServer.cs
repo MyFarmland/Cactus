@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using Dapper.Common;
 using Cactus.Common;
 
@@ -12,8 +10,6 @@ namespace Cactus.MSSQLService
 {
     public class RoleServer : IRoleServer
     {
-        //IDbConnection conn = new SqlConnection(SqlString.MSSQLString);
-
         public bool Insert(Model.Sys.Role entity)
         {
             using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
@@ -78,13 +74,17 @@ namespace Cactus.MSSQLService
             using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 string query = "select a.* from sys_role as a  WHERE a.Role_Id = @id";
-                return conn.Query<Model.Sys.Role>(query).SingleOrDefault();
+                return conn.Query<Model.Sys.Role>(query, new { id = id }).SingleOrDefault();
             }
         }
 
         public bool IsUseName(string rolename, int ignoreId)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            {
+                int i = conn.Query<int>("SELECT top 1 c.Role_Id FROM sys_role as c WHERE c.RoleName=@rolename and c.Role_Id not in (@ignoreId) ", new { rolename = rolename, ignoreId = ignoreId }).SingleOrDefault();
+                if (i > 0) { return true; } else { return false; }
+            }
         }
     }
 }

@@ -4,7 +4,10 @@
 
 <div class="tool-list">
     <div class="pure-button-group">
+@if (this.ViewContext.IsPower("templateManage", EnumsModel.ActionEnum.Add))
+{
         <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/TemplateAdd');" class="pure-button pure-button-primary pure-split">添加模板</a>
+}
         <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split"><i class="fa fa-reply"></i>返回</a>
     </div>
 </div>

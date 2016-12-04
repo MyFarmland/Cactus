@@ -8,7 +8,6 @@
     <label>编辑文章</label>
     <div class="pure-button-group">
         <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split"><i class="fa fa-reply"></i>返回</a>
-        @*<a href="javascript:;" name="edit_mode" class="pure-button pure-button-primary pure-split">编辑模式</a>*@
     </div>
 </div>
 
@@ -258,23 +257,6 @@
         Admin.tabInit(0);
         TagList(1);
         editorSender();
-
-        $('a[name=edit_mode]').bind('click', (function () {
-            if ($('a[name=edit_mode]').html() == "编辑模式") {
-                $("#menu-tree").hide();
-                $("#nav").hide();
-                $(".left-layout").hide();
-                var _vanish = 'padding: 0;margin-left:0;top:0;left:0;position:absolute;width: 100%;';
-                $("#main-content").attr("style", _vanish);
-                $('a[name=edit_mode]').html("常规模式");
-            } else {
-                $("#menu-tree").show();
-                $("#nav").show();
-                $(".left-layout").show();
-                $("#main-content").attr("style", "");
-                $('a[name=edit_mode]').html("编辑模式");
-            }
-        }));
 
         $("#blogUpdate button[name=blogupdate]").bind('click', function () {
             var Article_Id = $("#blogUpdate input[name=Article_Id]").val();

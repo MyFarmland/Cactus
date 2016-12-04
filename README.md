@@ -1,5 +1,5 @@
 # Cactus
-Cactus目前是一个权限管理的后台，也叫做MVCAdmin（以前的叫法）。
+Cactus目前是一个可扩展的权限管理的后台和一个博客文章系统，也叫做MVCAdmin（以前的叫法）。
 目前采用MVC4+Autofac+Dapper制作而成。前端网页用Pure，Jquery等渲染。
 欢迎喜欢C#和MVC的朋友学习使用（MIT协议开源）
 

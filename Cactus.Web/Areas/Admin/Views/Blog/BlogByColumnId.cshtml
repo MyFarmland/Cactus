@@ -8,7 +8,10 @@
 <div class="tool-list">
     <div class="pure-button-group">
         <a href="javascript:;" onclick="Admin.loadBackPage('main-content');" class="pure-button pure-button-primary pure-split"><i class="fa fa-reply"></i>返回</a>
-        <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogAddByColumnId?ColumnId='+ColumnId);" class="pure-button pure-button-primary pure-split">添加文章</a>
+@if (this.ViewContext.IsPower("blogManage", EnumsModel.ActionEnum.Add))
+{
+    <a href="javascript:;" onclick="Admin.loadContent_Jq('main-content', '/Admin/Blog/BlogAddByColumnId?ColumnId='+ColumnId);" class="pure-button pure-button-primary pure-split">添加文章</a>
+}
     </div>
 </div>
 <div class="pure-g">

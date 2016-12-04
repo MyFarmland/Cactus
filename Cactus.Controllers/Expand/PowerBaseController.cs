@@ -1,16 +1,10 @@
 ﻿using Cactus.Common;
+using Cactus.IService;
 using Cactus.Model.Sys;
+using Cactus.Model.Sys.Config;
 using Cactus.Model.Sys.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Mvc;
-using Cactus.IService;
-using Autofac;
-using Autofac.Integration.Mvc;
-using System.Security.Principal;
-using Cactus.Model.Sys.Config;
 
 namespace Cactus.Controllers.Expand
 {

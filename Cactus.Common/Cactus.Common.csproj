@@ -86,7 +86,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheHelper.cs" />
     <Compile Include="CookieHelper.cs" />
     <Compile Include="CryptoHelper.cs" />
     <Compile Include="Extend\JSONExtension.cs" />

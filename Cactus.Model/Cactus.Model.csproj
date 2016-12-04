@@ -74,7 +74,6 @@
     <Compile Include="Sys\PowerAdmin.cs" />
     <Compile Include="CMS\RenderRouteConfig.cs" />
     <Compile Include="Sys\Role.cs" />
-    <Compile Include="CMS\BlogConfig.cs" />
     <Compile Include="Sys\SiteConfig.cs" />
     <Compile Include="CMS\ThemeConfig.cs" />
     <Compile Include="Sys\User.cs" />

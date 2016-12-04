@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using Cactus.Common;
 using Cactus.Model.Sys;
 using Cactus.Model.Sys.Enums;
 using Cactus.Controllers.Expand;
 using Cactus.Controllers.Filters;
 using Cactus.Model.Other;
-using System.Reflection;
 
 namespace Cactus.Controllers.Areas.Admin.Controllers
 {
@@ -96,11 +91,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 this.userServer.Update(act);
                 if (Constant.CacheKey.List[Constant.CacheKey.LoginAdminInfoCacheKey].Count() > 0)
                 {
-                    HttpRuntime.Cache.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + m_token);
+                    base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + m_token);
                 }
-                //去除缓存
-                string token = CookieHelper.GetCookieValue("Admin");
-                base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + token);
                 return Json(new ResultModel { msg = "操作成功", pass = true });
             }
             else
@@ -205,7 +197,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 this.userServer.Update(act);
                 if (Constant.CacheKey.List[Constant.CacheKey.LoginAdminInfoCacheKey].Count() > 0)
                 {
-                    HttpRuntime.Cache.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + m_token);
+                    base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + m_token);
                 }
                 return Json(new ResultModel { pass = true, msg = "修改成功" });
             }

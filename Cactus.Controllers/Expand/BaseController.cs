@@ -1,14 +1,10 @@
-﻿using Autofac;
-using Autofac.Integration.Mvc;
-using Cactus.Common;
+﻿using Cactus.Common;
 using Cactus.IService;
 using Cactus.Model.Sys;
 using Cactus.Model.Sys.Enums;
 using HTools;
 using System;
-using System.IO;
 using System.Web.Mvc;
-using System.Web.Security;
 using Cactus.Controllers.Filters;
 
 namespace Cactus.Controllers.Expand

@@ -1,20 +1,18 @@
-﻿using Cactus.Controllers.Expand;
+﻿using Cactus.Common;
+using Cactus.Controllers.Expand;
 using Cactus.Controllers.Filters;
 using Cactus.IService.CMS;
-using System;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using Cactus.Model.CMS;
 using Cactus.Model.Other;
 using Cactus.Model.Sys.Enums;
-using Cactus.Common;
-using System.IO;
-using System.Collections.Generic;
-using Cactus.Model.CMS;
-using System.Text;
 using Newtonsoft.Json.Linq;
-using Cactus.IService;
-using Cactus.Model.Sys;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Cactus.Controllers.Areas.Admin.Controllers
 {
@@ -27,7 +25,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         public IStaticPageService staticPageService = IocHelper.AutofacResolveNamed<IStaticPageService>("CMS.StaticPageService");
         public ITagService tagService = IocHelper.AutofacResolveNamed<ITagService>("CMS.TagService");
         public ICommentService commentService = IocHelper.AutofacResolveNamed<ICommentService>("CMS.CommentService");
-        public IThemeConfigService themeConfigService = IocHelper.AutofacResolveNamed<IThemeConfigService>("CMS.ThemeConfigService");
+        public string RootDir = "Upload";
         //
         // GET: /Admin/Blog/
         #region Blog
@@ -71,7 +69,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
             pageturn.PageIndex = page;
             int count = 0;
-            //(int pageIndex, int pageSize, string where, string keySelector, out int count)
             var list = this.articleService.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "where ColumnId=" + ColumnId, " CreateTime DESC", out  count).Select(t => new
             {
                 t.Article_Id,
@@ -421,7 +418,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "fileManage",IsShow=true,Title="文件管理", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult FileManage()
         {
-            string _root = MyPath.AppPath + "File";//文件主目录（根目录）
+            string _root = Path.Combine(MyPath.AppPath, RootDir);//文件主目录（根目录）
             if (Directory.Exists(_root)==false) {
                 Directory.CreateDirectory(_root);
             }
@@ -431,7 +428,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         public ActionResult FileList(string currentDir,string viewDir)
         {
             currentDir = currentDir.Trim();
-            string _root = MyPath.AppPath + "File";//文件主目录（根目录）
+            string _root = Path.Combine(MyPath.AppPath, RootDir);//文件主目录（根目录）
             string target = "";
             viewDir = viewDir.Trim();
             if (string.IsNullOrEmpty(viewDir)) {
@@ -532,7 +529,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 };
                 return Json(_result, JsonRequestBehavior.AllowGet);
             }
-            string _root = MyPath.AppPath + "File";//文件主目录（根目录）
+            string _root = Path.Combine(MyPath.AppPath, RootDir);//文件主目录（根目录）
             string target = _root + Path.DirectorySeparatorChar + currentDir + Path.DirectorySeparatorChar + fileOrDir;//目标目录或者文件
             string fullpath = "";
             try
@@ -568,7 +565,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                         ResultModel _result = new ResultModel
                         {
                             msg = "删除失败," + e.Message,
-                            pass = true
+                            pass = false
                         };
                         return Json(_result, JsonRequestBehavior.AllowGet);
                     }
@@ -584,7 +581,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                             ResultModel _result = new ResultModel
                             {
                                 msg = "删除成功",
-                                pass = false
+                                pass = true
                             };
                             return Json(_result, JsonRequestBehavior.AllowGet);
                         }
@@ -592,7 +589,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                             ResultModel _result = new ResultModel
                             {
                                 msg = "删除失败," + e.Message,
-                                pass = true
+                                pass = false
                             };
                             return Json(_result, JsonRequestBehavior.AllowGet);
                         }
@@ -641,7 +638,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 };
                 return Json(_result, JsonRequestBehavior.AllowGet);
             }
-            string _root = MyPath.AppPath + "File";//文件主目录（根目录）
+            string _root = Path.Combine(MyPath.AppPath, RootDir);//文件主目录（根目录）
             string target_old = _root + Path.DirectorySeparatorChar + currentDir + Path.DirectorySeparatorChar + oldName;//目标目录或者文件
             string target_new = _root + Path.DirectorySeparatorChar + currentDir + Path.DirectorySeparatorChar + newName;//目标目录或者文件
             string oldpath = "", newPath="";
@@ -751,7 +748,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 };
                 return Json(_result, JsonRequestBehavior.AllowGet);
             }
-            string _root = MyPath.AppPath + "File";//文件主目录（根目录）
+            string _root =Path.Combine( MyPath.AppPath , RootDir);//文件主目录（根目录）
             string target = _root + Path.DirectorySeparatorChar + currentDir + Path.DirectorySeparatorChar + newDirName;//目标目录或者文件
             string fullpath = "";
             try
@@ -815,8 +812,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "fileManage", actionEnum = EnumsModel.ActionEnum.Upload)]
         public ActionResult FileUpload(string currentDir) {
             currentDir = currentDir.Trim();
-            string _root = MyPath.AppPath + "File";//文件主目录（根目录）
-            string target = _root + Path.DirectorySeparatorChar + currentDir;//目标目录或者文件
+            string _root = Path.Combine(MyPath.AppPath, RootDir);//文件主目录（根目录）
+            string target = _root + Path.DirectorySeparatorChar + currentDir ;//目标目录或者文件
             string fullpath = "";
             try
             {
@@ -856,13 +853,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 }
                 else
                 {
-                    string filePath = fullpath;
-                    if (!filePath.EndsWith(Path.DirectorySeparatorChar.ToString()))
-                    {
-                        filePath = filePath + Path.DirectorySeparatorChar;
-                    }
-
-                    filePath = filePath + file.FileName;
+                    string filePath = Path.Combine(fullpath, file.FileName);
                     if (WebHelper.saveUploadFile(file, filePath, 1024 * 4))
                     {
                         ResultModel _result = new ResultModel
@@ -1030,15 +1021,15 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 {
                     ViewContext viewContext = new ViewContext(this.ControllerContext, view, vd, td, writer);
                     viewContext.View.Render(viewContext, writer);
-                    string _t = Path.Combine(base.blogConfig.HtmlDir, base.blogConfig.PageDir);//下次改为配置的*|*
-                    string _e = blogConfig.PageExtension;//*|*
+                    string _t = Path.Combine(base.Config.HtmlDir, base.Config.PageDir);//下次改为配置的*|*
+                    string _e = base.Config.PageExtension;//*|*
                     string _f = _page.PageName + _e;
                     string _dir = Path.Combine(MyPath.AppPath, _t);
                     if (Directory.Exists(_dir) == false)
                     {
                         Directory.CreateDirectory(_dir);
                     }
-                    string webUrl = "/" + blogConfig.HtmlDir + "/" + blogConfig.PageDir + "/" + _f;
+                    string webUrl = "/" + base.Config.HtmlDir + "/" + base.Config.PageDir + "/" + _f;
                     string target_path = Path.Combine(MyPath.AppPath, _t, _f);
                     System.IO.File.WriteAllText(target_path, StringHelper.Compress(writer.ToString()), Encoding.UTF8);
                     _page.PagePath=webUrl;
@@ -1439,39 +1430,6 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }
         }
 
-        #endregion
-
-        #region 配置管理
-        [HttpGet]
-        [Power(ModuleName = "configManage",IsShow=true, Title="文章配置", actionEnum = EnumsModel.ActionEnum.Show)]
-        public ActionResult BlogConfig()
-        {
-            ViewData["BlogConfig"] = this.blogConfigService.LoadConfig(Constant.BlogConfigPath);
-            return View();
-        }
-        [HttpPost]
-        [Power(ModuleName = "configManage", IsShow = true, Title = "文章配置", actionEnum = EnumsModel.ActionEnum.Edit)]
-        public ActionResult BlogConfig(BlogConfig blog)
-        {
-            try
-            {
-                this.blogConfigService.SaveConfig(blog, Constant.BlogConfigPath);
-                base.cacheService.Remove(Constant.CacheKey.BlogConfigCacheKey);
-                return Json(new ResultModel
-                {
-                    pass = true,
-                    msg = "操作成功"
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                return Json(new ResultModel
-                {
-                    pass = false,
-                    msg = e.Message
-                }, JsonRequestBehavior.AllowGet);
-            }
-        }
         #endregion
 
     }

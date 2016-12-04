@@ -12,7 +12,7 @@ using System.Data.SQLite;
 
 namespace Cactus.Common
 {
-    public class SqlString
+    public static class SqlString
     {
 
         public static string MSSQLString = ConfigurationManager.ConnectionStrings["MSSQLString"].ConnectionString;

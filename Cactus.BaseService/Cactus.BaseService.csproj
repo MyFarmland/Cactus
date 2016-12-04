@@ -43,8 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheService.cs" />
-    <Compile Include="CMS\BlogConfigService.cs" />
-    <Compile Include="CMS\ThemeConfigService.cs" />
     <Compile Include="PathConfigService.cs" />
     <Compile Include="PowerConfigService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
