@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50077
 File Encoding         : 65001
 
-Date: 2016-11-23 10:58:08
+Date: 2016-12-18 18:35:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,24 +39,24 @@ CREATE TABLE `cms_article` (
   `IsShow` int(1) NOT NULL,
   `Source` varchar(100) default NULL,
   `SourceLink` varchar(200) default NULL,
-  `Praise` int(11) default NULL,
+  `Praise` int(11) default '0',
   PRIMARY KEY  (`Article_Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cms_article
 -- ----------------------------
-INSERT INTO `cms_article` VALUES ('1', '2', null, null, '&lt;p&gt;ArticleContent&lt;/p&gt;&lt;p&gt;11&lt;/p&gt;', '测试标题', '1899-12-30 00:00:00', '2016-06-09 19:28:47', '0', '测试作者', null, null, null, null, null, '0', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('2', '4', null, '', '&lt;p&gt;&lt;b&gt;求大神&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题1111', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者2222', null, null, null, null, null, '0', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('3', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题2', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者2', null, null, null, null, null, '0', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('4', '2', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题3', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者3', null, null, null, null, null, '0', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('5', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题4', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者4', null, null, null, null, null, '0', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('6', '1', null, '', '&lt;p&gt;&lt;u&gt;&lt;b&gt;测试内容&lt;/b&gt;&lt;/u&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题5', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者5', null, null, null, null, null, '0', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('7', '2', null, '', '&lt;p&gt;&lt;i&gt;测试内容&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题6', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者6', null, null, null, null, null, '0', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('8', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题7', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者7', null, null, null, null, null, '1', '0', null, null, null);
-INSERT INTO `cms_article` VALUES ('9', '2', null, '', '\r\n                        &lt;p&gt;测试内容&lt;img src=\"/Upload/UploadFile/1457864405.jpeg\" style=\"letter-spacing: 0.01em; word-spacing: normal; max-width: 100%;\"&gt;&lt;/p&gt;\r\n                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题8', '0001-01-01 00:00:00', '1899-12-30 00:00:00', '0', '测试作者8', null, null, null, null, null, '0', '0', null, null, null);
-INSERT INTO `cms_article` VALUES ('10', '3', null, '', '\r\n                        &lt;p&gt;测试内容&lt;img src=\"/Upload/UploadFile/1457864442.jpeg\" style=\"letter-spacing: 0.01em; word-spacing: normal; max-width: 100%;\"&gt;&lt;/p&gt;\r\n                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题9', '0001-01-01 00:00:00', '1899-12-30 00:00:00', '0', '测试作者9', null, null, null, null, null, '1', '1', null, null, null);
-INSERT INTO `cms_article` VALUES ('11', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题10', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者10', null, null, null, null, null, '0', '1', null, null, null);
+INSERT INTO `cms_article` VALUES ('1', '2', null, null, '&lt;p&gt;ArticleContent&lt;/p&gt;&lt;p&gt;11&lt;/p&gt;', '测试标题mysql', '1899-12-30 00:00:00', '2016-06-09 19:28:47', '0', '测试作者', null, null, null, null, null, '0', '1', null, null, '1');
+INSERT INTO `cms_article` VALUES ('2', '4', null, '', '&lt;p&gt;&lt;b&gt;求大神&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题1111', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者2222', null, null, null, null, null, '0', '1', null, null, '0');
+INSERT INTO `cms_article` VALUES ('3', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题2', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者2', null, null, null, null, null, '0', '1', null, null, '0');
+INSERT INTO `cms_article` VALUES ('4', '2', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题3', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者3', null, null, null, null, null, '0', '1', null, null, '0');
+INSERT INTO `cms_article` VALUES ('5', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题4', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者4', null, null, null, null, null, '0', '1', null, null, '0');
+INSERT INTO `cms_article` VALUES ('6', '1', null, '', '&lt;p&gt;&lt;u&gt;&lt;b&gt;测试内容&lt;/b&gt;&lt;/u&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题5', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者5', null, null, null, null, null, '0', '1', null, null, '0');
+INSERT INTO `cms_article` VALUES ('7', '2', null, '', '&lt;p&gt;&lt;i&gt;测试内容&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题6', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者6', null, null, null, null, null, '0', '1', null, null, '0');
+INSERT INTO `cms_article` VALUES ('8', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题7', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者7', null, null, null, null, null, '1', '0', null, null, '0');
+INSERT INTO `cms_article` VALUES ('9', '2', null, '', '\r\n                        &lt;p&gt;测试内容&lt;img src=\"/Upload/UploadFile/1457864405.jpeg\" style=\"letter-spacing: 0.01em; word-spacing: normal; max-width: 100%;\"&gt;&lt;/p&gt;\r\n                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题8', '0001-01-01 00:00:00', '1899-12-30 00:00:00', '0', '测试作者8', null, null, null, null, null, '0', '0', null, null, '0');
+INSERT INTO `cms_article` VALUES ('10', '3', null, '', '\r\n                        &lt;p&gt;测试内容&lt;img src=\"/Upload/UploadFile/1457864442.jpeg\" style=\"letter-spacing: 0.01em; word-spacing: normal; max-width: 100%;\"&gt;&lt;/p&gt;\r\n                    &lt;p&gt;&lt;br&gt;&lt;/p&gt;', '测试标题9', '0001-01-01 00:00:00', '1899-12-30 00:00:00', '0', '测试作者9', null, null, null, null, null, '1', '1', null, null, '0');
+INSERT INTO `cms_article` VALUES ('11', '1', null, '', '&lt;p&gt;测试内容&lt;/p&gt;', '测试标题10', '1899-12-30 00:00:00', '1899-12-30 00:00:00', '0', '测试作者10', null, null, null, null, null, '0', '1', null, null, '0');
 
 -- ----------------------------
 -- Table structure for `cms_articlemap`
@@ -83,7 +83,7 @@ CREATE TABLE `cms_column` (
   `Pid` bigint(20) NOT NULL,
   `Lv` int(11) default NULL,
   PRIMARY KEY  (`column_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cms_column
@@ -92,11 +92,6 @@ INSERT INTO `cms_column` VALUES ('1', '1', '测试1', '0', null);
 INSERT INTO `cms_column` VALUES ('2', '1', '测试2', '0', null);
 INSERT INTO `cms_column` VALUES ('3', '1', '测试3', '0', null);
 INSERT INTO `cms_column` VALUES ('4', '1', '测试4', '0', null);
-INSERT INTO `cms_column` VALUES ('5', '1', '测试1', '0', null);
-INSERT INTO `cms_column` VALUES ('7', '2', '测试6', '0', null);
-INSERT INTO `cms_column` VALUES ('8', '1', '我的栏目', '0', null);
-INSERT INTO `cms_column` VALUES ('9', '10', '我的栏目', '0', null);
-INSERT INTO `cms_column` VALUES ('10', '1', '测试栏目11111', '0', null);
 
 -- ----------------------------
 -- Table structure for `cms_comment`
@@ -117,6 +112,7 @@ CREATE TABLE `cms_comment` (
 -- ----------------------------
 -- Records of cms_comment
 -- ----------------------------
+INSERT INTO `cms_comment` VALUES ('6', '11', '3333', '2016-07-25 23:52:36', '222', '123@qq.com', '0', '0');
 
 -- ----------------------------
 -- Table structure for `cms_commentmap`
@@ -286,6 +282,22 @@ CREATE TABLE `store_order` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `sys_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_log`;
+CREATE TABLE `sys_log` (
+  `Log_Id` bigint(20) NOT NULL auto_increment,
+  `UserId` bigint(20) NOT NULL,
+  `LogInfo` tinytext NOT NULL,
+  `CreateTs` bigint(20) NOT NULL,
+  PRIMARY KEY  (`Log_Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of sys_log
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `sys_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
@@ -299,7 +311,7 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', 'RoleTest2222', '1008,1009,1010,1011,1001,1002,1003,1004,1005,1006,1007,1012,1013,1014,1015,1016,1017,1018,1019,1020,1021,1022,2001,2002');
+INSERT INTO `sys_role` VALUES ('1', '超级管理员', '');
 INSERT INTO `sys_role` VALUES ('3', '测试', '1009,1010,1011,1001,1004,1005,1006,1007');
 
 -- ----------------------------
@@ -326,5 +338,5 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', '1', '702295399@qq.com', 'cebfd1559b68d67688884d7a3d3e8c', '漫漫洒洒', '/Upload/Avatar/Avatar_1.jpg', '702295399@qq.com', '138888888888', '702295399', '1899-12-30 00:00:00', '2016-06-09 19:21:50', '127.0.0.1', '1');
+INSERT INTO `sys_user` VALUES ('1', '1', '702295399@qq.com', 'cebfd1559b68d67688884d7a3d3e8c', 'fourone', '/Upload/Avatar/Avatar_1.jpg', '702295399@qq.com', '138888888888', '702295399', '1899-12-30 00:00:00', '2016-12-04 16:57:30', '127.0.0.1', '1');
 INSERT INTO `sys_user` VALUES ('3190', '3', '测试三', 'cebfd1559b68d67688884d7a3d3e8c', '测试三1', '/Upload/Avatar/Avatar_3190.jpg', '7022953991@qq.com', '1234567891', '1234567891', '1899-12-30 00:00:00', '2016-06-09 19:20:28', '127.0.0.1', '0');

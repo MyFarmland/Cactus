@@ -9,7 +9,7 @@ Target Server Type    : SQLite
 Target Server Version : 30706
 File Encoding         : 65001
 
-Date: 2016-11-23 10:19:48
+Date: 2016-12-18 18:35:30
 */
 
 PRAGMA foreign_keys = OFF;
@@ -263,7 +263,7 @@ CREATE TABLE "cms_temppage" (
 -- Records of cms_temppage
 -- ----------------------------
 INSERT INTO "main"."cms_temppage" VALUES (2, 'Default', '默认模板', '[{ "key": "title", "value": "标题", "label": "标题", "tiplabel": "标题", "type": "1" },{ "key": "siteDescr", "value": "描述", "label": "描述", "tiplabel": "描述", "type": "1" },{ "key": "siteKeywords", "value": "关键字", "label": "关键字", "tiplabel": "关键字", "type": "1" }, { "key": "content", "value": "内容", "label": "内容", "type": "2" }]', '/Template/Default.cshtml', '@{ 
-    Layout = "~/Themes/Default/Views/Shared/_BlogLayout.cshtml";
+    Layout = "~/Views/Shared/_BlogLayout.cshtml";
     var obj = ViewData["Data"] as Newtonsoft.Json.Linq.JObject;
     ViewBag.Title = obj["title"].ToString();
     ViewBag.SiteDescr = obj["siteDescr"].ToString();
@@ -291,9 +291,9 @@ INSERT INTO "main"."cms_temppage" VALUES (2, 'Default', '默认模板', '[{ "key
             @Html.Raw(obj["content"].ToString())
         </div>
     </section>
-</div>', '2016-05-29 17:53:42.9683307', '2016-07-30 23:21:08.6889969');
+</div>', '2016-05-29 17:53:42.9683307', '2016-11-27 20:25:25.4551776');
 INSERT INTO "main"."cms_temppage" VALUES (3, 'Default2', '默认模板2', '[{ "key": "title", "value": "标题", "label": "标题", "tiplabel": "标题", "type": "1" }, { "key": "content", "value": "内容", "label": "内容", "type": "2" }]', '/Template/Default2.cshtml', '@{
-     Layout = "~/Themes/Default/Views/Shared/_BlogLayout.cshtml";
+     Layout = "~/Views/Shared/_BlogLayout.cshtml";
     var obj = ViewData["Data"] as Newtonsoft.Json.Linq.JObject;
 }
 <form class="pure-form pure-search pure-g" action="@Url.Action("Search", "Blog")" method="get">
@@ -314,7 +314,7 @@ INSERT INTO "main"."cms_temppage" VALUES (3, 'Default2', '默认模板2', '[{ "k
             @Html.Raw(obj["content"].ToString())
         </div>
     </section>
-</div>', '2016-05-29 21:36:42.6445554', '2016-07-10 22:38:40.3524396');
+</div>', '2016-05-29 21:36:42.6445554', '2016-11-27 20:25:11.039353');
 
 -- ----------------------------
 -- Table structure for "main"."sqlite_sequence"
@@ -335,6 +335,7 @@ INSERT INTO "main"."sqlite_sequence" VALUES ('store_customer', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('cms_column', 35);
 INSERT INTO "main"."sqlite_sequence" VALUES ('cms_comment', 6);
 INSERT INTO "main"."sqlite_sequence" VALUES ('cms_article', 18);
+INSERT INTO "main"."sqlite_sequence" VALUES ('sys_log', 0);
 
 -- ----------------------------
 -- Table structure for "main"."store_category"
@@ -480,6 +481,21 @@ CREATE TABLE "store_staff" (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for "main"."sys_log"
+-- ----------------------------
+DROP TABLE "main"."sys_log";
+CREATE TABLE "sys_log" (
+"Log_Id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"UserId"  INTEGER NOT NULL,
+"LogInfo"  TEXT NOT NULL,
+"CreateTs"  INTEGER NOT NULL
+);
+
+-- ----------------------------
+-- Records of sys_log
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for "main"."sys_role"
 -- ----------------------------
 DROP TABLE "main"."sys_role";
@@ -518,7 +534,7 @@ CREATE TABLE "sys_user" (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO "main"."sys_user" VALUES (1, 1, '702295399@qq.com', 'cebfd1559b68d67688884d7a3d3e8c', '漫漫洒洒', '/Upload/Avatar/Avatar_1.jpg', '702295399@qq.com', 1888888889, 702295399, '2016-02-07 09:44:53.2348994', '2016-11-22 09:11:06.3607803', '127.0.0.1', 1);
+INSERT INTO "main"."sys_user" VALUES (1, 1, '702295399@qq.com', 'cebfd1559b68d67688884d7a3d3e8c', 'fourone', '/Upload/Avatar/Avatar_1.jpg', '702295399@qq.com', 1888888889, 702295399, '2016-02-07 09:44:53.2348994', '2016-11-27 19:03:34.1222654', '127.0.0.1', 1);
 INSERT INTO "main"."sys_user" VALUES (3190, 3, '测试账户', 'cebfd1559b68d67688884d7a3d3e8c', '测试小二', '/Upload/Avatar/Avatar_3190.jpg', '7022953991@qq.com', 1234567891, 1234567891, '2016-02-19 10:26:13.8261764', '2016-10-13 09:04:00.5456769', '127.0.0.1', 0);
 
 -- ----------------------------
