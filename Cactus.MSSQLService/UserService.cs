@@ -6,13 +6,15 @@ using System.Linq;
 using Dapper.Common;
 using Cactus.Common;
 
-namespace Cactus.MySQLService
+namespace Cactus.MSSQLService
 {
-    public class UserServer : IUserServer
+    public class UserService : IUserService
     {
+        
+
         public Model.Sys.User CheckLogin(string userName, string pwd)
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 string query = "select a.*,b.* from sys_user as a left join sys_role as b on a.RoleId=b.Role_Id WHERE a.Name = @Name and a.Password=@Password";
                 return conn.Query<Model.Sys.User, Model.Sys.Role, Model.Sys.User>(query,(user,role)=>{
@@ -25,7 +27,7 @@ namespace Cactus.MySQLService
 
         public bool AlterPwd(int id, string oldPwd, string newPwd)
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 var u = this.Find(id);
                 if (u != null)
@@ -49,7 +51,7 @@ namespace Cactus.MySQLService
 
         public bool AlterFace(int id, string picUrl)
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 var u = this.Find(id);
                 if (u != null)
@@ -66,7 +68,7 @@ namespace Cactus.MySQLService
 
         public bool Insert(Model.Sys.User entity)
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 int i = conn.Execute("INSERT INTO sys_user(RoleId,Name,Password,NickName,Avatar,Email,Phone,Qq,AddTime,LastLoginTime,LastLoginIp,IsSuperUser)" +
                     "VALUES(@RoleId,@Name,@Password,@NickName,@Avatar,@Email,@Phone,@Qq,@AddTime,@LastLoginTime,@LastLoginIp,@IsSuperUser)", entity);
@@ -81,7 +83,7 @@ namespace Cactus.MySQLService
 
         public void Update(Model.Sys.User entity)
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 conn.Execute("UPDATE sys_user SET RoleId=@RoleId,Name=@Name,Password=@Password,NickName=@NickName,Avatar=@Avatar,Email=@Email," +
                     "Phone=@Phone,Qq=@Qq,AddTime=@AddTime,LastLoginTime=@LastLoginTime,LastLoginIp=@LastLoginIp,IsSuperUser=@IsSuperUser WHERE User_Id =@User_Id", entity);
@@ -90,7 +92,7 @@ namespace Cactus.MySQLService
 
         public void Delete(string ids)
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 conn.Execute(string.Format("DELETE FROM sys_user WHERE User_Id in ({0})", ids));
             }
@@ -98,7 +100,7 @@ namespace Cactus.MySQLService
 
         public List<Model.Sys.User> GetAll()
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 return conn.Query<Model.Sys.User, Model.Sys.Role, Model.Sys.User>("select a.*,b.* from sys_user as a left join sys_role as b on a.RoleId=b.Role_Id", (user, role) =>
                 {
@@ -111,20 +113,13 @@ namespace Cactus.MySQLService
 
         public List<Model.Sys.User> ToPagedList(int pageIndex, int pageSize, string keySelector,out int count)
         {
-            /*
-                * firstIndex:起始索引
-                * pageSize:每页显示的数量
-                * orderColumn:排序的字段名
-                * sql:可以是简单的单表查询语句，也可以是复杂的多表联合查询语句
-            */
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 string sql = "select a.*,b.* from sys_user as a left join sys_role as b on a.RoleId=b.Role_Id";
                 string sql01 = "select count(*) from sys_user";
                 count =conn.Query<int>(sql01).SingleOrDefault();
-                //string query = "select top " + pageSize + " o.* from (select row_number() over(order by " + keySelector + ") as rownumber,* from(" + sql + ") as oo) as o where rownumber>" + (pageIndex-1) * pageSize;
-                string query = "SELECT * from (" + sql +")as c  ORDER BY " + keySelector+" LIMIT " + (pageIndex - 1) * pageSize + "," + pageSize ;
-                
+                Model.Sys.User userTemp = new Model.Sys.User();
+                string query = "select top " + pageSize + " o.* from (select row_number() over(order by " + keySelector + ") as rownumber,* from(" + sql + ") as oo) as o where rownumber>" + (pageIndex-1) * pageSize;
                 return conn.Query<Model.Sys.User, Model.Sys.Role, Model.Sys.User>(query, (user,role) => {
                     if (role != null)
                         user.Role = role;
@@ -135,7 +130,7 @@ namespace Cactus.MySQLService
 
         public Model.Sys.User Find(int id)
         {
-            using (IDbConnection conn = SqlString.GetMySqlConnection())
+            using (IDbConnection conn = SqlString.GetSqlConnection(SqlString.MSSQLString))
             {
                 string query = "select a.*,b.* from sys_user as a left join sys_role as b on a.RoleId=b.Role_Id WHERE a.User_Id = @id";
                 return conn.Query<Model.Sys.User, Model.Sys.Role, Model.Sys.User>(query,(user,role)=>{

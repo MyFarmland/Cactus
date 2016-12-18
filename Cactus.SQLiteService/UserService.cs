@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Cactus.SQLiteService
 {
-    public class UserServer : IUserServer
+    public class UserService : IUserService
     {
         public bool IsUseName(string username, int ignoreId) {
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
@@ -121,12 +121,6 @@ namespace Cactus.SQLiteService
 
         public List<Model.Sys.User> ToPagedList(int pageIndex, int pageSize, string keySelector, out int count)
         {
-            /*
-                * firstIndex:起始索引
-                * pageSize:每页显示的数量
-                * orderColumn:排序的字段名
-                * sql:可以是简单的单表查询语句，也可以是复杂的多表联合查询语句
-            */
             using (IDbConnection conn = SqlString.GetSQLiteConnection())
             {
                 string sql = "select a.*,b.* from sys_user as a left join sys_role as b on a.RoleId=b.Role_Id";

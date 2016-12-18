@@ -49,6 +49,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             //用户注销
             //FormsAuthentication.SignOut();
             CookieHelper.ClearCookie("Admin");
+            base.logService.WriteLog(LoginUser.User_Id, "退出系统");
             if (HttpContext.Request.IsAjaxRequest())
             {
                 return Json(new ResultModel
@@ -86,9 +87,9 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             }
             if (LoginUser.Password == CryptoHelper.MD5Encrypt(pwded))
             {
-                var act = this.userServer.Find(LoginUser.User_Id);
+                var act = this.userService.Find(LoginUser.User_Id);
                 act.Password = CryptoHelper.MD5Encrypt(pwding);
-                this.userServer.Update(act);
+                this.userService.Update(act);
                 if (Constant.CacheKey.List[Constant.CacheKey.LoginAdminInfoCacheKey].Count() > 0)
                 {
                     base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + m_token);
@@ -132,7 +133,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                         ImageHelper.MakeThumbnailImage(savePath, thumbPath, 48, 48, "HW");
                         LoginUser.Avatar = this.pathConfig.dic["avatar"].WebPath + "/" + "Avatar_" + LoginUser.User_Id + avatarExt;
                         System.IO.File.Delete(savePath);
-                        Model.Sys.User u = this.userServer.Find(LoginUser.User_Id);
+                        Model.Sys.User u = this.userService.Find(LoginUser.User_Id);
                         if (base.Config.DefaultAvatar != u.Avatar)
                         {
                             string _syspath = HIO.SysPathParse(MyPath.AppPath, u.Avatar, true);
@@ -146,7 +147,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                             }
                         }
                         u.Avatar = LoginUser.Avatar;
-                        this.userServer.Update(u);
+                        this.userService.Update(u);
                         return Json(new ResultModel { pass = true, msg = "上传成功", append = new { url = LoginUser.Avatar } });
                     }
                     else
@@ -189,12 +190,12 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 {
                     return Json(new ResultModel { pass = false, msg = "qq为空" });
                 }
-                var act = this.userServer.Find(LoginUser.User_Id);
+                var act = this.userService.Find(LoginUser.User_Id);
                 act.NickName = u.NickName;
                 act.Email = u.Email;
                 act.Phone = u.Phone;
                 act.Qq = u.Qq;
-                this.userServer.Update(act);
+                this.userService.Update(act);
                 if (Constant.CacheKey.List[Constant.CacheKey.LoginAdminInfoCacheKey].Count() > 0)
                 {
                     base.cacheService.Remove(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + m_token);

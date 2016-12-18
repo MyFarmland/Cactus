@@ -9,7 +9,9 @@ namespace Cactus.Controllers.Expand
     //后段管理使用
     public class AdminBaseController : BaseController
     {
-        public IUserServer userServer = IocHelper.AutofacResolveNamed<IUserServer>("UserServer");
+        public IUserService userService = IocHelper.AutofacResolveNamed<IUserService>("UserService");
+        public ISysLogService logService = IocHelper.AutofacResolveNamed<ISysLogService>("SysLogService");
+
         /// <summary>
         /// 登录用户信息
         /// </summary>

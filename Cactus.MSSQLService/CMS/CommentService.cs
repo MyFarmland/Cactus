@@ -66,7 +66,7 @@ namespace Cactus.MSSQLService.CMS
                 string sql01 = "select count(Comment_Id) from cms_comment";
                 count = conn.Query<int>(sql01).SingleOrDefault();
                 Model.CMS.Article articleTemp = new Model.CMS.Article();
-                string sql = "select[Article_Id],[ColumnId],[Tagids],[Tags],[ArticleContent],[Title],b.[CreateTime],[LastTime],[Browse],[Author],[IsTop],[IsShow],[Comment_Id],[ArticleId],[Content],[Nickname],[Email] from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id";
+                string sql = "select [Comment_Id],[ArticleId],[Content],[Nickname],[Email],[Article_Id],[ColumnId],[Tagids],[Tags],[ArticleContent],[Title],b.[CreateTime],[LastTime],[Browse],[Author],[IsTop],[IsShow] from cms_comment as a left join cms_article as b on a.ArticleId=b.Article_Id";
                 string query = "select top " + pageSize + " o.* from (select row_number() over(order by " + keySelector + ") as rownumber,* from(" + sql + ") as oo ) as o where rownumber>" + (pageIndex - 1) * pageSize;
 
                 return conn.Query<Model.CMS.Comment, Model.CMS.Article, Model.CMS.Comment>(query,

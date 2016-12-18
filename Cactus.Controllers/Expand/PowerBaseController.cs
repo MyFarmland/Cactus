@@ -11,7 +11,7 @@ namespace Cactus.Controllers.Expand
     //后段管理使用
     public class PowerBaseController : AdminBaseController
     {
-        public IRoleServer roleServer = IocHelper.AutofacResolveNamed<IRoleServer>("RoleServer");
+        public IRoleService roleService = IocHelper.AutofacResolveNamed<IRoleService>("RoleService");
         public IPowerConfigService powerConfigService = IocHelper.AutofacResolveNamed<IPowerConfigService>("PowerConfigService");
         public IPathConfigService pathConfigService = IocHelper.AutofacResolveNamed<IPathConfigService>("PathConfigService");
 

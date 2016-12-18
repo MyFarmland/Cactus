@@ -76,6 +76,7 @@
     <Compile Include="Sys\Role.cs" />
     <Compile Include="Sys\SiteConfig.cs" />
     <Compile Include="CMS\ThemeConfig.cs" />
+    <Compile Include="Sys\SysLog.cs" />
     <Compile Include="Sys\User.cs" />
     <Compile Include="CMS\Article.cs" />
     <Compile Include="CMS\Column.cs" />

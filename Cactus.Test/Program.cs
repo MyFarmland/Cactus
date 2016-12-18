@@ -164,8 +164,8 @@ namespace Cactus.Test
             Console.ReadKey();
         }
         #region sqlite
-        static Cactus.SQLiteService.UserServer sqlite_user = new SQLiteService.UserServer();
-        static Cactus.SQLiteService.RoleServer sqlite_role = new SQLiteService.RoleServer();
+        static Cactus.SQLiteService.UserService sqlite_user = new SQLiteService.UserService();
+        static Cactus.SQLiteService.RoleService sqlite_role = new SQLiteService.RoleService();
         //static Cactus.SQLiteService.PowerConfigService sqlite_power = new SQLiteService.PowerConfigService();
         static void sqlite_Test() {
             //sqlite_ActionGroupTest();
@@ -291,8 +291,8 @@ namespace Cactus.Test
         #endregion
 
         #region mysql
-        static Cactus.MySQLService.UserServer mysql_user = new MySQLService.UserServer();
-        static Cactus.MySQLService.RoleServer mysql_role = new MySQLService.RoleServer();
+        static Cactus.MySQLService.UserService mysql_user = new MySQLService.UserService();
+        static Cactus.MySQLService.RoleService mysql_role = new MySQLService.RoleService();
         static void mysql_Test()
         {
             //mysql_ActionGroupTest();
@@ -415,8 +415,8 @@ namespace Cactus.Test
         #endregion
 
         #region mssql
-        static Cactus.MSSQLService.UserServer mssql_user = new MSSQLService.UserServer();
-        static Cactus.MSSQLService.RoleServer mssql_role = new MSSQLService.RoleServer();
+        static Cactus.MSSQLService.UserService mssql_user = new MSSQLService.UserService();
+        static Cactus.MSSQLService.RoleService mssql_role = new MSSQLService.RoleService();
         static void mssql_Test()
         {
             //mssql_ActionGroupTest();

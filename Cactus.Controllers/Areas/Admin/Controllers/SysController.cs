@@ -244,7 +244,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             int count = 0;
             PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
             pageturn.PageIndex = 1;
-            var list = this.userServer.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count);
+            var list = this.userService.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count);
             pageturn.CountSize = count;
             ViewData["UserList"] = list;
             ViewData["Pageturn"] = pageturn;
@@ -257,7 +257,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
             pageturn.PageIndex = page;
             int count = 0;
-            var list = this.userServer.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count).Select(t => new
+            var list = this.userService.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "User_Id", out  count).Select(t => new
             {
                 t.User_Id,
                 t.Name,
@@ -273,7 +273,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserAlterFace(int id)
         {
-            var act = this.userServer.Find(id);
+            var act = this.userService.Find(id);
             ViewData["User"] = act;
             return View();
         }
@@ -321,9 +321,9 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
 
                         Avatar = this.pathConfig.dic["avatar"].WebPath + "/" + "Avatar_" + Id + avatarExt;
 
-                        Model.Sys.User u = this.userServer.Find(Id);
+                        Model.Sys.User u = this.userService.Find(Id);
                         u.Avatar = Avatar;
-                        this.userServer.Update(u);
+                        this.userService.Update(u);
 
                         return Json(new ResultModel { pass = true,msg = "上传成功", append = new { url = Avatar } });
                     }
@@ -345,11 +345,11 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserResetPwd(int id)
         {
-            var act = this.userServer.Find(id);
+            var act = this.userService.Find(id);
             try
             {
                 act.Password = CryptoHelper.MD5Encrypt("123456");
-                this.userServer.Update(act);
+                this.userService.Update(act);
                 return Json(new ResultModel { msg = "密码已经重置为：123456", pass = true }, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -360,7 +360,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Show)]
         public ActionResult UserInfo(int id)
         {
-            var act = this.userServer.Find(id);
+            var act = this.userService.Find(id);
             ViewData["User"] = act;
             return View();
         }
@@ -368,7 +368,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Add)]
         public ActionResult UserAdd()
         {
-            ViewData["RoleList"] = this.roleServer.GetAll().ToList();
+            ViewData["RoleList"] = this.roleService.GetAll().ToList();
             return View();
         }
         [HttpPost]
@@ -393,10 +393,11 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             Email = Email.Trim();
             Phone = Phone.Trim();
             Qq = Qq.Trim();
-            if (this.userServer.IsUseName(UserName, 0)) {
+            if (this.userService.IsUseName(UserName, 0))
+            {
                 return Json(new ResultModel { msg = "改用户名已经在使用", pass = true });
             }
-            var b = this.userServer.Insert(new Model.Sys.User()
+            var b = this.userService.Insert(new Model.Sys.User()
             {
                 Avatar = Config.DefaultAvatar,
                 Name = UserName,
@@ -426,15 +427,15 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserUpdate(int id)
         {
-            ViewData["RoleList"] = this.roleServer.GetAll().ToList();
-            ViewData["User"] = this.userServer.Find(id);
+            ViewData["RoleList"] = this.roleService.GetAll().ToList();
+            ViewData["User"] = this.userService.Find(id);
             return View();
         }
         [HttpPost]
         [Power(ModuleName = "userManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult UserUpdate(string NickName, string Email, string Phone, string Qq, int RoleId, int User_Id)
         {
-            Model.Sys.User muser = this.userServer.Find(User_Id);
+            Model.Sys.User muser = this.userService.Find(User_Id);
             if (string.IsNullOrEmpty(NickName))
             {
                 return Json(new ResultModel { msg = "昵称为空", pass = false });
@@ -447,7 +448,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             muser.RoleId = RoleId;
             try
             {
-                this.userServer.Update(muser);
+                this.userService.Update(muser);
                 return Json(new ResultModel { msg = "修改成功", pass = true });
             }
             catch
@@ -460,7 +461,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
-                this.userServer.Delete(ids);
+                this.userService.Delete(ids);
                 return Json(new ResultModel { msg = "删除成功", pass = true }, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -483,7 +484,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
                 page = 1;
                 pageturn.PageIndex = page;
                 int count = 0;
-                var list = this.roleServer
+                var list = this.roleService
                     .ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "Role_Id", out count);
                 pageturn.CountSize = count;
 
@@ -494,7 +495,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             {
                 pageturn.PageIndex = page;
                 int count = 0;
-                var list = this.roleServer
+                var list = this.roleService
                     .ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "Role_Id", out count);
                 pageturn.CountSize = count;
 
@@ -515,11 +516,11 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             if (string.IsNullOrEmpty(RoleName)) {
                 return Json(new ResultModel { msg = "角色名为空", pass = false });
             }
-            if (this.roleServer.IsUseName(RoleName.Trim(), 0))
+            if (this.roleService.IsUseName(RoleName.Trim(), 0))
             {
                 return Json(new ResultModel { msg = "改角色名正在使用", pass = false });
             }
-            var b = this.roleServer.Insert(new Model.Sys.Role()
+            var b = this.roleService.Insert(new Model.Sys.Role()
             {
                 RoleName = RoleName.Trim(),
                 ActionIds = ActionIds
@@ -539,7 +540,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         [Power(ModuleName = "roleManage", actionEnum = EnumsModel.ActionEnum.Edit)]
         public ActionResult RoleUpdate(int id)
         {
-            var act = this.roleServer.Find(id);
+            var act = this.roleService.Find(id);
             ViewData["Role"] = act;
             return View(act);
         }
@@ -552,8 +553,8 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             {
                 return Json(new ResultModel { msg = "角色名为空", pass = false });
             }
-            Model.Sys.Role role = this.roleServer.Find(Id);
-            if (this.roleServer.IsUseName(RoleName.Trim(), role.Role_Id))
+            Model.Sys.Role role = this.roleService.Find(Id);
+            if (this.roleService.IsUseName(RoleName.Trim(), role.Role_Id))
             {
                 return Json(new ResultModel { msg = "改角色名正在使用", pass = false });
             }
@@ -561,7 +562,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             role.ActionIds = ActionIds;
             try
             {
-                this.roleServer.Update(role);
+                this.roleService.Update(role);
                 return Json(new ResultModel { msg = "修改成功", pass = true });
             }
             catch
@@ -576,7 +577,7 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
         {
             try
             {
-                this.roleServer.Delete(ids);
+                this.roleService.Delete(ids);
                 return Json(new ResultModel { msg = "删除成功", pass = true }, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -875,138 +876,178 @@ namespace Cactus.Controllers.Areas.Admin.Controllers
             return View(); 
         }
         [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Show)]
-        public ActionResult LogList()
+        public ActionResult LogList(int? page)
         {
-            if (System.IO.Directory.Exists(HIO.logDirPath))
+            if (!page.HasValue) { page = 1; }
+            PageTurnModel pageturn = new PageTurnModel() { ItemSize = 10 };
+            pageturn.PageIndex = page;
+            int count = 0;
+            var list = this.logService.ToPagedList(pageturn.PageIndex.Value, pageturn.ItemSize, "Log_Id", out  count).Select(t => new
             {
-                FileInfo[] file_list = new DirectoryInfo(HIO.logDirPath).GetFiles();
-                if (file_list.Length > 1000) {
-                    ResultModel error_result = new ResultModel
-                    {
-                        msg = "文件太多",
-                        pass = false
-                    };
-                    return Json(error_result, JsonRequestBehavior.AllowGet);
-                }
-                List<Model.CMS.Ext.FInfo> f_list = new List<Model.CMS.Ext.FInfo>();
-                for (int i = 0; i < file_list.Length; i++)
-                {
-                    f_list.Add(new Model.CMS.Ext.FInfo(file_list[i]));
-                }
-                ResultModel _result = new ResultModel
-                {
-                    msg = "获取成功",
-                    pass = true,
-                    append = new { f_list = f_list }
-                };
-                return Json(_result, JsonRequestBehavior.AllowGet);
-            }
-            else {
-                ResultModel _result = new ResultModel
-                {
-                    msg = "获取成功",
-                    pass = false
-                };
-                return Json(_result, JsonRequestBehavior.AllowGet);
-            }
-        }
-        [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Show)]
-        public ActionResult LogInfo(string filename) {
-            if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
-            {
-                ResultModel _result = new ResultModel
-                {
-                    msg = "文件名非法",
-                    pass = false                    
-                };
-                return Json(_result, JsonRequestBehavior.AllowGet);
-            }
-            else {
-                string path = HIO.logDirPath + System.IO.Path.DirectorySeparatorChar + filename;
-                if (System.IO.File.Exists(path))
-                {
-                    var stream=new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    int count = 1024 * 1024;
-                    if (stream.Length > count)
-                    {
-                        stream.Dispose();
-                        ResultModel error_result = new ResultModel
-                        {
-                            msg = "文件过大",
-                            pass = false
-                        };
-                        return Json(error_result, JsonRequestBehavior.AllowGet);
-                    }
-                    byte[] by = new byte[stream.Length];
-                    stream.Read(by, 0, (int)stream.Length);
-                    string result = System.Text.Encoding.UTF8.GetString(by).Trim();
-                    
-                    int i=result.Length;
-                    stream.Dispose();
-                    ResultModel _result = new ResultModel
-                    {
-                        msg = "获取成功",
-                        pass = true,
-                        append = new { content = result }
-                    };
-                    return Json(_result, JsonRequestBehavior.AllowGet);
-                }
-                else {
-                    ResultModel _result = new ResultModel
-                    {
-                        msg = "文件不存在",
-                        pass = false
-                    };
-                    return Json(_result, JsonRequestBehavior.AllowGet);
-                }
-            }
+                 Log_Id = t.Log_Id,
+                 LogInfo = t.LogInfo,
+                 UserId = t.UserId,
+                 UserName = t.User.Name,
+                 AddTime = StringHelper.GetTime(t.CreateTs).ToString("yyyy-MM-dd HH:mm:ss")
+            });
+            pageturn.CountSize = count;
+            return Json(new RowResultModel { rows = list, pagination = pageturn, pass = true }, JsonRequestBehavior.AllowGet);
         }
         [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Delete)]
-        public ActionResult LogClear() {
-            Directory.Delete(HIO.logDirPath, true);
-            Directory.CreateDirectory(HIO.logDirPath);
-            ResultModel _result = new ResultModel
+        public ActionResult LogDelete(int id) {
+            ResultModel _result = null;
+            if (this.logService.DeteleLog(id.ToString()))
             {
-                msg = "清空成功",
-                pass = true
-            };
+                _result = new ResultModel
+                {
+                    msg = "删除成功",
+                    pass = true
+                };
+            }
+            else {
+                  _result = new ResultModel
+                {
+                    msg = "删除失败",
+                    pass = false
+                };
+            }
+            
             return Json(_result, JsonRequestBehavior.AllowGet);
         }
-        [Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Delete)]
-        public ActionResult LogDelete(string filename)
-        {
-            if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
-            {
-                ResultModel _result = new ResultModel
-                {
-                    msg = "文件名非法",
-                    pass = false
-                };
-                return Json(_result, JsonRequestBehavior.AllowGet);
-            }
-            else {
-                string path = HIO.logDirPath + System.IO.Path.DirectorySeparatorChar + filename;
-                if (System.IO.File.Exists(path))
-                {
-                    System.IO.File.Delete(path);
-                    ResultModel _result = new ResultModel
-                    {
-                        msg = "删除成功",
-                        pass = true
-                    };
-                    return Json(_result, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    ResultModel _result = new ResultModel
-                    {
-                        msg = "文件不存在",
-                        pass = false
-                    };
-                    return Json(_result, JsonRequestBehavior.AllowGet);
-                }
-            }
-        }
+
+        //[Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Show)]
+        //public ActionResult LogList()
+        //{
+        //    if (System.IO.Directory.Exists(HIO.logDirPath))
+        //    {
+        //        FileInfo[] file_list = new DirectoryInfo(HIO.logDirPath).GetFiles();
+        //        if (file_list.Length > 1000) {
+        //            ResultModel error_result = new ResultModel
+        //            {
+        //                msg = "文件太多",
+        //                pass = false
+        //            };
+        //            return Json(error_result, JsonRequestBehavior.AllowGet);
+        //        }
+        //        List<Model.CMS.Ext.FInfo> f_list = new List<Model.CMS.Ext.FInfo>();
+        //        for (int i = 0; i < file_list.Length; i++)
+        //        {
+        //            f_list.Add(new Model.CMS.Ext.FInfo(file_list[i]));
+        //        }
+        //        ResultModel _result = new ResultModel
+        //        {
+        //            msg = "获取成功",
+        //            pass = true,
+        //            append = new { f_list = f_list }
+        //        };
+        //        return Json(_result, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else {
+        //        ResultModel _result = new ResultModel
+        //        {
+        //            msg = "获取成功",
+        //            pass = false
+        //        };
+        //        return Json(_result, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
+        //[Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Show)]
+        //public ActionResult LogInfo(string filename) {
+        //    if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
+        //    {
+        //        ResultModel _result = new ResultModel
+        //        {
+        //            msg = "文件名非法",
+        //            pass = false                    
+        //        };
+        //        return Json(_result, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else {
+        //        string path = HIO.logDirPath + System.IO.Path.DirectorySeparatorChar + filename;
+        //        if (System.IO.File.Exists(path))
+        //        {
+        //            var stream=new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        //            int count = 1024 * 1024;
+        //            if (stream.Length > count)
+        //            {
+        //                stream.Dispose();
+        //                ResultModel error_result = new ResultModel
+        //                {
+        //                    msg = "文件过大",
+        //                    pass = false
+        //                };
+        //                return Json(error_result, JsonRequestBehavior.AllowGet);
+        //            }
+        //            byte[] by = new byte[stream.Length];
+        //            stream.Read(by, 0, (int)stream.Length);
+        //            string result = System.Text.Encoding.UTF8.GetString(by).Trim();
+                    
+        //            int i=result.Length;
+        //            stream.Dispose();
+        //            ResultModel _result = new ResultModel
+        //            {
+        //                msg = "获取成功",
+        //                pass = true,
+        //                append = new { content = result }
+        //            };
+        //            return Json(_result, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else {
+        //            ResultModel _result = new ResultModel
+        //            {
+        //                msg = "文件不存在",
+        //                pass = false
+        //            };
+        //            return Json(_result, JsonRequestBehavior.AllowGet);
+        //        }
+        //    }
+        //}
+        //[Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Delete)]
+        //public ActionResult LogClear() {
+        //    Directory.Delete(HIO.logDirPath, true);
+        //    Directory.CreateDirectory(HIO.logDirPath);
+        //    ResultModel _result = new ResultModel
+        //    {
+        //        msg = "清空成功",
+        //        pass = true
+        //    };
+        //    return Json(_result, JsonRequestBehavior.AllowGet);
+        //}
+        //[Power(ModuleName = "logManage", actionEnum = EnumsModel.ActionEnum.Delete)]
+        //public ActionResult LogDelete(string filename)
+        //{
+        //    if (filename.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
+        //    {
+        //        ResultModel _result = new ResultModel
+        //        {
+        //            msg = "文件名非法",
+        //            pass = false
+        //        };
+        //        return Json(_result, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else {
+        //        string path = HIO.logDirPath + System.IO.Path.DirectorySeparatorChar + filename;
+        //        if (System.IO.File.Exists(path))
+        //        {
+        //            System.IO.File.Delete(path);
+        //            ResultModel _result = new ResultModel
+        //            {
+        //                msg = "删除成功",
+        //                pass = true
+        //            };
+        //            return Json(_result, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else
+        //        {
+        //            ResultModel _result = new ResultModel
+        //            {
+        //                msg = "文件不存在",
+        //                pass = false
+        //            };
+        //            return Json(_result, JsonRequestBehavior.AllowGet);
+        //        }
+        //    }
+        //}
         #endregion
     }
 }

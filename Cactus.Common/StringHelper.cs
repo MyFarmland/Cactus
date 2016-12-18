@@ -150,7 +150,7 @@ namespace Cactus.Common
         }
         public static string GetTimeStamp(DateTimeKind kind)
         {
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, kind);
             return Convert.ToInt64(ts.TotalMilliseconds).ToString();
         }
         /// <summary>
@@ -165,6 +165,19 @@ namespace Cactus.Common
             else
                 return "";
         }
+        /// <summary>
+        /// 十三位
+        /// </summary>
+        /// <param name="timeStamp"></param>
+        /// <returns></returns>
+        public static DateTime GetTime(long timeStamp)
+        {
+            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            TimeSpan toNow = new TimeSpan(timeStamp*10000);
+            dtStart = dtStart.Add(toNow);
+            return dtStart;
+        }
+
         /// <summary>
         /// 压缩string，用于压缩html
         /// </summary>

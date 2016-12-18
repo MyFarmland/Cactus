@@ -30,7 +30,7 @@ namespace Cactus.Controllers.Controllers
             //最后判断来源
             if (CryptoHelper.MD5Encrypt(VCode) == CookieHelper.GetCookieValue("code"))
             {
-                User u = userServer.CheckLogin(UserName.Trim(), Password.Trim());
+                User u = userService.CheckLogin(UserName.Trim(), Password.Trim());
                 if (u == null)
                 {
                     return Json(new ResultModel { msg = "用户不存在", pass = false });
@@ -42,7 +42,7 @@ namespace Cactus.Controllers.Controllers
                     //更新用户登录信息
                     u.LastLoginTime = DateTime.Now;
                     u.LastLoginIp = WebHelper.GetClientIPAddress();
-                    userServer.Update(u);
+                    userService.Update(u);
                     //加入缓存
                     base.cacheService.Add(Constant.CacheKey.LoginAdminInfoCacheKey + "_" + sid,
                         new HTools.CacheObj()
@@ -52,6 +52,7 @@ namespace Cactus.Controllers.Controllers
                         });
                     //清除验证码code
                     CookieHelper.ClearCookie("code");
+                    base.logService.WriteLog(u.User_Id, "登录系统");
                     return Json(new ResultModel { msg = "登陆成功",pass = true });
                 }
             }

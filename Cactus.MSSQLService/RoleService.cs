@@ -8,7 +8,7 @@ using Cactus.Common;
 
 namespace Cactus.MSSQLService
 {
-    public class RoleServer : IRoleServer
+    public class RoleService : IRoleService
     {
         public bool Insert(Model.Sys.Role entity)
         {
